@@ -150,3 +150,24 @@ npm run build
 `npm run dev` serves the local interface. Backend access requires Supabase configuration. The build reads the deployment variables above and writes the configured site to `dist/`.
 
 The service worker caches the interface, fleet catalog, and authentication SDK. Versioned asset names keep deployed updates consistent. Tests use a local PostgreSQL-compatible database to check permissions, required fields, meter rules, declared signatures, and duplicate submissions. Login tests check session handling and failure responses, including the Android origin. Android submission tests cover selected meters, previous readings, account signatures, conflicting entries, and permissions. QR tests generate a real image and decode it to verify the fleet code. They do not write to the production database.
+
+## Field testing before GMAIS integration
+
+Apply `supabase/test-data.sql` after the other migrations. It adds four clearly named test fleets, two test dispensers and a test material in the existing fuel-control database. No GMAIS data is changed, and no fake refueling history or accounts are created. Use an existing app account. The seed refuses to overwrite an existing real code and can be rerun without resetting readings or removing entries.
+
+On the phone, connect once to refresh the catalog. Enter local **990001** and material **990010**.
+
+| Fleet | Example | Initial KM | Engine hours | Elevator hours | Test tank capacity |
+| --- | --- | --- | --- | --- | --- |
+| 990101 | Pickup | 45,000 | — | — | 70 L |
+| 990102 | Truck | 180,000 | 8,500 | — | 900 L |
+| 990103 | Tractor | — | 3,200 | — | 300 L |
+| 990104 | Harvester | — | 5,600 | 4,200 | 600 L |
+
+These capacities are fictional test values. Local **990001** starts at **10,000**; destination **990002** starts at **20,000**. Use the fleet QR labels generated in **Frotas** or enter the fleet code manually.
+
+Suggested first test: select fleet 990101 in QR/dispenser mode, enter KM 45020 and dispenser final 10050. The app should calculate 50 L. Then try a lower KM and a quantity over 70 L to check the block and capacity confirmation. Subsequent tests must use the latest readings, which advance normally. A manual-liter entry still invalidates the physical dispenser baseline; a manager can verify the test local again in settings.
+
+Test airplane mode after refreshing the catalog: save a refueling and an occurrence with a photo, close and reopen the app, then restore connectivity and check receipt in the dashboard. Test transfer by closing the source dispenser and moving to local 990002.
+
+Test entries are stamped on the server, labeled in history and operations, and excluded from the default dashboard totals, chart, averages and dashboard export. Use **Ver testes** to inspect test totals separately; history exports include a TESTE column. A test fleet cannot write to a real local, and transfers cannot mix real and test locals. Keep test codes out of any future GMAIS import/export.
