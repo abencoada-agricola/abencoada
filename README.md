@@ -171,3 +171,9 @@ Suggested first test: select fleet 990101 in QR/dispenser mode, enter KM 45020 a
 Test airplane mode after refreshing the catalog: save a refueling and an occurrence with a photo, close and reopen the app, then restore connectivity and check receipt in the dashboard. Test transfer by closing the source dispenser and moving to local 990002.
 
 Test entries are stamped on the server, labeled in history and operations, and excluded from the default dashboard totals, chart, averages and dashboard export. Use **Ver testes** to inspect test totals separately; history exports include a TESTE column. A test fleet cannot write to a real local, and transfers cannot mix real and test locals. Keep test codes out of any future GMAIS import/export.
+
+### Simulated readings on the existing catalog
+
+Optionally apply `supabase/simulated-readings.sql` after `test-data.sql`. It keeps every fleet name and code and fills only meter baselines whose existing catalog value and recorded maximum are zero. Positive existing readings are preserved. Generated KM, engine hours and elevator hours are deterministic, labeled SIMULADO, and recorded in each fleet's `simulatedFields` metadata. Rerunning does not reset them. No fake refueling records are inserted and no GMAIS database is changed.
+
+Use local 990001 or 990002 and material 990010 to test any catalog fleet with its current name. Entries at these test locals are stamped TESTE by the server, including those for normally named fleets, and remain separate in dashboard totals. The fleet's configured required meters still apply. Simulated baselines and test records must be reviewed and replaced or isolated with verified readings before connecting a live GMAIS integration; they are not genuine machine measurements.
