@@ -122,8 +122,6 @@ td{font-size:13px}th{font-size:11px}.chart-y,.bar-label{font-size:11px}
 .metric strong small{font-size:16px}.field-fields label{font-size:15px}
 .fleet-card .fleet-stats{gap:12px;flex-wrap:wrap}
 @media(max-width:760px){
- .theme-toggle{right:12px;bottom:88px;max-width:calc(100vw - 24px)}
- .field-page .theme-toggle{bottom:12px}
  .field-content{padding-bottom:80px}
  .content{padding-bottom:80px}
  .sidebar{height:82px;overflow-x:auto}
