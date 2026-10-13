@@ -10,3 +10,14 @@ header{min-height:76px}#login-logo{width:min(280px,100%);max-height:190px;paddin
 /* Form controls do not consistently inherit text-transform from body. */
 input:not([type="password"]),textarea,select,option,button{text-transform:uppercase}
 input[type="password"]{text-transform:none}
+
+/* Keep the app inside the viewport; long forms scroll within the main area. */
+html{height:100%}
+body{height:100vh;height:100dvh;width:100%;display:flex;flex-direction:column;overflow:hidden}
+header{flex:0 0 auto;min-height:0;height:calc(56px + env(safe-area-inset-top));padding:calc(8px + env(safe-area-inset-top)) 20px 8px}
+body.login-screen header{height:calc(104px + env(safe-area-inset-top))}
+#login-logo{width:140px;height:80px;max-height:80px;max-width:100%;padding:6px;border-width:3px;border-radius:9px}
+#logout{top:calc(8px + env(safe-area-inset-top));right:12px;min-height:40px}
+main{flex:1 1 auto;min-height:0;min-width:0;width:100%;margin:0 auto;padding:18px 18px max(18px,env(safe-area-inset-bottom));overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;overflow-wrap:anywhere}
+input,select,textarea{min-width:0;max-width:100%}
+.capacity-dialog{max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto}
