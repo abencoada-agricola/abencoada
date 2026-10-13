@@ -6,3 +6,7 @@ header{min-height:76px}#login-logo{width:min(280px,100%);max-height:190px;paddin
 .capacity-warning{padding:16px;border:2px solid #ffe3a1;border-radius:10px;background:#493b1b;color:#ffe3a1;font-size:18px;line-height:1.5}.capacity-warning[hidden]{display:none}
 
 .capacity-dialog{background:#193c2b;color:#f5f7ef;border:2px solid #ffe3a1;border-radius:12px;padding:22px;width:calc(100% - 28px);max-width:480px;font:19px Arial;text-align:center}.capacity-dialog::backdrop{background:#0009}.capacity-dialog h2{font-size:24px}.capacity-dialog p{line-height:1.6}.capacity-dialog button{width:100%;margin-top:12px}.capacity-dialog .primary{background:#d8e8ad;color:#193c2b}.capacity-dialog .secondary{background:#244f3c;color:#f5f7ef}
+
+/* Form controls do not consistently inherit text-transform from body. */
+input:not([type="password"]),textarea,select,option,button{text-transform:uppercase}
+input[type="password"]{text-transform:none}

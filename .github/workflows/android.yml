@@ -10,6 +10,7 @@ on:
       - 'scripts/build-mobile.mjs'
       - 'web/backend.js'
       - 'web/fuel-utils.js'
+      - 'web/text-case.js'
       - 'web/logo.png'
       - 'web/fleets.json'
       - 'package*.json'

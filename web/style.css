@@ -149,3 +149,7 @@ td{font-size:13px}th{font-size:11px}.chart-y,.bar-label{font-size:11px}
 #capacity-warning[hidden]{display:none}.field-form #capacity-warning{margin:12px 20px}
 
 .capacity-dialog{padding:24px;max-width:460px}.capacity-dialog p{font-size:16px;line-height:1.7}.capacity-dialog button{width:100%;margin-top:12px;min-height:48px}
+
+/* Form controls do not consistently inherit text-transform from body. */
+input:not([type="password"]),textarea,select,option,button{text-transform:uppercase}
+input[type="password"]{text-transform:none}

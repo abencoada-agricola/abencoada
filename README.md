@@ -2,7 +2,7 @@
 
 A diesel refueling log for agricultural fleets, with an Android app for workers and a web dashboard for managers. Both the Android app and the web field form keep pending entries on the device when there is no internet.
 
-The website runs on GitHub Pages. Supabase stores the records and handles administrator authentication. The interface is in Portuguese.
+The website runs on GitHub Pages. Supabase stores the records and handles administrator authentication. The interface is in Portuguese. Login names and text fields use uppercase, including typed values, reports, and CSV exports. Usernames remain case-insensitive; passwords keep their exact original case.
 
 - [Android APK](https://github.com/abencoada-agricola/diesel/releases/latest/download/abencoada-diesel.apk)
 - [Field form](https://abencoada-agricola.github.io/diesel/)
