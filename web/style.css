@@ -164,3 +164,5 @@ label.meter-hidden{display:none}
 .brand img,.field-brand img{background:transparent;border:0;border-radius:0;padding:0}
 
 .brand{text-align:center}.brand img{display:block;margin:0 auto;max-width:100%}.brand p{margin:0;text-align:center;line-height:1.5}
+
+.top-actions{margin-left:auto}
