@@ -41,3 +41,12 @@ input[type="file"][hidden]{display:none}
 #connection-status[hidden]{display:none}
 
 .test-badge{border:1px solid #ffe3a1;border-radius:8px;padding:8px;color:#ffe3a1;font-size:14px;line-height:1.4}
+
+/* Persistent field header: brand, connection and compact observation action. */
+#header-logo{position:absolute;left:8px;top:calc(8px + env(safe-area-inset-top));width:68px;height:40px;max-height:40px;object-fit:contain;padding:3px;background:#fff;border:1px solid #fff;border-radius:5px}
+#open-observation{position:absolute;right:70px;top:calc(6px + env(safe-area-inset-top));width:42px;height:44px;min-height:44px;margin:0;padding:8px}
+#logout{right:8px;width:56px;padding:6px;font-size:12px}
+#connection-status{left:calc(50% - 14px);width:calc(100% - 208px);max-width:260px}
+header.has-context{height:calc(104px + env(safe-area-inset-top))}
+#change-context{top:calc(56px + env(safe-area-inset-top));left:8px;height:40px;min-height:40px;width:100px;max-width:100px}
+#header-logo[hidden],#open-observation[hidden]{display:none}

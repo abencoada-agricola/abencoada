@@ -166,3 +166,5 @@ label.meter-hidden{display:none}
 .brand{text-align:center}.brand img{display:block;margin:0 auto;max-width:100%}.brand p{margin:0;text-align:center;line-height:1.5}
 
 .top-actions{margin-left:auto}
+
+.operation-entry{padding:20px 22px;margin:0;align-items:flex-start}.operation-entry>div{min-width:0;width:100%}.operation-notes{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}
