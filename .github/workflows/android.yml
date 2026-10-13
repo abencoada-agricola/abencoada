@@ -9,6 +9,7 @@ on:
       - 'capacitor.config.json'
       - 'scripts/build-mobile.mjs'
       - 'web/backend.js'
+      - 'web/fuel-utils.js'
       - 'web/logo.png'
       - 'web/fleets.json'
       - 'package*.json'

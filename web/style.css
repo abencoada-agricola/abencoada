@@ -141,3 +141,11 @@ td{font-size:13px}th{font-size:11px}.chart-y,.bar-label{font-size:11px}
  .field-page .theme-toggle{bottom:12px}
 }
 .mobile-brand svg{color:var(--accent)}
+
+.fleet-search{padding:20px;margin-bottom:22px}.fleet-search input{margin-top:8px}
+.fleet-card-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fleet-card>button{width:100%;margin-top:12px}.fleet-card>.link-btn{text-align:left}
+.consumption-card{margin-bottom:27px}
+#capacity-warning[hidden]{display:none}.field-form #capacity-warning{margin:12px 20px}
+
+.capacity-dialog{padding:24px;max-width:460px}.capacity-dialog p{font-size:16px;line-height:1.7}.capacity-dialog button{width:100%;margin-top:12px;min-height:48px}

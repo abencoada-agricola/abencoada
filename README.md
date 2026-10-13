@@ -1,4 +1,4 @@
-# Abençoada Diesel
+# Abençoada Fuel Control
 
 A diesel refueling log for agricultural fleets, with an Android app for workers and a web dashboard for managers. Both the Android app and the web field form keep pending entries on the device when there is no internet.
 
@@ -19,7 +19,7 @@ Install the APK on Android 8 or later and sign in online with the username and p
 5. With QR/dispenser mode, enter the final dispenser reading. Liters are the final reading minus the last verified reading for that local/material. Manual mode asks for liters directly.
 6. Save the entry. The account supplies the worker signature; date and time are automatic.
 
-**Transferência** records the old and new local codes while keeping the material. It does not record liters or move inventory in GMAIS. **Observação / ocorrência** records a message linked to the current local and material.
+**Transferência** shows the current local/material and last dispenser reading. Enter the source dispenser’s final reading and the new local code. The app shows the difference and the last cached reading for the destination. Equal source readings are allowed when nothing was dispensed since the last entry. The server checks the source baseline before accepting the closure. Transfers do not move inventory in GMAIS, and their closing difference is not counted again as a fleet refueling. Older APK transfer entries remain readable as events without meter readings. **Observação / ocorrência** records a message linked to the current local and material.
 
 Managers choose the required fleet meters under **Frotas → Escolher leituras**. Initial defaults are KM for vehicles, engine hours for tractors, and engine/elevator hours for harvesters. Only the selected meters are shown. Numeric inputs use the numeric keyboard and format decimal values automatically. Buttons have pressed feedback and vibration where supported.
 
@@ -77,7 +77,13 @@ Administrators sign in with a username and password. They can view and filter re
 
 The dashboard checks for new records every 15 seconds while open and shows unread notices in the bell. Optional browser notifications also require the dashboard to remain open.
 
-**Frotas** manages the fleet catalog and required Android meters. Use **Gerar QR Code** to download or print a fleet label, or **Imprimir todos os QR Codes** for the whole active catalog. Attach the corresponding label to each machine. The APK download is also available on this page. **Transferências e ocorrências** lists app events. **Configurações** manages local/material catalogs, verified dispenser readings, access permissions, usernames, and validation rules. Use **Definir senha** in **Equipe e acessos** to create a login or replace an existing password. Passwords require at least 6 characters and confirmation. The server checks the manager’s authenticated session and team membership before calling Supabase Auth; passwords are never stored in the team table. These passwords belong to Diesel and do not change GMAIS credentials. Usernames contain 3–30 letters without accents, numbers, dots, hyphens, or underscores; capitalization does not matter. Email login remains available for existing accounts during the transition.
+**Frotas** supports searching by fleet code, name, model, or type. **Editar frota** changes the name, model, type, active status, and total tank capacity. Required Android meters are configured separately and remain unchanged when fleet details are edited. Capacities start unset; managers must enter verified vehicle capacities rather than relying on category estimates. Updating the GMAIS catalog snapshot preserves custom models and capacities. The dashboard and forms offer light/dark themes with a saved browser preference.
+
+Both refueling forms warn immediately above the registered tank capacity, without a tolerance margin. Workers can review and explicitly confirm an unusual quantity. The server checks that confirmation against the same quantity and current capacity; accepted exceptions retain the capacity snapshot and a confirmation flag. If capacity is unknown, the app does not invent a limit. Older APK submissions exceeding a newly configured capacity remain pending until corrected/confirmed in an updated app.
+
+The dashboard displays monthly average liters per refueling and per-fleet estimated km/L and L/h. Ratios use the sum of positive meter intervals and the associated liters, not an average of individual ratios. Only confirmed refuelings count; transfers and occurrences do not. Missing baselines, unselected meters, and zero/negative intervals do not produce a ratio. Partial fills and missing refuelings can distort consumption estimates; these are not measured full-tank consumption figures.
+
+**Frotas** also manages the required Android meters. Use **Gerar QR Code** to download or print a fleet label, or **Imprimir todos os QR Codes** for the whole active catalog. Attach the corresponding label to each machine. The APK download is also available on this page. **Transferências e ocorrências** lists app events. **Configurações** manages local/material catalogs, verified dispenser readings, access permissions, usernames, and validation rules. Use **Definir senha** in **Equipe e acessos** to create a login or replace an existing password. Passwords require at least 6 characters and confirmation. The server checks the manager’s authenticated session and team membership before calling Supabase Auth; passwords are never stored in the team table. These passwords belong to Diesel and do not change GMAIS credentials. Usernames contain 3–30 letters without accents, numbers, dots, hyphens, or underscores; capitalization does not matter. Email login remains available for existing accounts during the transition.
 
 Public access is limited to the fleet catalog, latest readings, validation rules, and validated submissions. Stored record history and worker names can only be retrieved by authorized accounts. Administration requires a manager account. Database tables have Row Level Security and cannot be accessed directly by public clients.
 
@@ -94,7 +100,7 @@ For a new Supabase project:
    values ('manager@example.com', 'Manager Name', 'admin');
    ```
 
-4. Run `supabase/usernames.sql`, then `supabase/field-access.sql` , `supabase/mobile.sql`, `supabase/operations.sql`, `supabase/background-sync.sql`, and `supabase/gmais-readings.sql`, once and in that order. The username migration assigns existing accounts an initial username based on their email prefix. It can be changed in the dashboard.
+4. Run `supabase/usernames.sql`, then `supabase/field-access.sql` , `supabase/mobile.sql`, `supabase/operations.sql`, `supabase/background-sync.sql`, and `supabase/gmais-readings.sql`, then `supabase/fuel-control.sql`, once and in that order. The username migration assigns existing accounts an initial username based on their email prefix. It can be changed in the dashboard.
 5. Deploy `supabase/functions/diesel-login/index.ts` as **diesel-login**, using `supabase/config.toml`. Keep `verify_jwt = true`. The function resolves usernames on the server and checks passwords with Supabase Auth. Login attempts are limited by username and IP address.
 6. Add these repository variables under **Settings → Secrets and variables → Actions → Variables**:
 
