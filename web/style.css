@@ -160,3 +160,5 @@ input[type="password"]{text-transform:none}
 @media(max-width:420px){.top-actions{gap:4px}.top-actions .status{font-size:10px;padding:6px 8px}.top-actions>.avatar{width:28px;height:28px}.mobile-brand{font-size:12px;gap:6px}.mobile-brand svg{width:18px;height:18px}}
 
 label.meter-hidden{display:none}
+
+.brand img,.field-brand img{background:transparent;border:0;border-radius:0;padding:0}
