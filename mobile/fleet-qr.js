@@ -6,3 +6,10 @@ export function readFleetQr(text){
 }
 export const defaultMeters=type=>type==='Caminhão'?{km:true,engine:false,elevator:false}:type==='Colhedora'?{km:false,engine:true,elevator:true}:type==='Trator'?{km:false,engine:true,elevator:false}:{km:true,engine:false,elevator:false};
 export const meterLabels={km:'KM',engine:'HORÍMETRO MOTOR',elevator:'HORÍMETRO ELEVADOR'};
+// Elevator readings are available only for machine categories.
+export const canUseElevator=fleet=>['Trator','Colhedora'].includes(fleet?.type);
+export function fleetMeters(fleet){
+ const meters={...(fleet.meter_fields||defaultMeters(fleet.type))};
+ if(!canUseElevator(fleet)){meters.elevator=false;if(!meters.km&&!meters.engine)meters.km=true}
+ return meters;
+}
