@@ -166,7 +166,7 @@ On the phone, connect once to refresh the catalog. Enter local **990001** and ma
 
 These capacities are fictional test values. Local **990001** starts at **10,000**; destination **990002** starts at **20,000**. Use the fleet QR labels generated in **Frotas** or enter the fleet code manually.
 
-Suggested first test: select fleet 990101 in QR/dispenser mode, enter KM 45020 and dispenser final 10050. The app should calculate 50 L. Then try a lower KM and a quantity over 70 L to check the block and capacity confirmation. Subsequent tests must use the latest readings, which advance normally. A manual-liter entry still invalidates the physical dispenser baseline; a manager can verify the test local again in settings.
+Suggested first test: select fleet 990101 in QR/dispenser mode, enter KM 45020 and dispenser final 10050. The app should calculate 50 L. Then try a lower KM and a quantity over 70 L to check the block and capacity confirmation. Subsequent tests must use the latest readings, which advance normally. With the optional trial-counter migration below, manual liters advance simulated counters. Physical counters still require a verified reading after manual entries.
 
 Test airplane mode after refreshing the catalog: save a refueling and an occurrence with a photo, close and reopen the app, then restore connectivity and check receipt in the dashboard. Test transfer by closing the source dispenser and moving to local 990002.
 
@@ -181,3 +181,11 @@ Use local 990001 or 990002 and material 990010 to test any catalog fleet with it
 Elevator readings are available only for machine categories (Trator and Colhedora), when enabled for that fleet. Cars, pickups, buses and trucks do not show or request elevator readings. Apply `supabase/vehicle-meters.sql` after the trial migrations to enforce this rule for existing fleets, imports and type changes. Previous records remain intact.
 
 Trial and simulated-reading badges are hidden in the interface. Internal trial flags and provenance remain available for dashboard separation and future migration.
+
+### Initial dispenser readings for field trials
+
+Apply `supabase/trial-recorder-readings.sql` once after `vehicle-meters.sql`. It fills missing local/material readings, preserving existing readings and reusing the last verified value when available. Other missing baselines receive a random value between 10,000 and 49,999. These baselines are stored in the control database, not GMAIS.
+
+Simulated counters advance with manual liters and pending entries on the phone. Retries do not advance a counter twice. Saving a physical reading in settings ends simulation for that local/material. Refresh the app online before going offline. Replace generated baselines with verified readings before live use.
+
+Android numeric fields use normal number entry: `100` means 100, while `100,50` means 100.50. Thousands separators appear automatically; leaving the field displays two decimal places. The Android decimal point key is accepted as a decimal comma.
