@@ -108,7 +108,11 @@ input:disabled,select:disabled{opacity:.75}
 .signature,.signature-img{background:#fff;border-color:var(--line)}
 #toast{background:var(--ink);color:var(--bg);border:1px solid var(--line)}
 .brand img{background:#fff;border-radius:8px;padding:6px}
-.theme-toggle{position:fixed;right:20px;bottom:20px;z-index:30;min-height:44px;box-shadow:0 3px 12px #0003;font-size:12px}
+.theme-toggle{width:40px;height:40px;min-width:40px;border-radius:8px;flex:0 0 auto;color:var(--ink)}
+.theme-toggle:hover{background:var(--surface-hover)}
+.theme-toggle svg{width:21px;height:21px}
+.topbar{position:sticky;top:0;z-index:25}
+.field-header .theme-toggle{position:absolute;right:16px;top:50%;transform:translateY(-50%)}
 .content{padding-bottom:88px}
 body{font-size:15px}
 .nav button,.btn,.link-btn,.fleet-row b,.fleet-row small,.metric-label,.metric-foot,.period,label,
@@ -137,8 +141,7 @@ td{font-size:13px}th{font-size:11px}.chart-y,.bar-label{font-size:11px}
  .sidebar{height:132px;padding:6px 8px max(6px,env(safe-area-inset-bottom));overflow:visible}
  .nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));min-width:0;gap:3px}
  .nav button{min-width:0;max-width:none;width:100%;font-size:11px;padding:6px 3px;min-height:55px;gap:4px}
- .main{padding-bottom:132px}.theme-toggle{bottom:144px}
- .field-page .theme-toggle{bottom:12px}
+ .main{padding-bottom:132px}
 }
 .mobile-brand svg{color:var(--accent)}
 
