@@ -33,7 +33,7 @@ The app checks every 15 seconds, when resumed, when connectivity returns, and wh
 
 Current KM and hour meters cannot be lower than previous received readings. The database validates again when entries synchronize. Conflicts stay on the phone for correction; dependent entries wait. Do not uninstall, clear app data, or switch accounts with pending entries. Sign-out is blocked while the local queue is not empty.
 
-Dispenser calculation requires a verified initial reading, entered under **Configurações → Locais, materiais e registradoras**. Stock balance is not a dispenser reading. A manual-liter entry invalidates that local/material's dispenser baseline because the physical final reading is unknown. A manager must verify it again before dispenser mode is used. Two disconnected phones may have different baselines; the server rejects mismatches for correction instead of silently changing liters.
+Dispenser calculation requires a verified initial reading, entered under **Configurações → Locais, materiais e registradoras**. Stock balance is not a dispenser reading. A manual-liter entry invalidates that local/material's dispenser baseline because the physical final reading is unknown. A manager must verify it again before dispenser refueling mode is used. The last known physical reading is preserved separately for transfer closure; it is not treated as an up-to-date refueling baseline. A transfer final reading can close that physical interval and establish the next verified source reading. Historical unknown baselines are not guessed. Two disconnected phones may have different baselines; the server rejects mismatches for correction instead of silently changing liters.
 
 ## GMAIS data
 
@@ -100,7 +100,7 @@ For a new Supabase project:
    values ('manager@example.com', 'Manager Name', 'admin');
    ```
 
-4. Run `supabase/usernames.sql`, then `supabase/field-access.sql` , `supabase/mobile.sql`, `supabase/operations.sql`, `supabase/background-sync.sql`, and `supabase/gmais-readings.sql`, then `supabase/fuel-control.sql`, once and in that order. The username migration assigns existing accounts an initial username based on their email prefix. It can be changed in the dashboard.
+4. Run `supabase/usernames.sql`, then `supabase/field-access.sql` , `supabase/mobile.sql`, `supabase/operations.sql`, `supabase/background-sync.sql`, and `supabase/gmais-readings.sql`, then `supabase/fuel-control.sql` and `supabase/transfer-baseline.sql`, once and in that order. The username migration assigns existing accounts an initial username based on their email prefix. It can be changed in the dashboard.
 5. Deploy `supabase/functions/diesel-login/index.ts` as **diesel-login**, using `supabase/config.toml`. Keep `verify_jwt = true`. The function resolves usernames on the server and checks passwords with Supabase Auth. Login attempts are limited by username and IP address.
 6. Add these repository variables under **Settings → Secrets and variables → Actions → Variables**:
 

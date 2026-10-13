@@ -10,3 +10,14 @@ export function operationDependencies(record){
  if(record.kind==='transfer'&&record.destination)keys.push('local:'+record.destination+':'+record.materialCode);
  return keys;
 }
+
+export function transferRecorderBase(locations,queue,local,material,exclude){
+ const location=locations.find(l=>l.local_code===local&&l.material_code===material);
+ let base=location?.last_meter??location?.last_verified_meter??null;
+ for(const record of queue){
+  if(record.id===exclude)break;
+  if(record.localCode!==local||record.materialCode!==material||record.error)continue;
+  if(record.kind==='transfer'&&record.transferVersion===2||record.kind==='refuel'&&record.mode==='recorder')base=record.recorderEnd;
+ }
+ return base===null?null:Number(base);
+}

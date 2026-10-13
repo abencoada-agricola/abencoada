@@ -2,7 +2,7 @@ import {PGlite} from '@electric-sql/pglite';
 import {readFile} from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import {capacityWarning,consumptionSummary} from '../web/fuel-utils.js';
-import {recorderBase,operationDependencies} from '../mobile/operations.js';
+import {recorderBase,operationDependencies,transferRecorderBase} from '../mobile/operations.js';
 assert.equal(capacityWarning({tank_capacity:70},70),null);
 assert.equal(capacityWarning({tank_capacity:null},100),null);
 assert.deepEqual(capacityWarning({tank_capacity:70},70.01),{capacity:70,liters:70.01});
@@ -28,7 +28,7 @@ await db.exec(`insert into members(email,name,role,username) values('manager@exa
 async function who(id,email,role='authenticated'){await db.exec('reset role');await db.query("select set_config('request.jwt.claims',$1,false)",[JSON.stringify({sub:id,email,role})]);await db.exec('set role '+role)}
 async function rpc(name,payload){return(await db.query('select '+name+'($1::jsonb) result',[JSON.stringify(payload)])).rows[0].result}
 await who(manager,'manager@example.com');await rpc('diesel_admin_save',{action:'fleet',id:'1001',name:'CAMIONETE',type:'Outro'});
-await db.exec('reset role');await db.exec(await readFile('supabase/fuel-control.sql','utf8'));
+await db.exec('reset role');await db.exec(await readFile('supabase/fuel-control.sql','utf8'));await db.exec(await readFile('supabase/transfer-baseline.sql','utf8'));
 const edit={action:'fleet-edit',id:'1001',name:'CAMIONETE',model:'MODELO TESTE',type:'Outro',active:true,tankCapacity:70};
 await who(worker,'worker@example.com');assert.equal((await rpc('diesel_admin_save',edit)).status,403);
 await who(manager,'manager@example.com');assert.equal((await rpc('diesel_admin_save',edit)).ok,true);assert.equal((await rpc('diesel_admin_save',{...edit,tankCapacity:-1})).status,422);
@@ -53,4 +53,4 @@ await who(null,null,'anon');const full={id:crypto.randomUUID(),submissionKey:cry
 await assert.rejects(()=>db.query('select private.capacity_check($1::jsonb)',[JSON.stringify(full)]),/permission denied/);
 await who(worker,'worker@example.com');const lease=(await db.query('select diesel_device_register($1) result',[crypto.randomUUID()])).rows[0].result;await who(null,null,'anon');const bg={...refuel,id:crypto.randomUUID(),mode:'manual',km:102};let receipt=(await db.query('select diesel_device_submit($1,$2::jsonb) result',[lease.token,JSON.stringify(bg)])).rows[0].result;assert.equal(receipt.capacityWarning,true);
 receipt=(await db.query('select diesel_device_submit($1,$2::jsonb) result',[lease.token,JSON.stringify({...bg,capacityConfirmed:true,capacityAtConfirmation:70,confirmedLiters:100})])).rows[0].result;assert.equal(receipt.id,bg.id);
-await db.close();console.log('Capacity warnings, fleet editing, consumption estimates, transfer readings and background validation passed.');
+await who(worker,'worker@example.com');const afterManual={...transfer,id:crypto.randomUUID(),recorderStart:1120,recorderEnd:1150};assert.equal((await rpc('diesel_operation_submit',afterManual)).id,afterManual.id);locations=(await db.query('select diesel_session() result')).rows[0].result.locations;assert.equal(locations.find(l=>l.local_code==='1').last_verified_meter,1150);assert.equal(transferRecorderBase([{local_code:'1',material_code:'9',last_meter:null,last_verified_meter:1120}],[],'1','9'),1120);assert.equal(recorderBase([{local_code:'1',material_code:'9',last_meter:null,last_verified_meter:1120}],[],'1','9'),null);await db.close();console.log('Capacity warnings, fleet editing, consumption estimates, transfer readings and background validation passed.');
