@@ -8,13 +8,14 @@ import {parseNumber,formatInput,recorderBase,litersFromRecorder,operationDepende
 import {CapacitorBarcodeScanner} from '@capacitor/barcode-scanner';
 import {api,fieldApi,signIn,signOut,isConfigured} from '../web/backend.js';
 import {readFleetQr,defaultMeters,meterLabels} from './fleet-qr.js';
+import {preparePhoto,isPhoto} from './photo.js';
 installUppercaseInputs();
 const app=document.querySelector('#app'),logout=document.querySelector('#logout'),changeContext=document.querySelector('#change-context');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>Number(v||0).toLocaleString('pt-BR',{maximumFractionDigits:2});
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo'}).format(new Date());
 let screen='context',context={},mode='manual',occurrenceReturn=null;
-let db,session,draft={},queue=[],selected=null,busy=false,connected=false,needsLogin=false,editId=null,message='';
+let db,session,draft={},queue=[],selected=null,busy=false,connected=false,needsLogin=false,editId=null,message='',photoBusy=false;
 async function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open('abencoada-diesel-mobile',1);req.onupgradeneeded=()=>{req.result.createObjectStore('meta',{keyPath:'key'});req.result.createObjectStore('queue',{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
 function op(store,mode,fn){return new Promise((resolve,reject)=>{const tx=db.transaction(store,mode),req=fn(tx.objectStore(store));let value;req.onsuccess=()=>value=req.result;tx.oncomplete=()=>resolve(value);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})}
 const get=async key=>(await op('meta','readonly',s=>s.get(key)))?.value;
@@ -53,7 +54,7 @@ function renderFlow(){
  else if(screen==='scan')content=`${mode==='recorder'?'<button class="primary" id="scan">ABRIR CÂMERA</button>':''}<form id="fleet-code"><label>CÓDIGO DA FROTA<input name="fleet" inputmode="numeric" pattern="[0-9]{1,30}" required></label><button class="secondary">SELECIONAR FROTA</button></form>`;
  else if(screen==='refuel')content=selected?formHTML():'';
  else if(screen==='transfer'){const d=editId?draft:(draft.transfer||{}),base=transferRecorderBase(session.locations||[],queue,context.localCode,context.materialCode,editId);content=`<form id="transfer-form"><p>LOCAL ATUAL: <b>${esc(context.localCode)}</b><br>MATERIAL: <b>${esc(context.materialCode)}</b></p><p>REGISTRADORA ANTERIOR<br><b class="reading" id="recorder-base">${base===null?'SEM LEITURA INICIAL':num(base)}</b></p>${decimal('recorderEnd','FINAL DA REGISTRADORA DO LOCAL ATUAL',d.recorderEnd??'')}<div class="liters-result"><span>LITROS DESDE O ÚLTIMO REGISTRO</span><strong id="transfer-liters">—</strong></div><label>NOVO CÓDIGO DO LOCAL<input name="destination" inputmode="numeric" pattern="[0-9]{1,30}" required maxlength="30" value="${esc(d.destination||'')}" list="transfer-locations"></label><datalist id="transfer-locations">${(session.locations||[]).filter(l=>l.material_code===context.materialCode&&l.local_code!==context.localCode).map(l=>`<option value="${esc(l.local_code)}">${esc(l.name)}</option>`).join('')}</datalist><p>ÚLTIMA LEITURA DO NOVO LOCAL<br><b class="reading" id="destination-base">—</b></p><p class="error" id="form-error" role="alert"></p><button class="primary">CONFIRMAR TRANSFERÊNCIA</button></form>`;}
- else if(screen==='occurrence')content=`<form id="occurrence-form"><label>OBSERVAÇÃO OU OCORRÊNCIA<textarea name="notes" required minlength="3" maxlength="2000" rows="5">${esc(draft.notes||'')}</textarea></label><p class="error" id="form-error"></p><button class="primary">SALVAR OCORRÊNCIA</button></form>`;
+ else if(screen==='occurrence')content=`<form id="occurrence-form"><label>OBSERVAÇÃO OU OCORRÊNCIA<textarea name="notes" required minlength="3" maxlength="2000" rows="5">${esc(draft.notes||'')}</textarea></label><div class="photo-actions"><button type="button" class="photo-button" id="take-photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5 10 3h4l2 2h5v16H3V5h5Z"/><circle cx="12" cy="13" r="4"/></svg>ADICIONAR FOTO</button><button type="button" class="photo-button" id="choose-photo">GALERIA</button></div><input type="file" id="camera-photo" accept="image/*" capture="environment" hidden><input type="file" id="gallery-photo" accept="image/*" hidden><div id="photo-preview">${photoHTML()}</div><p id="photo-status" role="status"></p><p class="error" id="form-error" role="alert"></p><button class="primary" id="save-occurrence" type="submit">SALVAR OCORRÊNCIA</button></form>`;
  const observation=['methods','scan','refuel','transfer'].includes(screen)?'<button type="button" class="observation-button" id="open-observation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 21h20L12 3Z"/><path d="M12 9v5m0 3v1"/></svg>OBSERVAÇÃO</button>':'';
  app.innerHTML=header+observation+content+(screen!=='menu'&&screen!=='context'?(screen==='occurrence'&&occurrenceReturn?'<button class="secondary" id="back-observation">VOLTAR</button>':'<button class="secondary" data-screen="menu">VOLTAR AO MENU</button>'):'')+`<div id="pending">${pendingHTML()}</div>`;
  document.querySelectorAll('[data-screen]').forEach(b=>b.onclick=()=>{screen=b.dataset.screen;editId=null;render()});
@@ -64,8 +65,23 @@ function renderFlow(){
  const scanButton=document.querySelector('#scan');if(scanButton)scanButton.onclick=scan;
  const fleetCode=document.querySelector('#fleet-code');if(fleetCode)fleetCode.onsubmit=e=>{e.preventDefault();choose(fleetCode.elements.fleet.value)};
  const refuel=document.querySelector('#refuel');if(refuel){refuel.onsubmit=submit;refuel.oninput=e=>{if(e.target.hasAttribute('data-decimal'))e.target.value=formatInput(e.target.value);draft={...draft,...Object.fromEntries(new FormData(refuel))};saveDraft().catch(()=>{});updateCalculated()};updateCalculated()}
- const transfer=document.querySelector('#transfer-form');if(transfer){transfer.onsubmit=e=>saveEvent(e,'transfer');transfer.oninput=e=>{if(e.target.hasAttribute('data-decimal'))e.target.value=formatInput(e.target.value);else e.target.value=e.target.value.replace(/\D/g,'');draft.transfer=Object.fromEntries(new FormData(transfer));saveDraft().catch(()=>{});updateCalculated()};updateCalculated()}const occurrence=document.querySelector('#occurrence-form');if(occurrence){occurrence.onsubmit=e=>saveEvent(e,'occurrence');occurrence.oninput=()=>{draft.notes=occurrence.elements.notes.value;saveDraft().catch(()=>{})}}
+ const transfer=document.querySelector('#transfer-form');if(transfer){transfer.onsubmit=e=>saveEvent(e,'transfer');transfer.oninput=e=>{if(e.target.hasAttribute('data-decimal'))e.target.value=formatInput(e.target.value);else e.target.value=e.target.value.replace(/\D/g,'');draft.transfer=Object.fromEntries(new FormData(transfer));saveDraft().catch(()=>{});updateCalculated()};updateCalculated()}const occurrence=document.querySelector('#occurrence-form');if(occurrence){occurrence.onsubmit=e=>saveEvent(e,'occurrence');occurrence.oninput=()=>{draft.notes=occurrence.elements.notes.value;saveDraft().catch(()=>{})};bindPhotoControls()}
  document.querySelectorAll('input[inputmode="numeric"]:not([data-decimal])').forEach(input=>input.oninput=()=>{input.value=input.value.replace(/\D/g,'')});bindPending();
+}
+function photoHTML(){return isPhoto(draft.photo)?`<img class="occurrence-photo" src="${esc(draft.photo)}" alt="FOTO ANEXADA À OCORRÊNCIA"><button type="button" class="photo-button" id="remove-photo">REMOVER FOTO</button>`:''}
+function bindPhotoControls(){
+ const camera=document.querySelector('#camera-photo'),gallery=document.querySelector('#gallery-photo');
+ document.querySelector('#take-photo').onclick=()=>camera.click();document.querySelector('#choose-photo').onclick=()=>gallery.click();
+ const preview=document.querySelector('#photo-preview');
+ const bindRemove=()=>{const remove=document.querySelector('#remove-photo');if(remove)remove.onclick=async()=>{delete draft.photo;await saveDraft();preview.innerHTML='';camera.value='';gallery.value=''}};bindRemove();
+ for(const input of [camera,gallery])input.onchange=async()=>{
+  const file=input.files[0];if(!file)return;
+  photoBusy=true;const buttons=[...document.querySelectorAll('button')];buttons.forEach(b=>b.disabled=true);
+  const status=document.querySelector('#photo-status');status.textContent='PREPARANDO FOTO…';
+  try{const photo=await preparePhoto(file);const previous=draft.photo;draft.photo=photo;try{await saveDraft()}catch(error){draft.photo=previous;throw Error('Não foi possível salvar a foto no celular. Libere espaço e tente novamente.')};preview.innerHTML=photoHTML();bindRemove();status.textContent='FOTO ADICIONADA.'}
+  catch(error){status.textContent=error.message}
+  finally{photoBusy=false;buttons.forEach(b=>b.disabled=false);input.value=''}
+ };
 }
 function updateCalculated(){
  const base=recorderBase(session.locations||[],queue,context.localCode,context.materialCode,editId);
@@ -80,7 +96,7 @@ function updateCalculated(){
   document.querySelector('#destination-base').textContent=!destination?'—':value===null?'SEM LEITURA INICIAL':num(value);
  }
 }
-async function saveEvent(e,kind){e.preventDefault();const button=e.target.querySelector('button');button.disabled=true;try{
+async function saveEvent(e,kind){e.preventDefault();if(photoBusy)return;const button=e.target.querySelector('[type="submit"]')||e.target.querySelector('button');button.disabled=true;try{
  const values=Object.fromEntries(new FormData(e.target)),old=editId?queue.find(r=>r.id===editId):null;
  if(kind==='transfer'&&values.destination===context.localCode)throw Error('Informe um local diferente do atual.');
  const record={id:editId||crypto.randomUUID(),kind,userId:session.user.id,operator:session.user.name,localCode:context.localCode,materialCode:context.materialCode,createdAt:old?.createdAt||new Date().toISOString(),...values};
@@ -90,9 +106,10 @@ async function saveEvent(e,kind){e.preventDefault();const button=e.target.queryS
   if(record.recorderEnd<record.recorderStart)throw Error('O final da registradora não pode ser menor que a leitura anterior.');
   record.recorderLiters=Math.round((record.recorderEnd-record.recorderStart)*100)/100;
  }
+ if(kind==='occurrence'&&draft.photo){if(!isPhoto(draft.photo))throw Error('Remova a foto inválida e adicione novamente.');record.photo=draft.photo}
  await enqueue(record);
  if(kind==='transfer'){context.localCode=values.destination;await put(key('context'),context)}
- if(kind==='occurrence'&&occurrenceReturn){delete draft.notes;({screen,editId}=occurrenceReturn);occurrenceReturn=null}else{editId=null;draft={};screen='menu'}await saveDraft();message='SALVO NO CELULAR. AGUARDANDO ENVIO.';render();sync()
+ if(kind==='occurrence'&&occurrenceReturn){delete draft.notes;delete draft.photo;({screen,editId}=occurrenceReturn);occurrenceReturn=null}else{editId=null;draft={};screen='menu'}await saveDraft();message='SALVO NO CELULAR. AGUARDANDO ENVIO.';render();sync()
  }catch(error){document.querySelector('#form-error').textContent=error.message;button.disabled=false}}
 
 async function configureNative(){

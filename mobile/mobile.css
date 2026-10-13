@@ -27,3 +27,9 @@ input,select,textarea{min-width:0;max-width:100%}
 #logout{top:calc(6px + env(safe-area-inset-top));min-height:44px;border:1px solid #759580;border-radius:8px;background:#244f3c;color:#f5f7ef;padding:8px 12px;touch-action:manipulation}
 .observation-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 12px;margin:0 0 12px;border:1px solid #d8bc70;border-radius:8px;background:#244f3c;color:#ffe3a1;font-size:14px;touch-action:manipulation}
 .observation-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.photo-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:16px 0}.photo-button{min-height:44px;padding:10px 12px;border:1px solid #759580;border-radius:8px;background:#244f3c;color:#f5f7ef;font-size:14px;touch-action:manipulation}.occurrence-photo{display:block;max-width:100%;max-height:240px;object-fit:contain;margin:12px auto;border-radius:8px}#photo-status{font-size:14px;line-height:1.5}
+
+input[type="file"][hidden]{display:none}
+
+.photo-button{display:inline-flex;align-items:center;justify-content:center;gap:6px}.photo-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
