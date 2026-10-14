@@ -186,3 +186,7 @@ label.meter-hidden{display:none}
 
 .topbar-title{margin:0;font-size:26px;font-weight:700;overflow-wrap:anywhere}.topbar{height:auto;min-height:83px;padding-top:12px;padding-bottom:12px}.page-heading.page-tools{justify-content:flex-end}
 @media(max-width:760px){.topbar{min-height:76px}.topbar-title{font-size:clamp(16px,4.5vw,20px)}}
+
+.operation-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+
+.operation-entry{padding:24px}.operation-actions{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);gap:12px}.page-tools{margin-bottom:24px}#remove-operation,#remove-record{margin-top:20px;margin-bottom:16px}

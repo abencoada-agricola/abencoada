@@ -29,7 +29,12 @@ await who(manager,'manager@example.com');assert.equal((await rpc('diesel_record_
 assert.equal((await rpc('diesel_record_controls',{...removal,kind:'occurrence',id:occurrence.id})).ok,true);assert.equal((await rpc('diesel_operations_admin',null)).operations.length,0);
 let removed=(await rpc('diesel_record_controls',null)).records;assert.equal(removed[0].id,occurrence.id);assert.equal(removed[0].removed_by_name,'GESTOR');assert.equal(removed[0].removal_reason,'LEITURA INCORRETA');
 assert.equal((await rpc('diesel_record_controls',{action:'restore',kind:'occurrence',id:occurrence.id})).ok,true);assert.equal((await rpc('diesel_operations_admin',null)).operations[0].has_photo,true);assert.equal((await db.query('select diesel_occurrence_photo($1) result',[occurrence.id])).rows[0].result.photo,occurrence.photo);
-await db.exec('reset role');assert.equal((await db.query('select count(*)::int n from private.record_control_audit')).rows[0].n,4);
+await who(worker,'worker@example.com');
+const transfer={id:crypto.randomUUID(),kind:'transfer',transferVersion:2,localCode:'1',materialCode:'9',destination:'2',recorderStart:1120,recorderEnd:1140,createdAt:new Date().toISOString()};assert.equal((await rpc('diesel_operation_submit',transfer)).id,transfer.id);
+assert.equal((await rpc('diesel_record_controls',{action:'remove',kind:'transfer',id:transfer.id,reason:'LOCAL INCORRETO'})).status,403);
+await who(manager,'manager@example.com');assert.equal((await rpc('diesel_record_controls',{action:'remove',kind:'transfer',id:transfer.id,reason:'LOCAL INCORRETO'})).ok,true);assert.equal((await rpc('diesel_operations_admin',null)).operations.filter(o=>o.kind==='transfer').length,0);
+assert.equal((await rpc('diesel_record_controls',{action:'restore',kind:'transfer',id:transfer.id})).ok,true);assert.equal((await rpc('diesel_operations_admin',null)).operations.find(o=>o.id===transfer.id).recorder_liters,20);
+await db.exec('reset role');assert.equal((await db.query('select count(*)::int n from private.record_control_audit')).rows[0].n,6);
 await db.exec("insert into fleets(id,name,type) values('CH','JD COLHEDORA CH570','Colhedora'),('OLD','JD COLHEDORA 3520','Colhedora'),('CUSTOM','JD TRATOR 7200J','Trator');update fleets set tank_capacity=450 where id='CUSTOM';");
 await db.exec(await readFile('supabase/tank-references.sql','utf8'));
 let reference=(await db.query("select tank_capacity,tank_reference from fleets where id='CH'")).rows[0];assert.equal(reference.tank_capacity,'605');assert.ok(reference.tank_reference.source.includes('deere'));
