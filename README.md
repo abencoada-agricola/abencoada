@@ -200,3 +200,5 @@ The Android menu has a white toolbar, a local/material context box and large rou
 - [Transfer icon by Magnific — Flaticon](https://www.flaticon.com/br/icone-gratis/troca_1372789).
 
 These icons are distributed under the Flaticon free license with attribution. The original PNG files are bundled in the APK, so the menu icons work offline. Credits are also included on the APK release page.
+
+The app uses yellow action buttons, responsive text sizes, a scrolling form area and a bounded content width on tablets. The login logo is displayed at 70% of its previous width.
