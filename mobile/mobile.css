@@ -63,3 +63,6 @@ header{background:#fff;border-bottom:1px solid #d4dfd7}
 .menu-actions button.primary{margin:0;min-height:88px;padding:20px 12px;border-radius:26px;font-size:26px;line-height:1.2}
 button.primary,button.secondary{border-radius:20px;font-size:24px}
 .menu-screen #pending:empty,.menu-screen #status:empty{display:none}
+
+.menu-actions button.primary{display:flex;align-items:center;justify-content:center;gap:12px;font-size:clamp(20px,6.4vw,26px)}
+.menu-actions .menu-icon{width:34px;height:34px;flex:0 0 34px;object-fit:contain}

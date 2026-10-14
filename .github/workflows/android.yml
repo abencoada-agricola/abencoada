@@ -71,4 +71,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "android-1.0.${{ github.run_number }}" abencoada-diesel.apk abencoada-diesel.apk.sha256 --target "$GITHUB_SHA" --title "Android 1.0.${{ github.run_number }}" --notes "Installable Android app with account login, fleet QR scanning, previous readings and offline refueling records. Requires Android 8 or later."
+          cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
+          Installable Android app with account login, fleet QR scanning, previous readings and offline refueling records. Requires Android 8 or later.
+
+          Icon credits:
+          - [Fuel icon by Smashicons — Flaticon](https://www.flaticon.com/br/icone-gratis/combustivel_1506329)
+          - [Transfer icon by Magnific — Flaticon](https://www.flaticon.com/br/icone-gratis/troca_1372789)
+          NOTES
+          gh release create "android-1.0.${{ github.run_number }}" abencoada-diesel.apk abencoada-diesel.apk.sha256 --target "$GITHUB_SHA" --title "Android 1.0.${{ github.run_number }}" --notes-file "$RUNNER_TEMP/release-notes.md"
