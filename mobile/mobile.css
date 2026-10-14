@@ -64,3 +64,10 @@ a{color:#ffe3a1}
 @media(min-width:600px){header{padding-left:16px;padding-right:16px;gap:12px}.menu-actions .menu-icon{width:36px;height:36px;flex-basis:36px}}
 
 button.back-button{background:#fff;color:var(--bg);border-color:#d4dfd7}
+
+.password-field{position:relative;margin-top:8px}
+.password-field input{margin:0;padding-right:60px}
+input[data-password]{text-transform:none}
+.password-field button{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:48px;height:48px;margin:0;padding:11px;border:0;border-radius:10px;background:transparent;color:var(--bg)}
+.password-field button:active:not(:disabled){transform:translateY(-50%);filter:brightness(.8)}
+.password-field svg{display:block;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}

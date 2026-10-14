@@ -4,7 +4,7 @@ export function installUppercaseInputs() {
   const isText = field => field instanceof HTMLTextAreaElement ||
     field instanceof HTMLInputElement && ['text','search','email','tel','url'].includes(field.type);
   const normalize = field => {
-    if (!isText(field) || field.readOnly || field.disabled) return;
+    if (!isText(field) || field.hasAttribute('data-password') || field.readOnly || field.disabled) return;
     field.autocapitalize = 'characters';
     const original = field.value, upper = original.toLocaleUpperCase('pt-BR');
     if (original === upper) return;

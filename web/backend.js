@@ -35,7 +35,7 @@ export async function api(path,options={}){
   else if(route==='occurrence-photo'){rpc='diesel_occurrence_photo';args={operation_id:new URLSearchParams(query).get('id')}}
   else if(route==='operations-admin'){rpc='diesel_operations_admin';args={payload:options.body?JSON.parse(options.body):null}}
   else if(route==='mobile-submit'){rpc='diesel_mobile_submit';args={payload:JSON.parse(options.body)}}
-  else if(route==='records'&&options.method==='POST'){rpc='diesel_submit';args={payload:JSON.parse(options.body)}}
+  else if(route==='records'&&options.method==='POST')throw Error('Registre abastecimentos pelo aplicativo Android.');
   else if(route==='records'){rpc='diesel_records';args={record_id:new URLSearchParams(query).get('id')}}
   else if(route==='admin'&&options.method==='POST'){rpc='diesel_admin_save';args={payload:JSON.parse(options.body)};if(args.payload.action==='import-fleets'){const r=await fetch('./fleets.json');if(!r.ok)throw Error('Catálogo indisponível.');args.payload.fleets=await r.json()}}
   else if(route==='admin')rpc='diesel_admin';
@@ -46,8 +46,9 @@ export async function api(path,options={}){
  }catch(error){if(error.name==='TypeError'||error.name==='AbortError')throw Error('Não foi possível conectar. Conecte o celular à internet e confira a data e hora automáticas. Os registros continuam salvos neste aparelho.');throw error}finally{clearTimeout(timer)}
 }
 
-// Campo público: somente catálogo, últimas leituras e inclusão validada no servidor.
+// Read-only catalog probe used to distinguish connection and session failures.
 export async function fieldApi(route,payload){
+ if(route!=='session')throw Error('Registre abastecimentos pelo aplicativo Android.');
  if(!client)throw Error('O banco ainda não foi conectado.');
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),10000);
  try{
