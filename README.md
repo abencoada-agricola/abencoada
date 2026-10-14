@@ -191,3 +191,5 @@ Simulated counters advance with manual liters and pending entries on the phone. 
 Android numeric fields use normal number entry: `100` means 100, while `100,50` means 100.50. Thousands separators appear automatically; leaving the field displays two decimal places. The Android decimal point key is accepted as a decimal comma.
 
 The Android header shows the company logo, connection status, an observation warning icon and sign-out. Observation is available after choosing a local/material, including from the main menu. Send text, a photo, or both; photo-only entries use the caption FOTO ANEXADA. Pending observations keep the original operator, capture time and photo offline until confirmed.
+
+The Android menu has a white toolbar, a local/material context box and large rounded action buttons centered in the available screen area. Location changes use the transfer flow; there is no separate change-local button.
