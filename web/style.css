@@ -175,4 +175,6 @@ label.meter-hidden{display:none}
 .nav button.active .nav-icon-wrap{background:var(--accent);color:var(--bg)}
 @media(max-width:800px){.nav-icon-wrap{width:28px;height:28px;flex:0 0 28px;border-radius:8px}.nav svg.nav-icon{width:20px;height:20px}}
 @media(min-width:761px){.sidebar{overflow-y:auto}.nav button{padding:10px 14px}}
-@media(max-width:760px){.sidebar{height:calc(190px + env(safe-area-inset-bottom))}.main{padding-bottom:calc(190px + env(safe-area-inset-bottom))}}
+@media(max-width:760px){.sidebar{height:calc(140px + env(safe-area-inset-bottom))}.main{padding-bottom:calc(140px + env(safe-area-inset-bottom))}}
+
+.btn.danger{background:#b42318;color:#fff;border-color:#b42318}.removed-entry{padding:16px 0;border-bottom:1px solid var(--border)}.removed-entry .btn{display:block;margin-top:12px}

@@ -22,14 +22,16 @@ export async function signOut(){await client.auth.signOut({scope:'local'})}
 export async function api(path,options={}){
  if(!client)throw Error('O banco ainda não foi conectado.');
  const {data:auth,error:authError}=await client.auth.getSession();if(authError)throw Error('Não foi possível confirmar a conexão. Os registros continuam neste aparelho.');if(!auth.session){const e=Error('Entre com seu usuário e senha.');e.status=401;throw e}
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),18000);
+ const photoUpload=path==='operation-submit'&&options.body&&Boolean(JSON.parse(options.body).photo);
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),photoUpload?45000:18000);
  try{
   if(path==='team-password'){
    const response=await fetch(config.url+'/functions/v1/diesel-login',{method:'POST',headers:{'Content-Type':'application/json',apikey:config.publishableKey,Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({action:'team-password',...JSON.parse(options.body)}),signal:controller.signal});
    const data=await response.json();if(!response.ok||!data.saved)throw Error(data.error||'Não foi possível salvar a senha.');return data;
   }
   const [route,query]=path.split('?');let rpc,args={};
-  if(route==='session')rpc='diesel_session';
+  if(route==='record-controls'){rpc='diesel_record_controls';args={payload:options.body?JSON.parse(options.body):null}}
+  else if(route==='session')rpc='diesel_session';
   else if(route==='device-register'){rpc='diesel_device_register';args={device_id:JSON.parse(options.body).deviceId}}
   else if(route==='operation-submit'){rpc='diesel_operation_submit';args={payload:JSON.parse(options.body)}}
   else if(route==='occurrence-photo'){rpc='diesel_occurrence_photo';args={operation_id:new URLSearchParams(query).get('id')}}
@@ -40,8 +42,8 @@ export async function api(path,options={}){
   else if(route==='admin'&&options.method==='POST'){rpc='diesel_admin_save';args={payload:JSON.parse(options.body)};if(args.payload.action==='import-fleets'){const r=await fetch('./fleets.json');if(!r.ok)throw Error('Catálogo indisponível.');args.payload.fleets=await r.json()}}
   else if(route==='admin')rpc='diesel_admin';
   else throw Error('Operação inválida.');
-  const {data,error}=await client.rpc(rpc,args).abortSignal(controller.signal);
-  if(error){const e=Error(error.message||'Não foi possível conectar ao banco.');if(error.code==='42501')e.status=403;if(['PGRST301','PGRST302','PGRST303'].includes(error.code))e.status=401;throw e}
+  const {data,error,status:rpcStatus}=await client.rpc(rpc,args).abortSignal(controller.signal);
+  if(error){const e=Error(error.message||'Não foi possível conectar ao banco.');e.status=rpcStatus||0;if(error.code==='42501')e.status=403;if(['PGRST301','PGRST302','PGRST303'].includes(error.code))e.status=401;throw e}
   if(data?.error){const e=Error(data.error);e.status=data.status||422;e.data=data;throw e}return data;
  }catch(error){if(error.name==='TypeError'||error.name==='AbortError')throw Error('Não foi possível conectar. Conecte o celular à internet e confira a data e hora automáticas. Os registros continuam salvos neste aparelho.');throw error}finally{clearTimeout(timer)}
 }

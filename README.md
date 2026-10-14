@@ -42,13 +42,13 @@ A future integration needs an authorized GMAIS API or read-only backend connecti
 
 ## Administration
 
-Administrators sign in with a username and password. They can view and filter records by fleet, worker, date, and synchronization status, inspect readings, export CSV files, and print reports. Received records cannot be edited or deleted through the app.
+Administrators sign in with a username and password. They can view and filter records by fleet, worker, date, and synchronization status, inspect readings, export CSV files, and print reports. Managers can exclude incorrect received records with a reason and restore them through **Excluídos**. The Android app cannot edit received entries.
 
 The dashboard checks for new records every 15 seconds while open and shows unread notices in the bell. Optional browser notifications also require the dashboard to remain open.
 
-**Frotas** supports searching by fleet code, name, model, or type. **Editar frota** changes the name, model, type, active status, and total tank capacity. Required Android meters are configured separately and remain unchanged when fleet details are edited. Capacities start unset; managers must enter verified vehicle capacities rather than relying on category estimates. Updating the GMAIS catalog snapshot preserves custom models and capacities. The dashboard and forms offer light/dark themes with a saved browser preference. The sun/moon icon stays in the header, beside notifications in the dashboard.
+**Frotas** supports searching by fleet code, name, model, or type. **Editar frota** changes the name, model, type, active status, and total tank capacity. Required Android meters are configured separately and remain unchanged when fleet details are edited. Manufacturer reference capacities are prefilled where the model is sufficiently identifiable. Ambiguous variants remain unset; managers can enter the verified total capacity of the actual tank(s). Updating the GMAIS catalog snapshot preserves custom models and capacities. The dashboard and forms offer light/dark themes with a saved browser preference. The sun/moon icon stays in the header, beside notifications in the dashboard.
 
-Both refueling forms warn immediately above the registered tank capacity, without a tolerance margin. Workers can review and explicitly confirm an unusual quantity. The server checks that confirmation against the same quantity and current capacity; accepted exceptions retain the capacity snapshot and a confirmation flag. If capacity is unknown, the app does not invent a limit. Older APK submissions exceeding a newly configured capacity remain pending until corrected/confirmed in an updated app.
+The Android refueling form warns immediately above the registered tank capacity, without a tolerance margin or confirmation dialog. Sending remains allowed. The server records the capacity snapshot and an excess-volume flag, including submissions from older APKs. Unknown capacities have no invented limit.
 
 The dashboard displays monthly average liters per refueling and per-fleet estimated km/L and L/h. Ratios use the sum of positive meter intervals and the associated liters, not an average of individual ratios. Only confirmed refuelings count; transfers and occurrences do not. Missing baselines, unselected meters, and zero/negative intervals do not produce a ratio. Partial fills and missing refuelings can distort consumption estimates; these are not measured full-tank consumption figures.
 
@@ -135,7 +135,7 @@ On the phone, connect once to refresh the catalog. Enter local **990001** and ma
 
 These capacities are fictional test values. Local **990001** starts at **10,000**; destination **990002** starts at **20,000**. Use the fleet QR labels generated in **Frotas** or enter the fleet code manually.
 
-Suggested first test: select fleet 990101 in QR/dispenser mode, enter KM 45020 and dispenser final 10050. The app should calculate 50 L. Then try a lower KM and a quantity over 70 L to check the block and capacity confirmation. Subsequent tests must use the latest readings, which advance normally. With the optional trial-counter migration below, manual liters advance simulated counters. Physical counters still require a verified reading after manual entries.
+Suggested first test: select fleet 990101 in QR/dispenser mode, enter KM 45020 and dispenser final 10050. The app should calculate 50 L. Then try a lower KM and a quantity over 70 L to check the lower-meter block and the nonblocking capacity warning. Subsequent tests must use the latest readings, which advance normally. With the optional trial-counter migration below, manual liters advance simulated counters. Physical counters still require a verified reading after manual entries.
 
 Test airplane mode after refreshing the catalog: save a refueling and an occurrence with a photo, close and reopen the app, then restore connectivity and check receipt in the dashboard. Test transfer by closing the source dispenser and moving to local 990002.
 
@@ -175,3 +175,9 @@ The app uses yellow action buttons, responsive text sizes, a scrolling form area
 The login password eye toggles visibility without changing letter case. Once chosen, local and material stay fixed across app restarts until explicit sign-out and a new login. A transfer records its destination without changing the current session selection. Reauthentication after an expired session preserves the existing selection and pending records.
 
 Apply `supabase/android-only.sql` after `trial-recorder-readings.sql` to disable the old web submission endpoints. Android operation and device synchronization endpoints stay available; historical records are preserved.
+
+Submission failures now show their cause separately from connectivity: expired session, permission, server response or network failure. Pending entries are preserved. A native background setup failure does not stop delivery with the app open. Photo uploads have a longer timeout for slower connections.
+
+Managers can exclude an incorrect refueling, transfer or occurrence from its details, entering a reason. Excluded entries disappear from lists, totals and fleet meter baselines. Use **Excluded** to restore them. The server keeps an audit of each action and retains occurrence photos. Excluding an entry does not undo physical fuel delivery or rewind the local recorder; correct that meter in Settings when necessary.
+
+Fuel volume above a fleet's tank capacity shows an advisory warning and can still be submitted, online or offline. Manufacturer references and unresolved model variants are documented in [tank capacities](docs/tank-capacities.md). Review the actual vehicle's tank configuration in Fleets. Apply `supabase/record-controls.sql` after `android-only.sql`, then `supabase/tank-references.sql`.

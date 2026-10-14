@@ -1,0 +1,167 @@
+{
+  "researchedAt": "2026-10-14",
+  "references": [
+    {
+      "name": "JD COLHEDORA CH570",
+      "capacity": 605,
+      "source": "https://www.deere.com.br/pt/colheitadeiras/colhedora-de-cana/ch570/",
+      "note": "CH570: capacidade de combustível de fábrica."
+    },
+    {
+      "name": "COLHEDORA CH570",
+      "capacity": 605,
+      "source": "https://www.deere.com.br/pt/colheitadeiras/colhedora-de-cana/ch570/",
+      "note": "CH570: capacidade de combustível de fábrica."
+    },
+    {
+      "name": "JD TRATOR 7200J",
+      "capacity": 390,
+      "source": "https://deere.com/assets/pdfs/region-3/parts-service/Tratores%207J%20-%207200J%2C%207215J%2C%207230J.pdf",
+      "note": "Guia de serviço 7J de abril/2022. Conferir tanque original do equipamento."
+    },
+    {
+      "name": "JD TRATOR 7230J",
+      "capacity": 390,
+      "source": "https://deere.com/assets/pdfs/region-3/parts-service/Tratores%207J%20-%207200J%2C%207215J%2C%207230J.pdf",
+      "note": "Guia de serviço 7J de abril/2022. Conferir tanque original do equipamento."
+    },
+    {
+      "name": "JD TRATOR 6180J",
+      "capacity": 300,
+      "source": "https://www.deere.com/latin-america/es/tractores/tractores-medianos/6180j/",
+      "note": "6180J: especificação regional do fabricante; conferir configuração brasileira."
+    },
+    {
+      "name": "JONH DEERE 7M230",
+      "capacity": 430,
+      "source": "https://www.deere.com.br/pt/tratores/s%C3%A9rie-7m-grande-200cv-230cv-/7230m-230cv/",
+      "note": "7M 230: capacidade publicada pelo fabricante."
+    },
+    {
+      "name": "PULVERIZADOR JD M4025",
+      "capacity": 268.6,
+      "source": "https://www.deere.com.br/pt/tratos-culturais/pulverizador-m4025/",
+      "note": "Somente combustível, não o tanque de solução de 2.500 L."
+    },
+    {
+      "name": "CARREGADEIRA L60F",
+      "capacity": 224,
+      "source": "https://www.volvoce.com/-/media/volvoce/global/global-site/product-archive/documents/03-wheel-loaders/09-volvo-f-series/v-l60f/v-l60ftol90f-22c1002737-2007-11.pdf",
+      "note": "L60F: catálogo original de novembro/2007."
+    },
+    {
+      "name": "ESCAVADEIRA EC140 DLM",
+      "capacity": 250,
+      "source": "https://www.volvoce.com/-/media/volvoce/global/products/excavators/crawler-excavators/brochures/brochure_ec120d_ec140d_t3_en_c5_20049141_d.pdf",
+      "note": "EC140D, incluindo DLM: combustível, página 13."
+    },
+    {
+      "name": "HILUX 2020 A 2024 MANUAL",
+      "capacity": 80,
+      "source": "https://media.toyota.com.br/35dc8ee1-7649-4957-9a21-020a0648d665.pdf",
+      "note": "Ficha Hilux 2024, todas as versões listadas: 80 L; conferir unidades dos outros anos."
+    },
+    {
+      "name": "AMAROK",
+      "capacity": 80,
+      "source": "https://www.vwnews.com.br/news/787",
+      "note": "Amarok V6 brasileira: 80 L; confirmar motorização e ano da unidade."
+    },
+    {
+      "name": "RAM 3500",
+      "capacity": 117,
+      "source": "https://www.ram.com.br/content/dam/ram/products/handbooks/ram-3500/2024/handbook-2024-2024-3500.pdf",
+      "note": "Manual brasileiro 2024, motor diesel 6,7 L, página 356."
+    },
+    {
+      "name": "S10 LS DS4 MANUAL",
+      "capacity": 76,
+      "source": "https://meu.chevrolet.com.br/content/dam/gmownercenter/gmsa/gmbr/dynamic/manuals/2016/chevrolet/S10/pt/om_ng-chevrolet_S10_my16-pt_BR.pdf",
+      "note": "Referência S10 diesel 2,8 L 4x2/4x4: 76 L (manuais 2016 e 2024). Confirmar ano e motor."
+    },
+    {
+      "name": "S10 LTS DD4A AUTOMATICA",
+      "capacity": 76,
+      "source": "https://meu.chevrolet.com.br/content/dam/gmownercenter/gmsa/gmbr/dynamic/manuals/2016/chevrolet/S10/pt/om_ng-chevrolet_S10_my16-pt_BR.pdf",
+      "note": "Referência S10 diesel 2,8 L 4x2/4x4: 76 L (manuais 2016 e 2024). Confirmar ano e motor."
+    },
+    {
+      "name": "FIAT STRADA ENDURANCE",
+      "capacity": 55,
+      "source": "https://www.media.stellantis.com/br-pt/download-model-document/123",
+      "note": "Ficha Endurance 1,4 cabine dupla. Conferir versão e ano da unidade."
+    },
+    {
+      "name": "JD COLHEDORA 3520",
+      "capacity": null,
+      "source": "https://www.deere.com/assets/pdfs/region-4/industries/government-and-military-sales/contracts/price-pages/agricultural/A3_20180122.pdf",
+      "note": "3520 de 2018: 605 L. Há gerações anteriores com alteração do tanque; falta ano/série para escolher."
+    },
+    {
+      "name": "JD TRATOR 6190J",
+      "capacity": null,
+      "source": "https://www.deere.com/assets/pdfs/region-3/parts-service/Tratores%206J%20-%206135J%2C%206150J%2C%206170J%2C%206190J%2C%206210J%20%28Edi%C3%A7%C3%A3o%20Am%C3%A9rica%20do%20Sul%29.pdf",
+      "note": "Guia regional: 300 L; página argentina atual: 372 L. Conferir versão da unidade antes de cadastrar."
+    },
+    {
+      "name": "JD 6190",
+      "capacity": null,
+      "source": "https://www.deere.com/assets/pdfs/region-3/parts-service/Tratores%206J%20-%206135J%2C%206150J%2C%206170J%2C%206190J%2C%206210J%20%28Edi%C3%A7%C3%A3o%20Am%C3%A9rica%20do%20Sul%29.pdf",
+      "note": "Guia regional: 300 L; página argentina atual: 372 L. Conferir versão da unidade antes de cadastrar."
+    },
+    {
+      "name": "TRATOR JD 5070E",
+      "capacity": null,
+      "source": "https://www.deere.com/assets/pdfs/region-3/parts-service/Tratores%205E.pdf",
+      "note": "Guia abril/2022: 115 L com plataforma ou 125 L com cabine; algumas séries antigas diferem. Falta ano/série/cabine."
+    },
+    {
+      "name": "TRATOR 5070E-5080E",
+      "capacity": null,
+      "source": "https://www.deere.com/assets/pdfs/region-3/parts-service/Tratores%205E.pdf",
+      "note": "Guia abril/2022: 115 L com plataforma ou 125 L com cabine; algumas séries antigas diferem. Falta ano/série/cabine."
+    },
+    {
+      "name": "JD TRATOR 5090E",
+      "capacity": null,
+      "source": "https://www.deere.com/assets/pdfs/region-3/parts-service/Tratores%205E.pdf",
+      "note": "Guia abril/2022: 115 L com plataforma ou 125 L com cabine; algumas séries antigas diferem. Falta ano/série/cabine."
+    },
+    {
+      "name": "JD TRATOR 5078E",
+      "capacity": null,
+      "source": "https://www.deere.com/assets/pdfs/region-3/parts-service/Tratores%205E.pdf",
+      "note": "Guia abril/2022: 115 L com plataforma ou 125 L com cabine; algumas séries antigas diferem. Falta ano/série/cabine."
+    },
+    {
+      "name": "VALTRA TRATOR BH 194",
+      "capacity": null,
+      "source": "https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/bhg4/VT_Trator_BH_G4_Web.pdf",
+      "note": "BH194 geração G4: 400 L. Cadastro não identifica a geração."
+    },
+    {
+      "name": "MB 3133/48",
+      "capacity": null,
+      "source": "https://www.mercedes-benz-trucks.com.br/imprensa/releases/mercedes-benz-lanca-novos-modelos-on-road-e-off-road-dos-caminhoes-extrapesados-atego-537",
+      "note": "Atego 3133 possui opções de 300 ou 600 L; confirmar tanque(s) da unidade."
+    },
+    {
+      "name": "SCANIA G 560",
+      "capacity": null,
+      "source": "https://www.scania.com/br/pt/home/products/trucks/Scania-Super.html",
+      "note": "Há configurações distintas de tanque(s). Precisa da ficha de fabricação ou identificação dos tanques."
+    },
+    {
+      "name": "VOLVO VM 360 6X4R",
+      "capacity": null,
+      "source": "https://www.volvotrucks.com.br/content/dam/volvo-trucks/markets/brazil/truck/fichas-vm/Ficha-T%C3%A9cnica-VM-6x4R-%2832%20ton%29.pdf",
+      "note": "Ficha VM 6x4R de geração anterior: 280 L; cadastro não informa ano/geração/número de tanques."
+    },
+    {
+      "name": "FORD F150",
+      "capacity": null,
+      "source": "https://media.ford.com/content/dam/fordmedia/South%20America/Brazil/2023/02/ebook-f150.pdf",
+      "note": "F-150 brasileira 2023: 136 L. Falta ano/origem para distinguir outras gerações e tanques opcionais."
+    }
+  ]
+}

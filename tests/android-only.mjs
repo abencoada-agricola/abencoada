@@ -21,11 +21,17 @@ for(const name of ['diesel_submit','diesel_field_submit'])await assert.rejects((
 const record={id:crypto.randomUUID(),kind:'refuel',mode:'manual',fleet:'123',localCode:'1',materialCode:'9',km:10,liters:20,measuredFields:{km:true,engine:false,elevator:false},createdAt:new Date().toISOString(),date:new Date().toISOString().slice(0,10)};
 assert.equal((await submit(record)).id,record.id);
 assert.equal((await submit(record)).duplicate,true);
+const photo='data:image/jpeg;base64,'+Buffer.from('ffd8ffe000104a46494600010100000100010000ffd9','hex').toString('base64');
+const occurrence={id:crypto.randomUUID(),kind:'occurrence',localCode:'1',materialCode:'9',createdAt:new Date().toISOString(),notes:'OCORRÊNCIA COM FOTO',photo};
+assert.equal((await submit(occurrence)).id,occurrence.id);assert.equal((await submit(occurrence)).duplicate,true);
+assert.equal((await submit({...occurrence,id:crypto.randomUUID(),photo:null})).id!==undefined,true);
+
 const lease=(await db.query('select diesel_device_register($1) result',[crypto.randomUUID()])).rows[0].result;
 await who(null,null,'anon');
 for(const name of ['diesel_submit','diesel_field_submit'])await assert.rejects(()=>db.query('select '+name+'($1::jsonb)',[JSON.stringify({})]),/permission denied/);
 const background={...record,id:crypto.randomUUID(),km:20};
 assert.equal((await db.query('select diesel_device_submit($1,$2::jsonb) result',[lease.token,JSON.stringify(background)])).rows[0].result.id,background.id);
 assert.ok((await db.query('select diesel_field_session() result')).rows[0].result.fleets.length);
+const bgOccurrence={...occurrence,id:crypto.randomUUID()};assert.equal((await db.query('select diesel_device_submit($1,$2::jsonb) result',[lease.token,JSON.stringify(bgOccurrence)])).rows[0].result.id,bgOccurrence.id);
 await who(manager,'manager@example.com');assert.equal((await db.query('select diesel_records() result')).rows[0].result.records.length,2);
 await db.close();console.log('Web entry disabled; Android foreground, background, retries, catalog and administration passed.');
