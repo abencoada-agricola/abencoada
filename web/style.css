@@ -178,3 +178,8 @@ label.meter-hidden{display:none}
 @media(max-width:760px){.sidebar{height:calc(140px + env(safe-area-inset-bottom))}.main{padding-bottom:calc(140px + env(safe-area-inset-bottom))}}
 
 .btn.danger{background:#b42318;color:#fff;border-color:#b42318}.removed-entry{padding:16px 0;border-bottom:1px solid var(--border)}.removed-entry .btn{display:block;margin-top:12px}
+
+.topbar-title{font-size:16px;font-weight:700;letter-spacing:.5px;color:var(--ink);min-width:0;line-height:1.3}.topbar{gap:12px}.dashboard-period{min-width:175px}.dashboard-period select{margin-top:5px;font-size:12px}.chart{overflow-x:auto}.chart-y{flex-shrink:0}.period{white-space:nowrap}
+@media(max-width:760px){.topbar-title{font-size:12px;letter-spacing:0}.topbar .top-actions{flex-shrink:0}.dashboard-period{min-width:145px}.dashboard-period select{font-size:11px}.card-head .period{font-size:9px}}
+
+.chart .bars{gap:10px}

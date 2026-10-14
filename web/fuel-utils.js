@@ -51,3 +51,22 @@ export function confirmCapacity(warning, fleetId) {
     dialog.querySelector('.secondary').focus();
   });
 }
+
+export const dashboardPeriods=[7,30,60,90];
+export function dashboardRange(end,days){
+ if(!dashboardPeriods.includes(Number(days)))throw Error('Período inválido.');
+ const start=new Date(end+'T12:00:00Z');start.setUTCDate(start.getUTCDate()-Number(days)+1);
+ return {start:start.toISOString().slice(0,10),end};
+}
+export function dashboardVolumes(records,end,days){
+ const {start}=dashboardRange(end,days),totals=new Map();
+ for(const r of records)if(r.date>=start&&r.date<=end&&(!r.status||r.status==='synced'))totals.set(r.date,(totals.get(r.date)||0)+Number(r.liters));
+ const buckets=[],step=Number(days)===7?1:7;
+ for(let offset=0;offset<Number(days);offset+=step){
+  const first=new Date(start+'T12:00:00Z');first.setUTCDate(first.getUTCDate()+offset);
+  const bucketStart=first.toISOString().slice(0,10);let total=0,bucketEnd=bucketStart;
+  for(let n=0;n<step&&offset+n<Number(days);n++){const d=new Date(first);d.setUTCDate(d.getUTCDate()+n);bucketEnd=d.toISOString().slice(0,10);total+=totals.get(bucketEnd)||0}
+  buckets.push({start:bucketStart,end:bucketEnd,total});
+ }
+ return buckets;
+}
