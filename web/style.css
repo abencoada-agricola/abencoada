@@ -168,3 +168,11 @@ label.meter-hidden{display:none}
 .top-actions{margin-left:auto}
 
 .operation-entry{padding:20px 22px;margin:0;align-items:flex-start}.operation-entry>div{min-width:0;width:100%}.operation-notes{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}
+
+/* Distinct, consistent vector icons for the administration navigation. */
+.nav-icon-wrap{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border-radius:10px;background:var(--surface-hover);color:inherit}
+.nav svg.nav-icon{width:22px;height:22px;flex-shrink:0}
+.nav button.active .nav-icon-wrap{background:var(--accent);color:var(--bg)}
+@media(max-width:800px){.nav-icon-wrap{width:28px;height:28px;flex:0 0 28px;border-radius:8px}.nav svg.nav-icon{width:20px;height:20px}}
+@media(min-width:761px){.sidebar{overflow-y:auto}.nav button{padding:10px 14px}}
+@media(max-width:760px){.sidebar{height:calc(190px + env(safe-area-inset-bottom))}.main{padding-bottom:calc(190px + env(safe-area-inset-bottom))}}
