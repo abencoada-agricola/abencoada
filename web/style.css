@@ -183,3 +183,6 @@ label.meter-hidden{display:none}
 @media(max-width:760px){.topbar-title{font-size:12px;letter-spacing:0}.topbar .top-actions{flex-shrink:0}.dashboard-period{min-width:145px}.dashboard-period select{font-size:11px}.card-head .period{font-size:9px}}
 
 .chart .bars{gap:10px}
+
+.topbar-title{margin:0;font-size:26px;font-weight:700;overflow-wrap:anywhere}.topbar{height:auto;min-height:83px;padding-top:12px;padding-bottom:12px}.page-heading.page-tools{justify-content:flex-end}
+@media(max-width:760px){.topbar{min-height:76px}.topbar-title{font-size:clamp(16px,4.5vw,20px)}}
