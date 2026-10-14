@@ -1,0 +1,4 @@
+export const checklistStatuses={PERFEITO:'PERFEITO',ATENCAO:'ATENÇÃO',CRITICO:'CRÍTICO'};
+export function checklistAnswers(questions,responses){if(!questions?.length)throw Error('Esta frota não tem perguntas cadastradas.');return questions.map(q=>{const status=responses?.[q.id];if(!Object.prototype.hasOwnProperty.call(checklistStatuses,status))throw Error('Responda todas as perguntas antes de enviar.');return {id:q.id,status}})}
+export function checklistGrade(answers){return answers.some(a=>a.status==='CRITICO')?'CRITICO':answers.some(a=>a.status==='ATENCAO')?'ATENCAO':'PERFEITO'}
+export function checklistOpenItems(records){return records.flatMap(r=>(r.answers||[]).filter(a=>a.status!=='PERFEITO'&&!r.resolutions?.[a.id]).map(a=>({...a,recordId:r.id,fleet:r.fleet,operator:r.operator,created_at:r.created_at})))}

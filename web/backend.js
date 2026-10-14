@@ -30,7 +30,8 @@ export async function api(path,options={}){
    const data=await response.json();if(!response.ok||!data.saved)throw Error(data.error||'Não foi possível salvar a senha.');return data;
   }
   const [route,query]=path.split('?');let rpc,args={};
-  if(route==='record-controls'){rpc='diesel_record_controls';args={payload:options.body?JSON.parse(options.body):null}}
+  if(route==='checklists-admin'){rpc='diesel_checklists_admin';args={payload:options.body?JSON.parse(options.body):null}}
+  else if(route==='record-controls'){rpc='diesel_record_controls';args={payload:options.body?JSON.parse(options.body):null}}
   else if(route==='session')rpc='diesel_session';
   else if(route==='device-register'){rpc='diesel_device_register';args={device_id:JSON.parse(options.body).deviceId}}
   else if(route==='operation-submit'){rpc='diesel_operation_submit';args={payload:JSON.parse(options.body)}}

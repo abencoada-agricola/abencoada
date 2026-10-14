@@ -77,5 +77,6 @@ jobs:
           Icon credits:
           - [Fuel icon by Smashicons — Flaticon](https://www.flaticon.com/br/icone-gratis/combustivel_1506329)
           - [Transfer icon by Magnific — Flaticon](https://www.flaticon.com/br/icone-gratis/troca_1372789)
+          - [Checklist icon by Paul J. — Flaticon](https://www.flaticon.com/free-icon/check_10647890)
           NOTES
           gh release create "android-1.0.${{ github.run_number }}" abencoada-diesel.apk abencoada-diesel.apk.sha256 --target "$GITHUB_SHA" --title "Android 1.0.${{ github.run_number }}" --notes-file "$RUNNER_TEMP/release-notes.md"

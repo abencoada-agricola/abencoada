@@ -11,3 +11,5 @@ android/**/build/
 *.keystore
 *.p12
 *.jks
+
+web/checklists.js

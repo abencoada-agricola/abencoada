@@ -26,6 +26,7 @@ export function recorderBase(locations,queue,local,material,exclude){const locat
 export function litersFromRecorder(start,end){if(start===null)throw Error('A registradora precisa de uma leitura inicial cadastrada pelo gestor.');const liters=Math.round((end-start)*100)/100;if(liters<=0)throw Error('O final da registradora deve superar a leitura anterior.');return liters}
 
 export function operationDependencies(record){
+ if(record.kind==='checklist')return record.fleet?['checklist:'+record.fleet]:[];
  const keys=[];
  if(record.localCode&&record.materialCode)keys.push('local:'+record.localCode+':'+record.materialCode);
  if(record.fleet)keys.push('fleet:'+record.fleet);

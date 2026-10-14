@@ -181,3 +181,15 @@ Submission failures now show their cause separately from connectivity: expired s
 Managers can exclude an incorrect refueling, transfer or occurrence from its details, entering a reason. Excluded entries disappear from lists, totals and fleet meter baselines. Use **Excluded** to restore them. The server keeps an audit of each action and retains occurrence photos. Excluding an entry does not undo physical fuel delivery or rewind the local recorder; correct that meter in Settings when necessary.
 
 Fuel volume above a fleet's tank capacity shows an advisory warning and can still be submitted, online or offline. Manufacturer references and unresolved model variants are documented in [tank capacities](docs/tank-capacities.md). Review the actual vehicle's tank configuration in Fleets. Apply `supabase/record-controls.sql` after `android-only.sql`, then `supabase/tank-references.sql`.
+
+## Checklists
+
+After login the Android menu has Refueling, Transfer and Checklist. Refueling and Transfer request local/material on first use; the selection remains fixed until sign-out. Checklist asks for a fleet without requiring local/material. Questions cached during a connected session remain usable offline. Every question requires Perfect, Attention or Critical. A completed checklist stores capture date/time and the authenticated operator, stays in the phone queue, and synchronizes automatically when connected.
+
+In **Checklist → Configurar perguntas**, choose a fleet, add/edit/remove questions and save. Copying questions from another fleet/model appends independent questions that can be adapted for the destination fleet. There is no fixed question-count limit; individual questions allow 500 characters and each configuration has a 500 KB payload limit. Connect the app to receive changes. Immutable revisions preserve submitted checklists and offline captures based on previous questions.
+
+**Checklists recebidos** filters by fleet, operator, capture dates and result. Attention/Critical buttons list records with unresolved items. New checklists appear in the notification bell; unresolved items also appear in the overview. Open the responses to register a replacement/service with a description and mark an item resolved. The original response stays in history, with the manager and resolution timestamp. **Baixar PDF** downloads a report containing fleet, operator, capture and reception timestamps, every question/response and recorded services.
+
+Apply `supabase/checklists.sql` after `tank-references.sql`. Only managers edit questions, review records or resolve issues. Operators submit checklists; the server verifies all answers and derives the operator, original question wording and overall severity. Retries keep the same ID to prevent duplicates.
+
+Checklist icon: [Check by Paul J. — Flaticon](https://www.flaticon.com/free-icon/check_10647890).
