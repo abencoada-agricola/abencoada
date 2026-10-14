@@ -62,3 +62,5 @@ a{color:#ffe3a1}
 .test-badge{border:1px solid #ffe3a1;border-radius:12px;padding:8px;color:#ffe3a1;font-size:15px;line-height:1.4}
 @media(max-height:520px){body.login-screen header{padding-top:max(14px,env(safe-area-inset-top));padding-bottom:14px}.menu-actions{min-height:184px;padding:12px 0}label{margin:12px 0}}
 @media(min-width:600px){header{padding-left:16px;padding-right:16px;gap:12px}.menu-actions .menu-icon{width:36px;height:36px;flex-basis:36px}}
+
+button.back-button{background:#fff;color:var(--bg);border-color:#d4dfd7}
