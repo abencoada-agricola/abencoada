@@ -59,7 +59,7 @@ assert.equal(recorderBase(loc,queue,'10','9'),150);
 assert.equal(recorderBase(loc,queue,'10','9','b'),120);
 assert.equal(transferRecorderBase(loc,queue,'10','9'),150);
 assert.equal(recorderBase([{...loc[0],simulated_meter:false}],queue,'10','9'),null);
-function input(value){return {value,selectionStart:value.length,validity:'',setCustomValidity(s){this.validity=s},setSelectionRange(s){this.selectionStart=s}}}
+function input(value){return {value,hasAttribute:()=>false,selectionStart:value.length,validity:'',setCustomValidity(s){this.validity=s},setSelectionRange(s){this.selectionStart=s}}}
 let field=input('100');formatNumericInput(field,{inputType:'insertText',data:'0'});assert.equal(field.value,'100');finishNumericInput(field);assert.equal(field.value,'100,00');assert.equal(parseNumber(field.value),100);
 field=input('100.');formatNumericInput(field,{inputType:'insertText',data:'.'});assert.equal(field.value,'100,');field.value+='5';field.selectionStart=field.value.length;formatNumericInput(field,{});finishNumericInput(field);assert.equal(field.value,'100,50');
 field=input('12345');field.selectionStart=3;formatNumericInput(field,{});assert.equal(field.value,'12.345');assert.equal(field.selectionStart,4);
