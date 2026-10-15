@@ -1,9 +1,16 @@
 import {PGlite} from '@electric-sql/pglite';
 import {readFile} from 'node:fs/promises';
 import assert from 'node:assert/strict';
-import {parseNumber,formatInput,recorderBase,litersFromRecorder} from '../mobile/operations.js';
+import {parseNumber,formatInput,formatNumericInput,finishNumericInput,recorderBase,litersFromRecorder} from '../mobile/operations.js';
 assert.equal(formatInput('123456'),'123.456');assert.equal(formatInput('100'),'100');assert.equal(formatInput('1234,5'),'1.234,5');assert.equal(parseNumber('1.234,56'),1234.56);assert.throws(()=>parseNumber(''));assert.equal(litersFromRecorder(100,125.12),25.12);assert.throws(()=>litersFromRecorder(null,125));assert.throws(()=>litersFromRecorder(100,100));
 assert.equal(recorderBase([{local_code:'2',material_code:'9',last_meter:100}],[{id:'pending',kind:'refuel',mode:'recorder',localCode:'2',materialCode:'9',recorderEnd:150}], '2','9'),150);
+// KM uses integer entry; liters and hour meters retain decimal precision.
+const numericField=(value,integer)=>({value,selectionStart:value.length,hasAttribute:name=>integer&&name==='data-integer',setCustomValidity(message){this.error=message},setSelectionRange(start){this.selectionStart=start}});
+const kmField=numericField('123456',true);formatNumericInput(kmField);assert.equal(kmField.value,'123.456');finishNumericInput(kmField);assert.equal(kmField.value,'123.456');assert.equal(parseNumber(kmField.value),123456);
+kmField.value='123.456,78';formatNumericInput(kmField);assert.equal(kmField.value,'123.456');
+kmField.value='-1';finishNumericInput(kmField);assert.ok(kmField.error);
+const decimalField=numericField('1234,5',false);formatNumericInput(decimalField);finishNumericInput(decimalField);assert.equal(decimalField.value,'1.234,50');
+const emptyKm=numericField('',true);finishNumericInput(emptyKm);assert.equal(emptyKm.value,'');
 const db=new PGlite();await db.exec(`create role service_role;create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key);create function auth.uid() returns uuid language sql as $$select (nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid$$;create function auth.jwt() returns jsonb language sql as $$select nullif(current_setting('request.jwt.claims',true),'')::jsonb$$;grant usage on schema auth to authenticated,anon;grant execute on all functions in schema auth to authenticated,anon;`);
 for(const f of ['schema','usernames','field-access','mobile','operations','background-sync','gmais-readings'])await db.exec(await readFile('supabase/'+f+'.sql','utf8'));
 const user=crypto.randomUUID(),other=crypto.randomUUID();await db.query('insert into auth.users values($1),($2)',[user,other]);await db.exec("insert into members(email,name,role,username) values('admin@example.com','GESTOR','admin','gestor'),('worker@example.com','OPERADOR','operator','operador');insert into fleets(id,name,type,meter_fields) values('1001','TESTE','Trator','{\"km\":false,\"engine\":true,\"elevator\":false}');");

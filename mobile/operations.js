@@ -11,14 +11,14 @@ export function formatNumericInput(input,event){
  let raw=input.value;const cursor=input.selectionStart??raw.length;
  if(event?.data==='.'&&event.inputType==='insertText')raw=raw.slice(0,cursor-1)+','+raw.slice(cursor);
  const before=raw.slice(0,cursor).replace(/[^0-9,-]/g,'').length;
- input.value=formatInput(raw);input.setCustomValidity('');
+ input.value=formatInput(input.hasAttribute('data-integer')?raw.split(',')[0]:raw);input.setCustomValidity('');
  let seen=0,position=0;while(position<input.value.length&&seen<before){if(/[0-9,-]/.test(input.value[position]))seen++;position++}
  input.setSelectionRange(position,position);
 }
 export function finishNumericInput(input){
  if(!input.value||input.value.endsWith(','))input.value=input.value.replace(/,$/,'');
  if(!input.value)return;
- try{input.value=parseNumber(input.value).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});input.setCustomValidity('')}
+ try{const value=parseNumber(input.value),integer=input.hasAttribute('data-integer');if(integer&&!Number.isInteger(value))throw Error('Informe o KM sem casas decimais.');input.value=value.toLocaleString('pt-BR',{minimumFractionDigits:integer?0:2,maximumFractionDigits:integer?0:2});input.setCustomValidity('')}
  catch(error){input.setCustomValidity(error.message)}
 }
 
