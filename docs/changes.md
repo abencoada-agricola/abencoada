@@ -58,3 +58,9 @@ Record material changes here with the request, resulting behavior, affected area
 - Periodic refresh updates results without replacing active filter fields. Existing detail, photo and recoverable deletion controls remain available.
 - Added fleet-code filtering and optional fleet entry on Android occurrences/transfers after the user confirmed that capture approach. Legacy records remain unlinked; no association is inferred from locations. Apply operation-fleets.sql after member-removal.sql. Links are validated on server submission, retained offline and preserved on retries.
 - Validation: production build and browser checks for employee/date combinations, local date boundaries, empty matches and independent tab filters. Deployment runs the full existing suite.
+
+## 2026-10-16 — Branded report headers
+
+- Added the Abençoada logo and issuance date/time in Brasília time to checklist PDFs, refueling printouts and QR-label printouts. Multi-page reports repeat the header with the same issuance timestamp. Capture/reception timestamps remain separate.
+- Shared report header code waits for print images to load and prevents checklist downloads without the logo. Included the shared module in versioned assets and offline caching.
+- Validation: multi-page checklist PDF rendering, embedded image and timestamp checks on every page, timezone boundary check, production build and print-layout preview.
