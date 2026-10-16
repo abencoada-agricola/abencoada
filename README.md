@@ -199,3 +199,11 @@ Checklist icon: [Check by Paul J. — Flaticon](https://www.flaticon.com/free-ic
 ## Development map
 
 Graphify provides a local code and SQL map. See [development workflow](docs/development.md) for setup, queries, automatic updates and downloadable GitHub snapshots. Material changes are recorded in [change log](docs/changes.md).
+
+## User access
+
+In **Configurações → Equipe e acessos → Permissões**, an administrator chooses the account profile (Operator or Administrator) and independently enables Refueling, Transfer and Checklist. New accounts have the same choices. Existing accounts keep all three functions until edited. Administrator controls access to the web administration; Android shows only the functions enabled for that login. The global Checklist setting must also be enabled.
+
+Apply `supabase/user-access.sql` after `checklists.sql`. Current permissions are checked by the server for foreground and native background submissions, including legacy refueling RPCs. A user cannot grant their own permissions or remove their own administrator profile. Changes are audited.
+
+Phones receive access changes at login or connected synchronization. Offline phones keep their cached permissions, so revocation cannot immediately hide an offline menu. The server rejects new unauthorized records when the phone reconnects. Pending records and drafts are retained; restoring access allows them to be sent. Already received records still return duplicate receipts after revocation so lost acknowledgments do not leave false pending entries. Permission failures remain separate from connection failures. Update the Android app to receive the filtered menu.

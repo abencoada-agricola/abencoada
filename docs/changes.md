@@ -2,6 +2,14 @@
 
 Record material changes here with the request, resulting behavior, affected areas and validation. Git history contains the full diff and authorship.
 
+## 2026-10-16 — Per-user feature access
+
+- Request: configure each login as an operator or administrator and allow any combination of refueling, transfer and checklist.
+- Added a member permission editor and new-account choices, filtered Android menus, cached access and current-permission checks at server submission boundaries. Existing accounts keep their previous access by default.
+- Added `user-access.sql` after `checklists.sql`, with role/feature validation, self-demotion protection and an administrator audit trail. Global Checklist availability remains independent.
+- Revoked access preserves drafts and queued records. Previously accepted records can still be acknowledged; feature-level denials do not become network errors or stop unrelated queue items.
+- Validation: access combinations, operator privilege escalation, native and legacy RPC enforcement, role promotion/demotion, restored access, duplicate receipts and audit permissions; full application suite; administration and mobile previews.
+
 ## 2026-10-16 — Simplify administration settings
 
 - Request: remove the locations, materials and recorder-reading controls while the database contains fictitious trial data.
