@@ -51,3 +51,10 @@ Record material changes here with the request, resulting behavior, affected area
 - Moved the overview period selector and CSV export below the final data card, with a compact inline layout. Preserved the 7/30/60/90-day choices and export scope.
 - Kept 44px touch targets on smaller screens.
 - Validation: production build and visual overview review; deployment runs the standard test suite.
+
+## 2026-10-16 — Operation search filters
+
+- Added independent employee-name and inclusive date-range filters to Occurrences and Transfers, with a Clear filters action. Employee search ignores case and accents; dates use São Paulo time.
+- Periodic refresh updates results without replacing active filter fields. Existing detail, photo and recoverable deletion controls remain available.
+- Fleet filtering requires a fleet association that current operation records do not store; the requested capture approach is awaiting clarification. No fleet association is inferred from locations.
+- Validation: production build and browser checks for employee/date combinations, local date boundaries, empty matches and independent tab filters. Deployment runs the full existing suite.
