@@ -195,3 +195,7 @@ In **Checklist → Configurar perguntas**, choose a fleet, add/edit/remove quest
 Apply `supabase/checklists.sql` after `tank-references.sql`. Only managers edit questions, review records or resolve issues. Operators submit checklists; the server verifies all answers and derives the operator, original question wording and overall severity. Retries keep the same ID to prevent duplicates.
 
 Checklist icon: [Check by Paul J. — Flaticon](https://www.flaticon.com/free-icon/check_10647890).
+
+## Development map
+
+Graphify provides a local code and SQL map. See [development workflow](docs/development.md) for setup, queries, automatic updates and downloadable GitHub snapshots. Material changes are recorded in [change log](docs/changes.md).

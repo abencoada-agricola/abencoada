@@ -13,3 +13,6 @@ android/**/build/
 *.jks
 
 web/checklists.js
+
+# Local architecture map and caches (CI publishes downloadable snapshots).
+graphify-out/
