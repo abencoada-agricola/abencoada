@@ -39,3 +39,9 @@ Record material changes here with the request, resulting behavior, affected area
 - New member-removal.sql archives the membership and revokes device leases, retaining authentication identities and submitted history. Server authorization denies removed accounts even with existing sessions. Removed accounts require explicit restoration.
 - Restoration recovers the previous role and permissions; username conflicts preserve the archive. Every removal/restoration is audited.
 - Validation: database authorization, session/device revocation, history retention, restoration, conflicts and UI preview; standard build and deployment checks.
+
+## 2026-10-16 — Type fleet codes in Checklist
+
+- Replaced the fleet dropdowns in received checklists and question configuration with editable fleet-code fields and catalog suggestions. Received records filter as the user types; clearing the field shows all fleets.
+- Question editing opens only for an existing catalog code.
+- Validation: production build and browser checks for typed filters, clearing, catalog selection and unknown codes.
