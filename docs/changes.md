@@ -45,3 +45,9 @@ Record material changes here with the request, resulting behavior, affected area
 - Replaced the fleet dropdowns in received checklists and question configuration with editable fleet-code fields and catalog suggestions. Received records filter as the user types; clearing the field shows all fleets.
 - Question editing opens only for an existing catalog code.
 - Validation: production build and browser checks for typed filters, clearing, catalog selection and unknown codes.
+
+## 2026-10-16 — Compact overview controls
+
+- Moved the overview period selector and CSV export below the final data card, with a compact inline layout. Preserved the 7/30/60/90-day choices and export scope.
+- Kept 44px touch targets on smaller screens.
+- Validation: production build and visual overview review; deployment runs the standard test suite.
