@@ -56,5 +56,5 @@ Record material changes here with the request, resulting behavior, affected area
 
 - Added independent employee-name and inclusive date-range filters to Occurrences and Transfers, with a Clear filters action. Employee search ignores case and accents; dates use São Paulo time.
 - Periodic refresh updates results without replacing active filter fields. Existing detail, photo and recoverable deletion controls remain available.
-- Fleet filtering requires a fleet association that current operation records do not store; the requested capture approach is awaiting clarification. No fleet association is inferred from locations.
+- Added fleet-code filtering and optional fleet entry on Android occurrences/transfers after the user confirmed that capture approach. Legacy records remain unlinked; no association is inferred from locations. Apply operation-fleets.sql after member-removal.sql. Links are validated on server submission, retained offline and preserved on retries.
 - Validation: production build and browser checks for employee/date combinations, local date boundaries, empty matches and independent tab filters. Deployment runs the full existing suite.
