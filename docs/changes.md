@@ -32,3 +32,10 @@ Record material changes here with the request, resulting behavior, affected area
 - Removed the Aplicativo Android settings card and its checklist toggle handler. Administrators manage each login through Equipe e acessos → Permissões.
 - Existing operation settings, Android compatibility and pending records are preserved.
 - Validation: production build and settings preview; deployment checks run in GitHub Actions.
+
+## 2026-10-16 — Recoverable user removal
+
+- Added administrator-only Remove and Restore actions under Equipe e acessos, with a confirmation dialog and self-removal protection.
+- New member-removal.sql archives the membership and revokes device leases, retaining authentication identities and submitted history. Server authorization denies removed accounts even with existing sessions. Removed accounts require explicit restoration.
+- Restoration recovers the previous role and permissions; username conflicts preserve the archive. Every removal/restoration is audited.
+- Validation: database authorization, session/device revocation, history retention, restoration, conflicts and UI preview; standard build and deployment checks.
