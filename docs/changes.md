@@ -26,3 +26,9 @@ Record material changes here with the request, resulting behavior, affected area
 - Baseline: existing Android version 1.0.40 and checklist availability control, source commit `c9ffdd5`.
 - Validation: first extraction and incremental refresh; focused login, offline queue and checklist queries; graph health inspection; local hook and GitHub workflow verification.
 - Known limits: partial Gradle extraction, historical SQL definitions and some grouped graph relationships. See `docs/development.md`.
+
+## 2026-10-16 — Remove the global checklist control
+
+- Removed the Aplicativo Android settings card and its checklist toggle handler. Administrators manage each login through Equipe e acessos → Permissões.
+- Existing operation settings, Android compatibility and pending records are preserved.
+- Validation: production build and settings preview; deployment checks run in GitHub Actions.
