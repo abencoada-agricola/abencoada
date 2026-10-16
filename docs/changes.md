@@ -6,6 +6,7 @@ Record material changes here with the request, resulting behavior, affected area
 
 - Request: remove the locations, materials and recorder-reading controls while the database contains fictitious trial data.
 - Removed the settings card, its reading/cadastro dialogs and its settings-only data request. Existing database values and Android workflows are preserved.
+- Renamed the rules card to Regras and removed the static mandatory-fields and decreasing-readings explanations. Validation behavior remains in place.
 - Validation: production build and visual review of Configurações; architecture map updated. Standard deployment checks run in GitHub Actions.
 
 ## 2026-10-16 — Project architecture tracking
