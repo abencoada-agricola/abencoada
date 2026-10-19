@@ -21,11 +21,13 @@ O banco usa PostgreSQL no Supabase e autenticação pelo Supabase Auth. O aplica
 
 Os painéis administrativos exigem acesso à organização/projeto. A URL pública do banco atual é `https://pqsbcwmtemlwvcpkcyum.supabase.co`. Em outro ambiente, essa URL e as chaves precisam ser as do novo projeto.
 
-## Tabelas
+## Database Tables
 
 São **15 tabelas próprias, com 125 colunas**: 9 no schema `public` e 6 no schema `private`. Os schemas são divisões do mesmo banco. As tabelas internas do Supabase Auth, como `auth.users`, ficam fora dessa contagem.
 
-| Schema/tabela | Finalidade | Colunas |
+As 15 tabelas da aplicação estão listadas abaixo, com os nomes usados no banco. As tabelas gerenciadas pelo Supabase, incluindo `auth.users`, não entram nessa lista.
+
+| Database Tables | Finalidade | Colunas |
 | --- | --- | --- |
 | `public.members` | Usuários e permissões | 5 |
 | `public.fleets` | Frotas e equipamentos | 10 |
