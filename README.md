@@ -1,28 +1,9 @@
 # APP Abençoada
 
-Fuel control for Abençoada Agrícola. Android app for field workers and a web dashboard for administration.
+Android app and web dashboard for Abençoada Agrícola.
 
-Records refueling, transfers, checklists and occurrences with photos. The app saves entries offline and sends them when a connection is available. The first login requires internet.
+Refueling, transfers, checklists and incident reports. Entries are saved offline and sent when the phone reconnects.
 
-- [Web dashboard](https://abencoada-agricola.github.io/app-abencoada/admin.html)
-- [Download Android app](https://github.com/abencoada-agricola/app-abencoada/releases/latest/download/abencoada-diesel.apk)
-
-## Development
-
-Node.js 22 or later.
-
-```sh
-npm ci
-npm run dev
-```
-
-```sh
-npm test
-npm run build
-```
-
-Built with JavaScript, Capacitor and Supabase. The website runs on GitHub Pages. The interface is in Portuguese.
-
-See [setup](docs/setup.md) for database configuration, deployment and Android builds, or [development notes](docs/development.md) for the project map.
-
-Database handover: [configuração do banco de dados](configuracao%20banco%20de%20dados.md) (Portuguese).
+- [Dashboard](https://abencoada-agricola.github.io/app-abencoada/admin.html)
+- [Android APK](https://github.com/abencoada-agricola/app-abencoada/releases/latest/download/abencoada-diesel.apk)
+- [Database configuration](configuracao%20banco%20de%20dados.md)
