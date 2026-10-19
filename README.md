@@ -1,11 +1,11 @@
-# Abastece
+# APP Abençoada
 
 Fuel control for Abençoada Agrícola. Android app for field workers and a web dashboard for administration.
 
 Records refueling, transfers, checklists and occurrences with photos. The app saves entries offline and sends them when a connection is available. The first login requires internet.
 
-- [Web dashboard](https://abencoada-agricola.github.io/diesel/admin.html)
-- [Download Android app](https://github.com/abencoada-agricola/diesel/releases/latest/download/abencoada-diesel.apk)
+- [Web dashboard](https://abencoada-agricola.github.io/app-abencoada/admin.html)
+- [Download Android app](https://github.com/abencoada-agricola/app-abencoada/releases/latest/download/abencoada-diesel.apk)
 
 ## Development
 

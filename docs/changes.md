@@ -1,5 +1,10 @@
 # Change log
 
+## 2026-10-19 — Nome do repositório
+
+Repositório renomeado para `app-abencoada`, apresentado como APP Abençoada. Atualizados os links de administração, downloads e documentação. O endereço da administração passa a ser `https://abencoada-agricola.github.io/app-abencoada/admin.html`. Identificadores do Android, banco e fila offline foram preservados.
+
+
 Record material changes here with the request, resulting behavior, affected areas and validation. Git history contains the full diff and authorship.
 
 ## 2026-10-16 — Per-user feature access

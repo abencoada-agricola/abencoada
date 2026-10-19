@@ -8,14 +8,14 @@ Hoje usamos PostgreSQL no Supabase, com login pelo Supabase Auth. O aplicativo A
 
 | Acesso | Link |
 | --- | --- |
-| Código do projeto | [Repositório](https://github.com/abencoada-agricola/diesel) |
-| Administração | [Controle de Combustível](https://abencoada-agricola.github.io/diesel/admin.html) |
-| Aplicativo Android | [Baixar APK](https://github.com/abencoada-agricola/diesel/releases/latest/download/abencoada-diesel.apk) |
+| Código do projeto | [Repositório](https://github.com/abencoada-agricola/app-abencoada) |
+| Administração | [Controle de Combustível](https://abencoada-agricola.github.io/app-abencoada/admin.html) |
+| Aplicativo Android | [Baixar APK](https://github.com/abencoada-agricola/app-abencoada/releases/latest/download/abencoada-diesel.apk) |
 | Projeto Supabase atual | [Painel do projeto](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum) |
 | Executar SQL | [SQL Editor](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum/sql/new) |
-| Publicações e builds | [GitHub Actions](https://github.com/abencoada-agricola/diesel/actions) |
-| Variáveis e segredos de publicação | [Configuração do Actions](https://github.com/abencoada-agricola/diesel/settings/secrets/actions) |
-| Hospedagem do site | [GitHub Pages](https://github.com/abencoada-agricola/diesel/settings/pages) |
+| Publicações e builds | [GitHub Actions](https://github.com/abencoada-agricola/app-abencoada/actions) |
+| Variáveis e segredos de publicação | [Configuração do Actions](https://github.com/abencoada-agricola/app-abencoada/settings/secrets/actions) |
+| Hospedagem do site | [GitHub Pages](https://github.com/abencoada-agricola/app-abencoada/settings/pages) |
 | Arquivos SQL | [Pasta supabase](supabase/) |
 | Histórico de alterações | [Alterações do projeto](docs/changes.md) |
 
