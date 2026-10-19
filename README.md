@@ -24,7 +24,3 @@ npm run build
 Built with JavaScript, Capacitor and Supabase. The website runs on GitHub Pages. The interface is in Portuguese.
 
 See [setup](docs/setup.md) for database configuration, deployment and Android builds, or [development notes](docs/development.md) for the project map.
-
-## Credits
-
-Icons: [Smashicons](https://www.flaticon.com/br/icone-gratis/combustivel_1506329), [Magnific](https://www.flaticon.com/br/icone-gratis/troca_1372789) and [Paul J.](https://www.flaticon.com/free-icon/check_10647890) via Flaticon.
