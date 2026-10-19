@@ -1,8 +1,8 @@
 # Abastece — estrutura do banco de dados
 
-Documento técnico para Luiz. Revisão: 19/10/2026.
+Estrutura do banco de dados. Revisão: 19/10/2026.
 
-## Resumo para encaminhar
+## Resumo
 
 O Abastece usa PostgreSQL hospedado no Supabase. O aplicativo Android foi feito com JavaScript e Capacitor; a administração web fica no GitHub Pages. Foram criadas 15 tabelas próprias: 9 no schema public e 6 no schema private, somando 125 colunas. A autenticação fica no Supabase Auth, separado dessas 15 tabelas. O app não se conecta diretamente ao SQL: envia dados por HTTPS para funções RPC, que validam usuário, permissões e leituras. Sem internet, guarda os registros no celular e sincroniza depois. Hoje o banco é independente do GMAIS; a integração ainda precisa ser definida.
 
@@ -420,4 +420,4 @@ Para a integração, o principal é mapear o código da frota, material, local/r
 
 O contrato também precisa estabelecer como enviar um UUID externo sem duplicar lançamentos, como consultar alterações desde a última sincronização, como tratar conflitos e estornos, qual autenticação oficial usar e quais permissões de leitura/escrita serão liberadas. Não é necessário copiar todas as tabelas do GMAIS para o Abastece. Uma API ou interface oficial de integração pode permitir que as duas estruturas continuem diferentes.
 
-Pontos atuais para revisão com Luiz: locais/materiais não estão totalmente normalizados por chaves estrangeiras; os itens de checklist estão em JSONB; fotos estão em base64; leituras de referência usam um campo chamado gmais_readings sem integração ativa; e os dados atuais são de teste. Esses pontos são decisões do protótipo e podem ser ajustados ao contrato oficial de integração.
+Pontos para revisão da integração: locais/materiais não estão totalmente normalizados por chaves estrangeiras; os itens de checklist estão em JSONB; fotos estão em base64; leituras de referência usam um campo chamado gmais_readings sem integração ativa; e os dados atuais são de teste. Esses pontos são decisões do protótipo e podem ser ajustados ao contrato oficial de integração.

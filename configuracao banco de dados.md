@@ -1,8 +1,8 @@
 # Configuração do banco de dados — Abastece
 
-Luiz, este arquivo reúne a estrutura e os passos para montar o ambiente do Abastece. A referência é o código de 19/10/2026.
+Estrutura e instalação do banco do Abastece. Atualizado em 19/10/2026.
 
-Hoje usamos PostgreSQL no Supabase, com login pelo Supabase Auth. O aplicativo Android envia os lançamentos e o site faz a administração. O banco ainda é separado do GMAIS. Os cadastros e leituras atuais servem para testar as funções.
+O banco usa PostgreSQL no Supabase e autenticação pelo Supabase Auth. O aplicativo Android envia os lançamentos e o site faz a administração. O banco ainda é separado do GMAIS. Os cadastros e leituras atuais servem para testar as funções.
 
 ## Links de acesso
 
@@ -21,10 +21,9 @@ Hoje usamos PostgreSQL no Supabase, com login pelo Supabase Auth. O aplicativo A
 
 Os painéis administrativos exigem acesso à organização/projeto. A URL pública do banco atual é `https://pqsbcwmtemlwvcpkcyum.supabase.co`. Em outro ambiente, essa URL e as chaves precisam ser as do novo projeto.
 
-## Quantas tabelas foram criadas
+## Tabelas
 
 São **15 tabelas próprias, com 125 colunas**: 9 no schema `public` e 6 no schema `private`. Os schemas são divisões do mesmo banco. As tabelas internas do Supabase Auth, como `auth.users`, ficam fora dessa contagem.
-
 
 | Schema/tabela | Finalidade | Colunas |
 | --- | --- | --- |
@@ -44,7 +43,7 @@ São **15 tabelas próprias, com 125 colunas**: 9 no schema `public` e 6 no sche
 | `private.user_access_audit` | Auditoria de permissões | 7 |
 | `private.removed_members` | Usuários removidos recuperáveis | 5 |
 
-## Como criar um ambiente novo
+## Instalação
 
 Este procedimento é para um projeto Supabase vazio. No projeto que já está funcionando, aplicar somente as migrações ainda não executadas. Não executar novamente o `schema.sql`.
 
@@ -172,8 +171,7 @@ Em um novo ambiente, cadastrar as frotas, escolher quais leituras cada uma usa, 
 
 As perguntas do checklist são configuradas no site por frota e podem ser copiadas de outra. Cada alteração gera uma versão; as respostas preservam a versão utilizada.
 
-## Estrutura completa dos campos
-
+## Campos
 
 “Não nulo” descreve a coluna do banco, não necessariamente um campo que o funcionário deve digitar. Muitos valores vêm da conta, do relógio, de valores padrão ou do cálculo do servidor. numeric é usado para litros e leituras; o app aceita KM inteiro. timestamptz guarda instantes com fuso, apresentados em horário de Brasília na interface/relatórios.
 
@@ -423,7 +421,7 @@ Preserva o cadastro anterior para permitir restaurar o acesso sem apagar o hist�
 
 Chaves declaradas: `PRIMARY KEY (email)`.
 
-## Regras que precisam continuar no servidor
+## Regras do servidor
 
 - Todas as tabelas próprias usam RLS. Os clientes não recebem acesso livre de escrita; usam funções RPC com conferência de conta e permissão. Não expor o schema `private` na API.
 - `diesel_session` entrega conta, permissões, catálogo e referências. `diesel_operation_submit` recebe os lançamentos. `diesel_device_register` e `diesel_device_submit` atendem à sincronização do Android em segundo plano.
@@ -459,13 +457,13 @@ where table_type = 'BASE TABLE'
 order by table_schema, table_name;
 ```
 
-A referência deste documento é de 15 tabelas próprias. Outros produtos instalados no mesmo projeto podem acrescentar tabelas. Conferir também RLS, permissões e funções; a contagem sozinha não valida a instalação.
+A instalação descrita tem 15 tabelas próprias. Outros produtos instalados no mesmo projeto podem acrescentar tabelas. Conferir também RLS, permissões e funções; a contagem sozinha não valida a instalação.
 
-## O que precisamos definir para conectar ao GMAIS
+## Integração com o GMAIS
 
-Luiz, precisamos combinar a interface oficial de integração e o mapeamento destes dados:
+A integração depende de uma interface oficial e do mapeamento abaixo:
 
-| Informação | O que precisamos receber/definir |
+| Informação | Dados para integração |
 | --- | --- |
 | Frotas | Código estável, descrição, modelo, situação, capacidade e leituras aplicáveis. |
 | Últimas leituras | KM, horímetro motor, elevador quando houver, data e identificador do último movimento. |
@@ -475,11 +473,11 @@ Luiz, precisamos combinar a interface oficial de integração e o mapeamento des
 | Envio futuro | Campos obrigatórios, autenticação, permissões, UUID externo contra duplicação, confirmação e tratamento de conflitos/estornos. |
 | Ambiente | Endereço de homologação, documentação disponível e credenciais específicas para a integração. |
 
-Também precisamos definir quem será a fonte de cada cadastro e de cada leitura. Se houver acesso ao banco, combinar views e permissões com o responsável antes de implementar consultas. O APK não deve carregar credenciais diretas do banco do GMAIS; essa comunicação fica em um serviço no servidor.
+Definir qual sistema será a origem dos cadastros e das leituras. Se houver acesso ao banco, combinar views e permissões com o responsável antes de implementar consultas. O APK não deve carregar credenciais diretas do banco do GMAIS; essa comunicação fica em um serviço no servidor.
 
-Até isso ser definido, o Abastece continua no banco atual e qualquer análise do GMAIS permanece somente de leitura. Não é necessário copiar as 15 tabelas para dentro do GMAIS: podemos manter a estrutura do Abastece e integrar por uma interface oficial. Senhas existentes não devem ser tratadas como dados importáveis sem conhecer o método de autenticação suportado.
+Até isso ser definido, o Abastece continua no banco atual e qualquer análise do GMAIS permanece somente de leitura. A estrutura do Abastece pode ser mantida, com troca de dados por uma interface oficial do GMAIS. Senhas existentes não devem ser tratadas como dados importáveis sem conhecer o método de autenticação suportado.
 
-## Backup e documentação de apoio
+## Backup
 
 Guardar backup dos dados e da estrutura antes de mudar o ambiente. Incluir separadamente os requisitos de restauração do Auth, configurações das funções e a assinatura Android. Um export das tabelas próprias não substitui um backup completo do projeto Supabase.
 
