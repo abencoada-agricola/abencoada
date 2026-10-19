@@ -1,31 +1,35 @@
-# Configuração do banco de dados — Abastece
+# Configuração do banco de dados
 
-Estrutura e instalação do banco do Abastece. Atualizado em 19/10/2026.
+Abastece · APP Abençoada · 19/10/2026
 
-O banco usa PostgreSQL no Supabase e autenticação pelo Supabase Auth. O aplicativo Android envia os lançamentos e o site faz a administração. O banco ainda é separado do GMAIS. Os cadastros e leituras atuais servem para testar as funções.
+## Ambiente
 
-## Links de acesso
-
-| Acesso | Link |
+| Componente | Configuração |
 | --- | --- |
-| Código do projeto | [Repositório](https://github.com/abencoada-agricola/app-abencoada) |
-| Administração | [Controle de Combustível](https://abencoada-agricola.github.io/app-abencoada/admin.html) |
-| Aplicativo Android | [Baixar APK](https://github.com/abencoada-agricola/app-abencoada/releases/latest/download/abencoada-diesel.apk) |
-| Projeto Supabase atual | [Painel do projeto](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum) |
-| Executar SQL | [SQL Editor](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum/sql/new) |
-| Publicações e builds | [GitHub Actions](https://github.com/abencoada-agricola/app-abencoada/actions) |
-| Variáveis e segredos de publicação | [Configuração do Actions](https://github.com/abencoada-agricola/app-abencoada/settings/secrets/actions) |
-| Hospedagem do site | [GitHub Pages](https://github.com/abencoada-agricola/app-abencoada/settings/pages) |
-| Arquivos SQL | [Pasta supabase](supabase/) |
-| Histórico de alterações | [Alterações do projeto](docs/changes.md) |
+| Banco | PostgreSQL no Supabase |
+| Projeto | `pqsbcwmtemlwvcpkcyum` |
+| URL | `https://pqsbcwmtemlwvcpkcyum.supabase.co` |
+| Autenticação | Supabase Auth e função `diesel-login` |
+| Aplicativo | Android, JavaScript e Capacitor |
+| Administração | GitHub Pages |
+| Comunicação | HTTPS, funções RPC e Edge Function |
+| GMAIS | Sem integração ativa |
 
-Os painéis administrativos exigem acesso à organização/projeto. A URL pública do banco atual é `https://pqsbcwmtemlwvcpkcyum.supabase.co`. Em outro ambiente, essa URL e as chaves precisam ser as do novo projeto.
+## Links
+
+- [Repositório](https://github.com/abencoada-agricola/app-abencoada)
+- [Administração](https://abencoada-agricola.github.io/app-abencoada/admin.html)
+- [APK Android](https://github.com/abencoada-agricola/app-abencoada/releases/latest/download/abencoada-diesel.apk)
+- [Supabase](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum)
+- [SQL Editor](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum/sql/new)
+- [GitHub Actions](https://github.com/abencoada-agricola/app-abencoada/actions)
+- [Variáveis e secrets](https://github.com/abencoada-agricola/app-abencoada/settings/secrets/actions)
+- [GitHub Pages](https://github.com/abencoada-agricola/app-abencoada/settings/pages)
+- [SQLs](supabase/)
 
 ## Database Tables
 
-São **15 tabelas próprias, com 125 colunas**: 9 no schema `public` e 6 no schema `private`. Os schemas são divisões do mesmo banco. As tabelas internas do Supabase Auth, como `auth.users`, ficam fora dessa contagem.
-
-As 15 tabelas da aplicação estão listadas abaixo, com os nomes usados no banco. As tabelas gerenciadas pelo Supabase, incluindo `auth.users`, não entram nessa lista.
+**15 tabelas, 125 colunas: 9 em `public` e 6 em `private`.** Tabelas internas do Supabase, como `auth.users`, não estão nessa contagem.
 
 | Database Tables | Finalidade | Colunas |
 | --- | --- | --- |
@@ -45,14 +49,11 @@ As 15 tabelas da aplicação estão listadas abaixo, com os nomes usados no banc
 | `private.user_access_audit` | Auditoria de permissões | 7 |
 | `private.removed_members` | Usuários removidos recuperáveis | 5 |
 
-## Instalação
+## Migrações
 
-Este procedimento é para um projeto Supabase vazio. No projeto que já está funcionando, aplicar somente as migrações ainda não executadas. Não executar novamente o `schema.sql`.
+Ordem de aplicação em banco vazio:
 
-1. Criar o projeto Supabase e guardar a senha do banco em local privado.
-2. Abrir o SQL Editor e executar os arquivos abaixo, **um por vez, na ordem indicada**, com a conta proprietária do banco. Conferir o resultado antes de seguir. Eles criam tabelas, índices, funções, validações e permissões; copiar apenas os comandos `CREATE TABLE` não monta o sistema completo.
-
-| Ordem | Arquivo |
+| Ordem | SQL |
 | --- | --- |
 | 1 | [schema.sql](supabase/schema.sql) |
 | 2 | [usernames.sql](supabase/usernames.sql) |
@@ -76,21 +77,31 @@ Este procedimento é para um projeto Supabase vazio. No projeto que já está fu
 | 20 | [member-removal.sql](supabase/member-removal.sql) |
 | 21 | [operation-fleets.sql](supabase/operation-fleets.sql) |
 
-Alguns desses arquivos também inserem cadastros e leituras de exemplo. A sequência cria quatro frotas reservadas para teste (`990101` a `990104`) e dados de locais/materiais. Ela **não reproduz sozinha a base atual de dez frotas**.
+Em banco existente, somente migrações pendentes. `schema.sql` não é reaplicável.
 
-O arquivo [fleets.sql](supabase/fleets.sql) é uma carga histórica de 246 frotas. É opcional; se for utilizado para reconstruir o catálogo antigo, executar depois de `schema.sql` e antes das demais migrações. Não usar essa carga se a intenção for manter só dez frotas.
+| Carga / manutenção | Uso |
+| --- | --- |
+| [fleets.sql](supabase/fleets.sql) | Catálogo histórico de 246 frotas. Opcional, após `schema.sql` e antes das demais migrações. Fora da base reduzida atual. |
+| `test-data.sql` e migrações de simulação | Incluem cadastros e leituras fictícias; quatro frotas reservadas de `990101` a `990104`. |
+| [reset-test-workspace.sql](supabase/maintenance/reset-test-workspace.sql) | Limpeza pontual de 19/10/2026, já executada. Apaga movimentos e valida o inventário anterior. Fora da instalação; sem reexecução. |
 
-O arquivo [reset-test-workspace.sql](supabase/maintenance/reset-test-workspace.sql) registra a limpeza pontual já feita em 19/10/2026. Ele verifica o inventário anterior e apaga movimentos. **Não faz parte da instalação e não deve ser reexecutado.**
+As migrações recriam a estrutura e as cargas nelas contidas. A base atual de dez frotas e as contas dependem de restauração dos cadastros; não são reproduzidas integralmente pela sequência SQL.
 
-Para reproduzir exatamente os dados de uma instalação, é necessário restaurar um backup autorizado dos cadastros além de aplicar a estrutura. Os SQLs versionados não contêm as contas, senhas nem uma cópia completa dos dados atuais.
+## Acesso
 
-## Criar o primeiro administrador
+| Item | Definição |
+| --- | --- |
+| Conta | Supabase Auth, e-mail confirmado |
+| Cadastro público | Desativado |
+| Vínculo | `members.email` corresponde ao e-mail do Auth |
+| Login | `members.username`, entre 3 e 30 caracteres: letras sem acento, números, ponto, traço e sublinhado |
+| Caixa do login | Armazenado em minúsculas; comparação sem diferença entre maiúsculas e minúsculas |
+| Senha | Gerenciada pelo Auth, com diferença entre maiúsculas e minúsculas |
+| Perfis | `admin` e `operator` |
+| Permissões | `refuel`, `transfer` e `checklist`, independentes por usuário |
+| Gestão da equipe | Configurações → Equipe e acessos |
 
-Depois de aplicar os 21 arquivos:
-
-1. No Supabase, abrir **Authentication → Users** e criar a conta do responsável, com e-mail confirmado e senha definida por ele.
-2. Desativar o cadastro público de novas contas nas configurações de Authentication. A equipe será cadastrada pelo administrador.
-3. No SQL Editor, cadastrar o mesmo e-mail em `members`. Substituir os valores do exemplo; o e-mail e o username devem ficar em minúsculas no banco.
+Cadastro inicial de administrador, após as migrações e a criação da conta correspondente no Auth. Valores de exemplo:
 
 ```sql
 insert into public.members (email, name, role, username, permissions)
@@ -103,15 +114,18 @@ values (
 );
 ```
 
-O username aceita de 3 a 30 caracteres: letras sem acento, números, ponto, traço e sublinhado. A tela mostra os textos em maiúsculas; o login não diferencia maiúsculas de minúsculas. A senha diferencia e não deve ser convertida.
+## Função de login
 
-As próximas pessoas podem ser cadastradas em **Configurações → Equipe e acessos**, com perfil `admin` ou `operator` e permissão individual para abastecimento, transferência e checklist. A opção de definir senha usa o Supabase Auth. Não existe coluna de senha em `members`.
+| Item | Valor |
+| --- | --- |
+| Nome | `diesel-login` |
+| Código | [index.ts](supabase/functions/diesel-login/index.ts) |
+| Configuração | [config.toml](supabase/config.toml), `verify_jwt = true` |
+| Ambiente reservado | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
+| Origens autorizadas | `https://abencoada-agricola.github.io` e `https://localhost` |
+| Funções | Resolução de username, validação de senha, limite de tentativas e definição de senha pela administração |
 
-## Publicar a função de login
-
-Código: [diesel-login/index.ts](supabase/functions/diesel-login/index.ts). Configuração: [config.toml](supabase/config.toml).
-
-Com o Supabase CLI instalado e autorizado na conta correta, executar na raiz do repositório, trocando o identificador pelo projeto de destino:
+Publicação via Supabase CLI, na raiz do repositório, com acesso ao projeto de destino:
 
 ```sh
 supabase login
@@ -119,38 +133,34 @@ supabase link --project-ref IDENTIFICADOR_DO_PROJETO
 supabase functions deploy diesel-login
 ```
 
-Manter `verify_jwt = true`, conforme `config.toml`. A função usa `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY` do ambiente reservado das Edge Functions. Conferir a disponibilidade dessas variáveis no projeto. A chave de serviço fica somente no servidor.
+Mudança de domínio exige atualização das origens autorizadas. A chave `service_role` permanece no servidor.
 
-A função resolve o username, valida a senha no Auth, limita tentativas e permite ao administrador definir senhas da equipe. Os endereços autorizados no código são `https://abencoada-agricola.github.io` e `https://localhost` (aplicativo Android). Se mudar o domínio do site, atualizar essa lista e publicar a função novamente.
+## Publicação
 
-## Conectar o site e o Android
+Variáveis públicas do GitHub Actions:
 
-No GitHub, em **Settings → Secrets and variables → Actions → Variables**, cadastrar:
-
-| Variável | Valor necessário |
+| Variável | Conteúdo |
 | --- | --- |
-| `SUPABASE_URL` | URL do projeto Supabase. |
-| `SUPABASE_PUBLISHABLE_KEY` | Chave pública publishable do projeto. |
-| `SUPABASE_LOGIN_KEY` | Chave pública legada `anon`, no formato JWT, para o gateway da função de login. |
+| `SUPABASE_URL` | URL do projeto |
+| `SUPABASE_PUBLISHABLE_KEY` | Chave pública publishable |
+| `SUPABASE_LOGIN_KEY` | Chave pública legada `anon`, formato JWT, para a função de login |
 
-As chaves são obtidas nas configurações de API do projeto Supabase. Não usar a chave `service_role` nem uma chave secreta nessas três variáveis.
-
-Em **Settings → Pages**, selecionar **GitHub Actions**. Executar o workflow **Publicar sistema** para gerar e publicar o site. O workflow roda os testes e publica a pasta `dist/`.
-
-Para gerar APK, usar o workflow **Build Android APK**. Além das três variáveis públicas, ele precisa destes **Secrets**:
-
-| Secret | Conteúdo |
+| Publicação | Configuração |
 | --- | --- |
-| `ANDROID_KEYSTORE_BASE64` | Keystore PKCS12 de assinatura, codificado em base64, com alias `abencoada`. |
-| `ANDROID_KEYSTORE_PASSWORD` | Senha desse keystore. |
+| Site | Pages com origem GitHub Actions; workflow `Publicar sistema`; saída `dist/` |
+| Android | Workflow `Build Android APK` |
+| Secret Android | `ANDROID_KEYSTORE_BASE64`: keystore PKCS12 em base64, alias `abencoada` |
+| Secret Android | `ANDROID_KEYSTORE_PASSWORD`: senha do keystore |
+| Application ID | `br.com.abencoada.diesel` |
+| Assinatura | Mesmo keystore nas atualizações |
+| Build local | Node.js 22+, `npm ci`, `npm test`, `npm run build` |
+| Build Android | Java 21, Android SDK e `npm run android:sync` |
 
-O identificador do aplicativo é `br.com.abencoada.diesel`. As atualizações precisam usar a mesma assinatura da versão instalada. Guardar o keystore original e a senha fora do repositório. Trocar o banco nas variáveis exige publicar o site e gerar um novo APK; os aplicativos já instalados continuam com a configuração embutida anteriormente.
+As chaves públicas vêm das configurações de API do Supabase. Chaves secretas e `service_role` ficam fora do site e do APK. Mudança do projeto Supabase exige nova publicação do site e novo APK; a configuração é embutida no build.
 
-Para desenvolvimento local: Node.js 22 ou superior, `npm ci`, `npm test` e `npm run build`. Para Android, também Java 21 e Android SDK; usar `npm run android:sync`. Mais detalhes em [setup](docs/setup.md).
+## Base de teste
 
-## Cadastros necessários para testar
-
-A base atual ficou com **10 frotas, 3 usuários, 2 locais e 1 material**. Os movimentos anteriores foram removidos na limpeza de 19/10/2026. Novos testes podem alterar essas quantidades de movimentos.
+Estado após a limpeza de 19/10/2026: **10 frotas, 3 usuários, 2 locais e 1 material**, sem movimentos anteriores. Novos lançamentos alteram esse estado.
 
 | Frota | Equipamento |
 | --- | --- |
@@ -165,13 +175,16 @@ A base atual ficou com **10 frotas, 3 usuários, 2 locais e 1 material**. Os mov
 | 1001 | JD COLHEDORA 3520 |
 | 1003 | JD COLHEDORA CH570 |
 
-Material: código **9**, ÓLEO DIESEL S-10. Locais: **2**, TANQUE CFM, leitura inicial **10.000**; e **12**, ABASTECIMENTO EXTERNO, leitura inicial **20.000**.
+| Local | Material | Registradora inicial |
+| --- | --- | --- |
+| 2 — TANQUE CFM | 9 — ÓLEO DIESEL S-10 | 10.000 |
+| 12 — ABASTECIMENTO EXTERNO | 9 — ÓLEO DIESEL S-10 | 20.000 |
 
-Essas leituras são fictícias. KM e horímetros também receberam valores de teste; algumas capacidades foram preenchidas apenas para exercitar o aviso. Antes de uso real, conferir cada cadastro, capacidade e leitura física. O campo `gmais_readings` guarda referências; seu nome não significa que há consulta ativa ao GMAIS.
+KM, horímetros e registradoras são fictícios. Algumas capacidades também são valores de teste. O campo `gmais_readings` contém referências locais, sem consulta ativa ao GMAIS.
 
-Em um novo ambiente, cadastrar as frotas, escolher quais leituras cada uma usa, definir capacidade e referência inicial. Cadastrar o material e os pares local/material com leitura inicial de registradora pelo SQL de preparação autorizado. As telas de locais/materiais foram retiradas das configurações web. Manter `is_test` coerente entre frota e local; as funções impedem misturar os dois grupos.
+Cadastros de frota incluem leituras habilitadas, capacidade e referências iniciais. Locais/materiais são mantidos por SQL; não há tela de edição desses cadastros nas configurações web. `is_test` deve ser compatível entre frota e local.
 
-As perguntas do checklist são configuradas no site por frota e podem ser copiadas de outra. Cada alteração gera uma versão; as respostas preservam a versão utilizada.
+Checklists têm perguntas por frota, cópia entre modelos e versões preservadas nas respostas.
 
 ## Campos
 
@@ -423,33 +436,65 @@ Preserva o cadastro anterior para permitir restaurar o acesso sem apagar o hist�
 
 Chaves declaradas: `PRIMARY KEY (email)`.
 
-## Regras do servidor
+## Relacionamentos
 
-- Todas as tabelas próprias usam RLS. Os clientes não recebem acesso livre de escrita; usam funções RPC com conferência de conta e permissão. Não expor o schema `private` na API.
-- `diesel_session` entrega conta, permissões, catálogo e referências. `diesel_operation_submit` recebe os lançamentos. `diesel_device_register` e `diesel_device_submit` atendem à sincronização do Android em segundo plano.
-- `diesel_admin`/`diesel_admin_save`, `diesel_operations_admin`, `diesel_checklists_admin` e `diesel_record_controls` atendem à administração, respeitando as permissões de cada ação. `diesel_occurrence_photo` consulta a foto separadamente.
-- KM e horímetros não podem diminuir. Litros precisam ser positivos. Pela registradora, conferir a diferença entre leitura final e inicial. Abastecimento acima da capacidade gera aviso, sem bloquear o envio.
-- A frota é obrigatória no abastecimento/checklist e opcional em transferência/ocorrência. Horímetro de elevador só deve ser habilitado nas máquinas que o utilizam.
-- UUID do lançamento precisa permanecer igual nas tentativas de envio. Confirmar o recebimento e reconhecer repetição para não duplicar registros.
-- Data/hora da captura e do recebimento são distintas. Instantes usam `timestamptz`; a interface e os relatórios mostram horário de Brasília.
-- Exclusão normal de movimentos é lógica, com responsável, motivo e possibilidade de restaurar. Remover usuário preserva o histórico e revoga o envio daquele acesso.
+- `members.email`: vínculo lógico com a conta Auth.
+- `records.fleet` → `fleets.id`.
+- `records.user_id` → `auth.users.id`.
+- `records.previous_record_id` → `records.id`.
+- `diesel_operations.fleet` → `fleets.id`, opcional.
+- `diesel_checklist_templates`: chave composta `(fleet, version)`, com frota vinculada a `fleets.id`.
+- `diesel_checklists`: referência a `(fleet, template_version)` do modelo de perguntas.
+- `diesel_occurrence_photos.operation_id` → `diesel_operations.id`.
+- `diesel_locations`: chave composta `(local_code, material_code)`.
 
-`members.email` liga o cadastro à conta Auth; o vínculo é conferido no servidor. `records.fleet` referencia `fleets.id`. Checklists respondidos referenciam a combinação frota/versão do modelo de perguntas. Fotos referenciam a ocorrência. A chave de `diesel_locations` é o par local/material. Nem todo vínculo lógico tem uma chave estrangeira declarada: os códigos de material e vários identificadores de autor precisam ser considerados no mapeamento.
+Códigos de material e vários campos de autoria têm vínculo lógico sem chave estrangeira declarada. Permissões, leituras, perguntas, respostas e resoluções usam JSONB.
 
-Permissões, leituras exigidas, perguntas, respostas e resoluções usam JSONB. As fotos ficam em tabela privada como JPEG comprimido em base64, até 280.000 caracteres por foto; não há bucket de Storage configurado para elas. As notificações do site são verificadas por consulta periódica a cada 15 segundos enquanto a página está aberta; não existe tabela própria de notificações.
+## Funções e regras
 
-## Conferência depois da configuração
+| Função | Uso |
+| --- | --- |
+| `diesel_session` | Conta, permissões, catálogo e referências |
+| `diesel_operation_submit` | Recebimento dos lançamentos |
+| `diesel_device_register` / `diesel_device_submit` | Autorização e sincronização do dispositivo |
+| `diesel_admin` / `diesel_admin_save` | Administração de cadastros e regras |
+| `diesel_operations_admin` | Gestão de operações |
+| `diesel_checklists_admin` | Perguntas, respostas e resolução de itens |
+| `diesel_record_controls` | Exclusão lógica, restauração e auditoria |
+| `diesel_occurrence_photo` | Consulta autorizada da foto |
 
-1. Entrar no site como administrador e no Android com uma conta de operador. Conferir as funções liberadas para cada login.
-2. Carregar o catálogo com internet. Selecionar frota pelo código e pelo QR Code; conferir a última leitura e as perguntas do checklist.
-3. Registrar abastecimento, transferência, ocorrência com foto e checklist. Conferir operador, data, leituras e litros no site; abrir a foto e gerar o PDF.
-4. Testar leituras inferiores, litros acima da capacidade e troca do local na transferência. A leitura inferior deve ser recusada; o excesso de litros deve avisar e permitir confirmação.
-5. Depois de preparar o app online, desligar a conexão, registrar e fechar o aplicativo. Ao reconectar, conferir o envio automático, inclusive da foto, sem duplicar movimentos.
-6. Alterar permissões e conferir o comportamento após o app conectar. Testar exclusão/restauração de um lançamento pela administração.
+- RLS habilitada nas 15 tabelas. Acesso dos clientes por RPC com validação de conta e permissão. Schema `private` fora da API pública.
+- KM e horímetros não podem diminuir. Litros positivos; diferença da registradora conferida no servidor.
+- Litragem acima da capacidade gera aviso e permite confirmação.
+- Frota obrigatória no abastecimento/checklist e opcional em transferência/ocorrência.
+- Horímetro de elevador habilitado somente nas máquinas aplicáveis.
+- UUID preservado nos reenvios para evitar duplicação.
+- Captura e recebimento com horários separados; instantes em `timestamptz`, exibição em horário de Brasília.
+- Exclusão de movimentos com motivo, responsável e restauração. Remoção de usuário preserva histórico e revoga o acesso.
+- Uma foto JPEG comprimida por ocorrência, em tabela privada, até 280.000 caracteres em data URL/base64. Sem bucket de Storage.
+- Notificações verificadas a cada 15 segundos com a administração aberta. Sem tabela própria de notificações.
 
-O primeiro login precisa de internet. O app guarda catálogo, rascunhos e fila local; só retira um item depois da confirmação do servidor. A autorização restrita de dispositivo tem validade de 90 dias, renovada ao conectar. Não limpar os dados do aparelho nem desinstalar o app com lançamentos pendentes.
+## Offline
 
-Para conferir as tabelas no SQL Editor:
+Primeiro login online. Catálogo, rascunhos e fila armazenados no aparelho. Remoção da fila somente após confirmação do servidor. Autorização restrita de dispositivo válida por 90 dias, renovada com conexão.
+
+Dados do aplicativo e instalação preservados enquanto houver lançamentos pendentes.
+
+## Validação
+
+| Fluxo | Resultado esperado |
+| --- | --- |
+| Login e permissões | Funções disponíveis conforme perfil e permissões do usuário |
+| Frota por código/QR | Identificação, leituras e perguntas correspondentes |
+| Abastecimento e transferência | Leituras, litros, local, operador e data corretos |
+| Ocorrência | Texto e foto disponíveis na administração |
+| Checklist | Respostas, operador, versão, data e PDF disponíveis |
+| Leitura inferior | Envio recusado |
+| Excesso de litros | Aviso com confirmação permitida |
+| Offline e reconexão | Envio automático, inclusive foto, sem duplicação |
+| Exclusão/restauração | Histórico de responsável, motivo e data |
+
+Consulta das tabelas próprias:
 
 ```sql
 select table_schema, table_name
@@ -459,30 +504,26 @@ where table_type = 'BASE TABLE'
 order by table_schema, table_name;
 ```
 
-A instalação descrita tem 15 tabelas próprias. Outros produtos instalados no mesmo projeto podem acrescentar tabelas. Conferir também RLS, permissões e funções; a contagem sozinha não valida a instalação.
-
 ## Integração com o GMAIS
 
-A integração depende de uma interface oficial e do mapeamento abaixo:
+Pendente de interface oficial e definição da origem dos cadastros e leituras.
 
-| Informação | Dados para integração |
+| Dados | Definição pendente |
 | --- | --- |
-| Frotas | Código estável, descrição, modelo, situação, capacidade e leituras aplicáveis. |
-| Últimas leituras | KM, horímetro motor, elevador quando houver, data e identificador do último movimento. |
-| Materiais e locais | Código oficial, descrição, vínculo local/material e última leitura da registradora. |
-| Usuários | Método oficial de autenticação e vínculo dos identificadores; se existe SSO, OAuth 2.0, OpenID Connect ou outro método suportado. |
-| Consultas | Endpoints ou views autorizadas, filtros, paginação, consulta de alterações e limites de acesso. |
-| Envio futuro | Campos obrigatórios, autenticação, permissões, UUID externo contra duplicação, confirmação e tratamento de conflitos/estornos. |
-| Ambiente | Endereço de homologação, documentação disponível e credenciais específicas para a integração. |
+| Frotas | Código, descrição, modelo, situação, capacidade e leituras aplicáveis |
+| Leituras | KM, horímetros, data e identificador do último movimento |
+| Locais/materiais | Códigos, descrições, vínculos e registradoras |
+| Usuários | Identificadores e autenticação oficial: SSO, OAuth 2.0, OpenID Connect ou método suportado |
+| Consultas | API ou views autorizadas, filtros, paginação e alterações incrementais |
+| Envio futuro | Campos, permissões, UUID externo, confirmação, conflitos e estornos |
+| Ambiente | Homologação, documentação e credenciais de integração |
 
-Definir qual sistema será a origem dos cadastros e das leituras. Se houver acesso ao banco, combinar views e permissões com o responsável antes de implementar consultas. O APK não deve carregar credenciais diretas do banco do GMAIS; essa comunicação fica em um serviço no servidor.
-
-Até isso ser definido, o Abastece continua no banco atual e qualquer análise do GMAIS permanece somente de leitura. A estrutura do Abastece pode ser mantida, com troca de dados por uma interface oficial do GMAIS. Senhas existentes não devem ser tratadas como dados importáveis sem conhecer o método de autenticação suportado.
+Acesso atual ao GMAIS somente de leitura. Credenciais do banco fora do APK; integração por serviço no servidor. Migração de autenticação depende do método oficial, sem pressupor importação de senhas.
 
 ## Backup
 
-Guardar backup dos dados e da estrutura antes de mudar o ambiente. Incluir separadamente os requisitos de restauração do Auth, configurações das funções e a assinatura Android. Um export das tabelas próprias não substitui um backup completo do projeto Supabase.
+Backup dos dados, estrutura, Auth e configurações do projeto, com cópia separada da assinatura Android. O export das 15 tabelas não cobre todo o ambiente Supabase.
 
-O backup feito antes da limpeza está fora do GitHub. Não publicar e-mails da equipe, senhas, fotos, tokens, chaves de serviço ou o keystore neste arquivo.
+Backup anterior à limpeza guardado fora do GitHub. Senhas, fotos, tokens, chaves de serviço e keystore fora do repositório público.
 
-Referência complementar: [estrutura e decisões do banco](docs/database-architecture.pt-BR.md). Os arquivos SQL do repositório são a fonte para criação das funções, índices, restrições e permissões.
+[Documentação da estrutura](docs/database-architecture.pt-BR.md) · [Histórico](docs/changes.md)
