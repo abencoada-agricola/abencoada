@@ -64,3 +64,12 @@ Record material changes here with the request, resulting behavior, affected area
 - Added the Abençoada logo and issuance date/time in Brasília time to checklist PDFs, refueling printouts and QR-label printouts. Multi-page reports repeat the header with the same issuance timestamp. Capture/reception timestamps remain separate.
 - Shared report header code waits for print images to load and prevents checklist downloads without the logo. Included the shared module in versioned assets and offline caching.
 - Validation: multi-page checklist PDF rendering, embedded image and timestamp checks on every page, timezone boundary check, production build and print-layout preview.
+
+## 2026-10-19 — Database documentation and smaller test workspace
+
+- Documented the 15 application tables (9 public, 6 private), 125 columns, declared relationships, authentication, RPCs and offline synchronization in database-architecture.pt-BR.md. Managed Supabase Auth tables are counted separately.
+- User confirmed clearing operational trial history while retaining 10 representative fleets, accounts and necessary configuration. Saved a private local snapshot of all 15 tables and a recovery script outside Git before changing the live test data.
+- Added a one-time maintenance script with expected-inventory checks and a transaction. Reduced the live catalog from 250 to 10 fleets, retained 3 members, 2 locations and material 9, and cleared 15 refuelings, 7 transfer/occurrence events, 4 submitted checklists and 2 photos. Security/access audit and device credentials were preserved.
+- Retained checklist versions for selected fleets and added basic questions where missing. Reset initial meter values for testing; known capacities remain and missing capacities have trial values. All selected fleets/locations are internally flagged as test data. Updated the bundled catalog to the same 10 fleet codes.
+- Validation: restored the private snapshot into local PostgreSQL-compatible storage, rehearsed reset, tested refueling/transfer/occurrence/checklist submission, rejected a second reset and restored the original data successfully. Existing application test suite passed. Verified live result counts and reviewed the technical PDF.
+- Offline queues on phones are preserved; phones must connect to refresh the reduced catalog. GMAIS was not modified.
