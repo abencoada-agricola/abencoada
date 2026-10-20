@@ -14,7 +14,7 @@ const navigationIcons={
  history:'<path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M2 21h14M14 10h2a2 2 0 0 1 2 2v5a2 2 0 0 0 4 0V8l-3-3M19 5v4h3"/><rect x="7" y="6" width="4" height="5" rx=".5"/>',
  operations:'<path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4"/>',
  occurrences:'<path d="m12 3 10 18H2L12 3Z M12 9v5 M12 17h.01"/>',
- fleets:'<path d="M4 14V5h7v10M4 5h9M11 11h7l3 5v2h-3M9 18h7M3 10h8M15 11V7"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="2"/>',
+ fleets:'<path d="M3.5 16H2V5.5A1.5 1.5 0 0 1 3.5 4H14v12H8.5M14 8h4l4 5v3h-1.5M14 16h1.5M17 8v5h5"/><circle cx="6" cy="17" r="2.5"/><circle cx="18" cy="17" r="2.5"/>',
  pending:'<path d="M20 8a8 8 0 0 0-13.7-3M20 3v5h-5M4 16a8 8 0 0 0 13.7 3M4 21v-5h5"/>',
  settings:'<path d="M9.8 3h4.4l.7 2.5 2.2 1.3 2.5-.7 2.2 3.8-1.8 1.8v2.6l1.8 1.8-2.2 3.8-2.5-.7-2.2 1.3-.7 2.5H9.8l-.7-2.5-2.2-1.3-2.5.7-2.2-3.8 1.8-1.8v-2.6L2.2 9.9l2.2-3.8 2.5.7 2.2-1.3L9.8 3Z"/><circle cx="12" cy="13" r="3"/>'
 };
