@@ -1,3 +1,4 @@
+import {navigationSvg} from './navigation-icons.js';
 import {reportHeaderHTML,reportHeaderStyles,finishReportPrint} from './report-header.js';
 import {featureLabels,memberPermissions} from './access.js';
 import {checklistPage,loadChecklists,showChecklist,updateChecklistRecords,checklistOpenItems,checklistStatuses} from './checklists.js';
@@ -8,17 +9,7 @@ import {fieldApi, api, signIn, signOut, getAuthUserId, isConfigured} from './bac
 'use strict';
 const paths={grid:'M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z',fuel:'M4 3h10v18H4z M6 6h6v5H6z M14 8l4 3v6a2 2 0 0 0 4 0V8l-3-3 M2 21h14',tractor:'M4 16h9l3-7h4v7h-3 M3 7h8v9 M7 7V3 M5 3h5 M2 13h3 M9 19a3 3 0 1 0 0-6 3 3 0 0 0 0 6 M19 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4',sync:'M20 8a8 8 0 0 0-14-4L3 7 M3 2v5h5 M4 16a8 8 0 0 0 14 4l3-3 M21 22v-5h-5',bell:'M18 8a6 6 0 0 0-12 0c0 8-3 8-3 10h18c0-2-3-2-3-10 M10 21h4',plus:'M12 5v14 M5 12h14',download:'M12 3v12 M7 10l5 5 5-5 M5 17v4h14v-4',search:'M21 21l-6-6 M18 10a8 8 0 1 0-16 0 8 8 0 0 0 16 0',check:'M5 12l4 4L19 6',clock:'M12 8v5l3 2 M22 12a10 10 0 1 0-20 0 10 10 0 0 0 20 0',settings:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8 M9 3h6l1 4 4 1 1 5-4 3-1 5H9l-1-4-4-1-1-5 4-3z',leaf:'M20 3C8 2 1 8 5 16s16 1 15-13 M5 20L16 9',arrow:'M5 12h14 M14 7l5 5-5 5',x:'M6 6l12 12 M18 6L6 18',users:'M16 21v-3a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v3 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8 M18 5a4 4 0 0 1 0 7 M18 15a4 4 0 0 1 4 4v2',file:'M6 3h9l4 4v14H6z M14 3v5h5 M9 12h7 M9 16h7',shield:'M12 2l9 4v7q-2 6-9 9-7-3-9-9V6z M7 12l3 3 6-6'};
 const icon=(n)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[n]||paths.file}"/></svg>`;
-const navigationIcons={
- checklists:'<rect x="5" y="4" width="15" height="17" rx="2"/><path d="M9 4V2h7v2M8 10l1.5 1.5L12 9M14 10h3M8 16l1.5 1.5L12 15M14 16h3"/>',
- dashboard:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/>',
- history:'<path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M2 21h14M14 10h2a2 2 0 0 1 2 2v5a2 2 0 0 0 4 0V8l-3-3M19 5v4h3"/><rect x="7" y="6" width="4" height="5" rx=".5"/>',
- operations:'<path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4"/>',
- occurrences:'<path d="m12 3 10 18H2L12 3Z M12 9v5 M12 17h.01"/>',
- fleets:'<path d="M3 4h10M4 4v8M12 4v13M12 10h7l2 5M16 10V6M10 18h6M8 4v5h4"/><circle cx="6" cy="17" r="4"/><circle cx="19" cy="18" r="2.5"/>',
- pending:'<path d="M20 8a8 8 0 0 0-13.7-3M20 3v5h-5M4 16a8 8 0 0 0 13.7 3M4 21v-5h5"/>',
- settings:'<path d="M9.8 3h4.4l.7 2.5 2.2 1.3 2.5-.7 2.2 3.8-1.8 1.8v2.6l1.8 1.8-2.2 3.8-2.5-.7-2.2 1.3-.7 2.5H9.8l-.7-2.5-2.2-1.3-2.5.7-2.2-3.8 1.8-1.8v-2.6L2.2 9.9l2.2-3.8 2.5.7 2.2-1.3L9.8 3Z"/><circle cx="12" cy="13" r="3"/>'
-};
-const navigationIcon=id=>`<span class="nav-icon-wrap"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${navigationIcons[id]}</svg></span>`;
+const navigationIcon=id=>`<span class="nav-icon-wrap">${navigationSvg(id)}</span>`;
 const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,dec=1)=>Number(v||0).toLocaleString('pt-BR',{maximumFractionDigits:dec});
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo'}).format(new Date());

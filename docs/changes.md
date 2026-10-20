@@ -78,3 +78,21 @@ Record material changes here with the request, resulting behavior, affected area
 - Retained checklist versions for selected fleets and added basic questions where missing. Reset initial meter values for testing; known capacities remain and missing capacities have trial values. All selected fleets/locations are internally flagged as test data. Updated the bundled catalog to the same 10 fleet codes.
 - Validation: restored the private snapshot into local PostgreSQL-compatible storage, rehearsed reset, tested refueling/transfer/occurrence/checklist submission, rejected a second reset and restored the original data successfully. Existing application test suite passed. Verified live result counts and reviewed the technical PDF.
 - Offline queues on phones are preserved; phones must connect to refresh the reduced catalog. GMAIS was not modified.
+
+## 2026-10-20 — Shared website and Android icons
+
+- Replaced the Android menu PNGs with the website's SVG icons for refueling, transfers and checklists; occurrences use the same warning triangle. Both interfaces import one icon module with matching rounded strokes.
+- Bundled SVGs work offline. Added the shared module to website asset versioning and service-worker caching.
+- Validation: website/mobile production builds, existing application tests and mobile-size visual review.
+
+## 2026-10-20 — Larger Android button labels
+
+- Increased button font sizes by 20%, including main actions, menu, sign-out, photo actions and checklist choices.
+- Kept flexible button heights and wrapped long labels at spaces; narrow menus use two columns so icons do not squeeze the larger labels.
+- Validation: mobile build and visual checks at narrow phone, standard phone and tablet widths.
+
+### Publication verification
+
+- Full application suite passed, including permissions, offline submission, retries, photos and checklist revisions. Website and mobile production builds passed.
+- Verified real login/menu, local/material selection, refueling methods and checklist screens in a browser using an isolated local backend fixture at 320, 360, 390 and 600px. Button overflow measurements were clear on these screens. Earlier visual review also covered long action labels and photo controls.
+- Included shared icon changes in Android workflow triggers. No database migrations or offline-storage changes.

@@ -11,6 +11,7 @@ on:
       - 'web/backend.js'
       - 'web/fuel-utils.js'
       - 'web/text-case.js'
+      - 'web/navigation-icons.js'
       - 'web/logo.png'
       - 'web/fleets.json'
       - 'package*.json'
