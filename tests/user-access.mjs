@@ -28,6 +28,7 @@ const refuel={id:crypto.randomUUID(),kind:'refuel',fleet:'1001',mode:'manual',da
 const transfer={id:crypto.randomUUID(),kind:'transfer',localCode:'1',materialCode:'9',destination:'2',createdAt:new Date().toISOString()};assert.equal((await rpc('diesel_operation_submit',transfer)).id,transfer.id);
 assert.equal((await access(none)).ok,true);await who(worker,memberEmail);assert.equal((await rpc('diesel_operation_submit',refuel)).duplicate,true);assert.equal((await rpc('diesel_mobile_submit',refuel)).duplicate,true);assert.equal((await rpc('diesel_operation_submit',transfer)).duplicate,true);
 assert.equal((await rpc('diesel_operation_submit',{...refuel,id:crypto.randomUUID()})).status,403);
+const alwaysAllowedOccurrence={id:crypto.randomUUID(),kind:'occurrence',localCode:'1',materialCode:'9',notes:'OCORRÊNCIA COM TODAS AS FUNÇÕES DESATIVADAS',createdAt:new Date().toISOString()};assert.equal((await rpc('diesel_operation_submit',alwaysAllowedOccurrence)).id,alwaysAllowedOccurrence.id);
 // Native device leases resolve the current account permissions on every request.
 await who(null,null,'anon');const background=async payload=>(await db.query('select diesel_device_submit($1,$2::jsonb) result',[lease.token,JSON.stringify(payload)])).rows[0].result;
 assert.equal((await background({...checklist,id:crypto.randomUUID()})).code,'FEATURE_FORBIDDEN');assert.equal((await background(checklist)).duplicate,true);

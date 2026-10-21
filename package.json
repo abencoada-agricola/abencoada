@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite web --host 127.0.0.1",
     "build": "node scripts/build.mjs",
-    "test": "node tests/database.mjs && node tests/login.mjs && node tests/team-password.mjs && node tests/connection.mjs && node tests/text-case.mjs && node tests/sync-errors.mjs && node tests/qr.mjs && node tests/operations.mjs && node tests/fuel-control.mjs && node tests/dashboard-period.mjs && node tests/photos.mjs && node tests/test-data.mjs && node tests/simulated-readings.mjs && node tests/vehicle-meters.mjs && node tests/trial-recorder-readings.mjs && node tests/android-only.mjs && node tests/record-controls.mjs && node tests/checklists.mjs && node tests/user-access.mjs && node tests/member-removal.mjs && node tests/operation-fleets.mjs",
+    "test": "node tests/database.mjs && node tests/login.mjs && node tests/team-password.mjs && node tests/connection.mjs && node tests/text-case.mjs && node tests/sync-errors.mjs && node tests/qr.mjs && node tests/operations.mjs && node tests/fuel-control.mjs && node tests/dashboard-period.mjs && node tests/photos.mjs && node tests/test-data.mjs && node tests/simulated-readings.mjs && node tests/vehicle-meters.mjs && node tests/trial-recorder-readings.mjs && node tests/android-only.mjs && node tests/record-controls.mjs && node tests/checklists.mjs && node tests/user-access.mjs && node tests/member-removal.mjs && node tests/operation-fleets.mjs && node tests/mobile-access-ui.mjs",
     "build:mobile": "node scripts/build-mobile.mjs",
     "android:sync": "npm run build:mobile && cap sync android"
   },
