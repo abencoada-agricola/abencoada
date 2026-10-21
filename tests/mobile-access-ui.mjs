@@ -42,14 +42,15 @@ for(const screen of ['menu','context','methods','scan','refuel','transfer','chec
 // Revocation ejects an open restricted form without dropping its draft or pending records.
 state.session.user.permissions=none;state.screen='refuel';state.draft={fleet:'1001',km:'500'};state.queue=[{id:'pending'}];state.renderFlow();assert.equal(state.screen,'menu');assert.equal(state.draft.km,'500');assert.equal(state.queue.length,1);
 state.queue=[];state.screen='context';state.contextNext='methods';state.session.user.permissions=all;state.draft={context:{localCode:'1',materialCode:'9'},km:'500'};state.renderFlow();
-nodes.get('#open-observation').onclick();assert.equal(state.screen,'occurrence');assert.match(state.app.innerHTML,/name="localCode"/);assert.match(state.app.innerHTML,/name="materialCode"/);assert.match(state.app.innerHTML,/value="1"/);
+nodes.get('#open-observation').onclick();assert.equal(state.screen,'occurrence');assert.doesNotMatch(state.app.innerHTML,/name="(?:localCode|materialCode|fleet)"/);
 const returnTarget=state.occurrenceReturn;state.draft.notes='RASCUNHO';nodes.get('#open-observation').onclick();assert.equal(state.occurrenceReturn,returnTarget);assert.equal(state.draft.notes,'RASCUNHO');assert.equal(nodes.get('#occurrence-form [name="notes"]').focused,true);
-state.context={localCode:'2',materialCode:'9'};assert.equal(state.occurrenceContextHTML(),'');state.context={};
+state.context={localCode:'2',materialCode:'9'};state.renderFlow();assert.doesNotMatch(state.app.innerHTML,/name="(?:localCode|materialCode|fleet)"|context-box/);
 state.session.user.permissions=none;const submitButton={disabled:false};
 const event=values=>({preventDefault(){},target:{values,querySelector:()=>submitButton}});
-await state.saveEvent(event({notes:'OCORRÊNCIA INDEPENDENTE',fleet:'',localCode:'1',materialCode:'9'}),'occurrence');
-assert.equal(captured.length,1);assert.equal(captured[0].kind,'occurrence');assert.equal(captured[0].localCode,'1');assert.equal(captured[0].materialCode,'9');assert.equal(state.fixedContext,null);assert.equal(state.draft.km,'500');assert.equal(state.draft.context.localCode,'1');
-await state.saveEvent(event({notes:'SEM LOCAL',fleet:''}),'occurrence');assert.equal(captured.length,1);assert.match(nodes.get('#form-error').textContent,/local e material/);
+await state.saveEvent(event({notes:'OCORRÊNCIA INDEPENDENTE'}),'occurrence');
+assert.equal(captured.length,1);assert.equal(captured[0].kind,'occurrence');assert.equal(captured[0].localCode,undefined);assert.equal(captured[0].materialCode,undefined);assert.equal(captured[0].fleet,undefined);assert.equal(state.fixedContext,null);assert.equal(state.draft.km,'500');assert.equal(state.draft.context.localCode,'1');
+await state.saveEvent(event({notes:'SEM LOCAL'}),'occurrence');assert.equal(captured.length,2);assert.equal(captured[1].localCode,undefined);
+state.editId='legacy';state.queue=[{id:'legacy',localCode:'1',materialCode:'9',fleet:'1001',createdAt:new Date().toISOString()}];await state.saveEvent(event({notes:'CORREÇÃO ANTIGA'}),'occurrence');assert.equal(captured[2].localCode,'1');assert.equal(captured[2].fleet,'1001');state.queue=[];state.editId=null;
 // Exercise the actual refresh flow: hide/re-enable without logout, persist permissions,
 // keep the last known restrictions offline and preserve an open occurrence draft.
 let fresh={...state.session,user:{...state.session.user,permissions:none}},offline=false;

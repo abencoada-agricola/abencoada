@@ -177,8 +177,8 @@ Reúne os dois tipos de evento na mesma tabela, diferenciados pelo campo kind.
 | `user_id` | uuid | Sim | UUID da conta autenticada responsável. |
 | `operator` | text | Sim | Nome do operador no momento do registro; permanece como histórico. |
 | `kind` | text | Sim | Tipo de evento: transfer ou occurrence. |
-| `local_code` | text | Sim | Código do local de origem/registradora. |
-| `material_code` | text | Sim | Código do combustível/material. |
+| `local_code` | text | Não | Obrigatório em transferência; opcional apenas para compatibilidade com ocorrências antigas. |
+| `material_code` | text | Não | Obrigatório em transferência; ocorrências gerais não exigem material. |
 | `destination` | text | Não | Código do novo local em uma transferência. |
 | `notes` | text | Não | Texto da ocorrência ou observação. |
 | `created_at` | timestamptz | Sim | Data/hora de criação ou captura. |
@@ -195,6 +195,8 @@ Reúne os dois tipos de evento na mesma tabela, diferenciados pelo campo kind.
 | `fleet` | text | Não | Frota opcional. Registros antigos podem não ter vínculo com frota. |
 
 Chaves declaradas: `PRIMARY KEY (id)`; `FOREIGN KEY (fleet) REFERENCES fleets(id)`.
+Ocorrências novas são relatos gerais sem local, material ou frota. A migração `general-occurrences.sql` preserva vínculos antigos e exige local/material somente para transferências.
+
 ### 4.8. public.diesel_checklist_templates
 
 Versões das perguntas configuradas para cada frota. Uma nova configuração gera uma nova versão.
@@ -388,6 +390,7 @@ Ordem das migrações de estrutura/comportamento usadas nesta revisão:
 19. `user-access.sql`
 20. `member-removal.sql`
 21. `operation-fleets.sql`
+22. `general-occurrences.sql`
 
 O arquivo fleets.sql é uma carga de catálogo, não uma tabela adicional. Os arquivos de teste inserem referências para ensaios. A limpeza pontual de 19/10/2026 fica separada em supabase/maintenance/reset-test-workspace.sql, com verificação do inventário anterior e transação; não é uma migração automática.
 
