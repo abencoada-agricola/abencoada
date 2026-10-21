@@ -44,9 +44,9 @@ export async function api(path,options={}){
   else if(route==='admin')rpc='diesel_admin';
   else throw Error('Operação inválida.');
   const {data,error,status:rpcStatus}=await client.rpc(rpc,args).abortSignal(controller.signal);
-  if(error){const e=Error(error.message||'Não foi possível conectar ao banco.');e.status=rpcStatus||0;if(error.code==='42501')e.status=403;if(['PGRST301','PGRST302','PGRST303'].includes(error.code))e.status=401;throw e}
+  if(error){const e=Error(error.message||'Não foi possível conectar ao banco.');e.status=rpcStatus||0;if(!e.status&&(error.name==='AbortError'||/aborterror|the user aborted a request|operation was aborted/i.test(e.message)))e.name='AbortError';if(error.code==='42501')e.status=403;if(['PGRST301','PGRST302','PGRST303'].includes(error.code))e.status=401;throw e}
   if(data?.error){const e=Error(data.error);e.status=data.status||422;e.data=data;throw e}return data;
- }catch(error){if(error.name==='TypeError'||error.name==='AbortError')throw Error('Não foi possível conectar. Conecte o celular à internet e confira a data e hora automáticas. Os registros continuam salvos neste aparelho.');throw error}finally{clearTimeout(timer)}
+ }catch(error){if(error.name==='TypeError'||error.name==='AbortError')throw Object.assign(Error('Não foi possível conectar. Conecte o celular à internet e confira a data e hora automáticas. Os registros continuam salvos neste aparelho.'),{code:error.name==='AbortError'?'REQUEST_ABORTED':'NETWORK_ERROR'});throw error}finally{clearTimeout(timer)}
 }
 
 // Read-only catalog probe used to distinguish connection and session failures.

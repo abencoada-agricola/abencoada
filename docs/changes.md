@@ -96,3 +96,9 @@ Record material changes here with the request, resulting behavior, affected area
 - Full application suite passed, including permissions, offline submission, retries, photos and checklist revisions. Website and mobile production builds passed.
 - Verified real login/menu, local/material selection, refueling methods and checklist screens in a browser using an isolated local backend fixture at 320, 360, 390 and 600px. Button overflow measurements were clear on these screens. Earlier visual review also covered long action labels and photo controls.
 - Included shared icon changes in Android workflow triggers. No database migrations or offline-storage changes.
+
+## 2026-10-21 — Quiet empty-queue refresh failures
+
+- Opening/resuming the Android app also refreshes session/catalog data. Failed refreshes previously used upload wording even when no records were pending; Supabase status-zero abort responses could lose their error type and leak technical AbortError text.
+- Normalize wrapped abort responses, keep idle network/server/rate-limit failures in the header, and reserve record-preservation/upload messages for nonempty queues. Session-expiry and authorization notices remain actionable. Clear the previous synchronization notice after recovery without erasing unrelated feedback.
+- Validation: full application suite, web/mobile production builds, focused regressions for empty/pending queues, wrapped aborts, recovery, access statuses and matching receipts. Browser review with an isolated interrupted-request fixture confirmed the empty-queue menu has no upload error banner. No storage schema, pending-record deletion rules or GMAIS data changed.
