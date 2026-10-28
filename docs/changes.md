@@ -1,5 +1,19 @@
 # Change log
 
+## 2026-10-28 — Aparência, carregamento e confirmações de envio
+
+Paleta compartilhada com o site, temas claro/escuro persistentes e botão Ajustes ao lado de Ocorrências. Rótulos flutuantes no login, animação local de carregamento e bloqueio do botão durante a validação. Avisos distinguem gravação local de recebimento confirmado, com resumo da fila e retorno visual acessível.
+
+Android possui canal de notificações de envio, permissão solicitada após login e opção de solicitar novamente em Ajustes. Confirmações do envio em primeiro ou segundo plano geram notificação nativa, inclusive com tela bloqueada quando permitido pelo sistema. Duplicatas são evitadas por identidade/registro em armazenamento nativo persistente. Erros de rede, recibos divergentes e simples gravação local não disparam confirmação. O agendamento de fundo depende do Android e de suas restrições de bateria/rede.
+
+Validação: regressões de confirmação/recibo divergente, permissão recusada/repetida, deduplicação, login e acesso offline; suíte completa e builds. Fluxo de navegador isolado validou temas, persistência, saída/retorno/reinício offline e conservação de pendências com dados fictícios.
+
+## 2026-10-28 — Desbloqueio offline com a senha do login
+
+Primeiro acesso online habilita desbloqueio local com a mesma senha validada, sem armazenar senha legível. Catálogo/sessão passam a ser cifrados com AES-GCM e chave derivada por PBKDF2; filas e rascunhos são preservados. SAIR fecha a sessão visível preservando o acesso offline, rascunhos e pendências; trocar de usuário com registros pendentes é impedido. Prazo inicial de 30 dias renovado por validação de sessão online; token local expirado não equivale a revogação de acesso offline. Autenticação GMAIS permanece responsabilidade da futura conexão do servidor.
+
+Campos de usuário e senha adaptados à referência de rótulo flutuante do Bencho, com CSS local e acessibilidade. Regras e limites documentados em `docs/offline-access.md`. Validação: testes criptográficos/estados, suíte existente, fluxo de navegador em modo avião com registro/reinício/bloqueio, revisão visual e builds web/móvel.
+
 ## 2026-10-28 — Barra de status e disposição das telas Android
 
 Fixado o contraste da barra de status sobre o cabeçalho branco, inclusive no tema escuro do aparelho, usando SystemBars do Capacitor. O tema inicial e o fundo nativo acompanham a configuração; a navegação considera a área reservada por WebViews antigos e a área verde em edge-to-edge. Insets fornecidos pelo Capacitor passam a ser respeitados no CSS.

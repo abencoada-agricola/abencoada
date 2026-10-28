@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import vm from 'node:vm';
+const source=(await readFile('mobile/delivery.js','utf8')).replace(/^import .*;\n/gm,'').replaceAll('export ','');
+const notices=[],nativeCalls=[],storage=new Map();let nativeEnabled=false;
+const native={status:async()=>({enabled:nativeEnabled}),request:async()=>{nativeCalls.push('permission');return {enabled:nativeEnabled}},delivered:async value=>{nativeCalls.push(value);throw Error('notifications disabled')}};
+const state={Capacitor:{getPlatform:()=> 'android'},registerPlugin:()=>native,showDelivered:n=>notices.push(n),localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)}};
+vm.createContext(state);vm.runInContext(source,state);
+assert.equal((await state.requestDeliveryNotifications()).enabled,false);await state.requestDeliveryNotifications();assert.equal(nativeCalls.filter(v=>v==='permission').length,1);
+nativeEnabled=true;assert.equal((await state.requestDeliveryNotifications(true)).enabled,true);
+state.reportDelivery('operator',[]);assert.equal(notices.length,0);
+state.reportDelivery('operator',['confirmed-a','confirmed-a']);await Promise.resolve();assert.deepEqual(notices,[1]);
+state.reportDelivery('operator',['confirmed-a']);assert.deepEqual(notices,[1]);
+state.reportDelivery('operator',['confirmed-b','confirmed-c']);assert.deepEqual(notices,[1,2]);
+state.Capacitor.getPlatform=()=> 'web';state.reportDelivery('operator',['confirmed-d']);assert.deepEqual(notices,[1,2,1]);assert.equal((await state.requestDeliveryNotifications()).supported,false);
+console.log('Delivery notices deduplicate confirmations, tolerate notification denial, support explicit permission retry and skip native calls on the web.');

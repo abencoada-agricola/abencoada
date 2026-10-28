@@ -34,9 +34,9 @@ const vm=await import('node:vm');
 const appSource=await readFile('mobile/app.js','utf8');
 const syncSource=appSource.slice(appSource.indexOf('async function sync(){'),appSource.indexOf('function passwordEye'));
 let failRefresh=true,failUpload=false,mismatch=false;
-const stored=[];
+const stored=[],deliveries=[];
 const fresh={user:{id:'worker'},fleets:[],locations:[],rules:{checklistEnabled:true}};
-const state={busy:false,session:structuredClone(fresh),needsLogin:false,nativeConfigured:false,connected:true,syncIssue:null,message:'',queue:[],selected:null,screen:'menu',
+const state={reportDelivery(user,ids){if(ids.length)deliveries.push({user,ids:[...ids]})},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},locked:false,localAccess:{refresh:async()=>{},requireOnline:async()=>{}},busy:false,session:structuredClone(fresh),needsLogin:false,nativeConfigured:false,connected:true,syncIssue:null,message:'',queue:[],selected:null,screen:'menu',
  describeSyncFailure,prepareBackgroundSync,accessSignature:()=>'',checklistEnabled:()=>true,operationDependencies:()=>[],
  mirrorQueue:async()=>{},configureNative:async()=>{},updatePanels:()=>{},render:()=>{},login:()=>{},
  put:async(key,value)=>stored.push({key,value:structuredClone(value)}),op:async(_store,_mode,fn)=>fn({put:record=>stored.push(structuredClone(record)),delete:id=>stored.push({deleted:id})}),
@@ -49,5 +49,7 @@ failRefresh=false;state.queue=[];await state.sync();assert.equal(state.syncIssue
 state.message='RASCUNHO SALVO';await state.sync();assert.equal(state.message,'RASCUNHO SALVO');
 state.queue=[pending];failUpload=true;await state.sync();assert.equal(state.queue[0],pending);assert.match(pending.lastSendError,/REGISTROS CONTINUAM SALVOS/);assert.doesNotMatch(pending.lastSendError,/AbortError/);
 failUpload=false;mismatch=true;await state.sync();assert.equal(state.queue.length,1);assert.ok(!stored.some(entry=>entry.deleted));
-mismatch=false;await state.sync();assert.equal(state.queue.length,0);assert.ok(stored.some(entry=>entry.deleted===pending.id));assert.equal(state.syncIssue,null);assert.match(state.message,/REGISTRO ENVIADO/);
+assert.equal(deliveries.length,0);mismatch=false;await state.sync();assert.equal(state.queue.length,0);assert.ok(stored.some(entry=>entry.deleted===pending.id));assert.equal(state.syncIssue,null);assert.match(state.message,/REGISTRO ENVIADO/);
 console.log('Empty refreshes stay quiet, wrapped aborts are sanitized, recovery clears stale errors and pending uploads require a matching receipt.');
+
+assert.deepEqual(deliveries,[{user:'worker',ids:['pending-one']}]);

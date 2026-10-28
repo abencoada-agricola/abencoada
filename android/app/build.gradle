@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+def appRelease = new groovy.json.JsonSlurper().parse(file('../../app-version.json'))
+def releaseCode = (project.findProperty('appVersionCode') ?: appRelease.versionCode).toString()
+def releaseName = (project.findProperty('appVersionName') ?: appRelease.version).toString()
+if (releaseCode.find(/[13]/) || releaseName.find(/[13]/)) {
+    throw new GradleException('App versions must not contain the digits 1 or 3.')
+}
+
 android {
     namespace = "br.com.abencoada.diesel"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -7,8 +14,8 @@ android {
         applicationId "br.com.abencoada.diesel"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode = (project.findProperty('appVersionCode') ?: '1').toInteger()
-        versionName = (project.findProperty('appVersionName') ?: '1.0')
+        versionCode = releaseCode.toInteger()
+        versionName = releaseName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
