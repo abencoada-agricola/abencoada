@@ -23,3 +23,8 @@ Rules:
 - Do not write to GMAIS or publish/alter its data. Integration remains future work until an authorized interface is available.
 - Do not edit an applied migration to change production behavior; add a new ordered migration and the relevant tests.
 - Run checks appropriate to the change. Graph updates do not replace application tests or manual UI verification.
+
+## App version numbering
+
+- User preference: app versions must never contain the digits **1** or **3**, anywhere in the displayed version or Android versionCode. Skip all such numbers; do not merely skip the substring 13. This applies to future versions, not historical releases or dependency/tool versions.
+- Use `app-version.json` and `node scripts/app-version.mjs <workflow-run-number>` for release numbering. Keep the APK version, login footer and release tag consistent, and preserve strictly increasing Android version codes. The login version label stays very small near the bottom edge.

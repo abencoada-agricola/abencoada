@@ -70,3 +70,7 @@ Do not index credentials, operational exports or GMAIS captures. Keep all future
 ## iPhone app
 
 The `ios/` project shares the `mobile/` interface with Android. See [iOS setup](ios.md) for Xcode, signing and background limitations. Use `npm run ios:sync` with the same public Supabase build variables, then `npm run ios:open`. `npm run ios:test` runs native queue regressions on macOS; `npm test` covers the shared application and server rules. The iOS GitHub workflow builds an unsigned simulator artifact only. Generated web assets, Xcode caches and SPM dependencies are excluded from the architecture map.
+
+## App release numbering
+
+App versions and Android version codes must not contain the digits 1 or 3 (user preference). The baseline is in `app-version.json`; `node scripts/app-version.mjs <workflow-run-number>` derives monotonically increasing allowed versions. CI exports the selected metadata before building, so the APK, login footer and release tag use the same value. Local builds use the baseline unless APP_BUILD_NUMBER is provided. Tool/dependency versions and historical releases are unaffected.

@@ -8,6 +8,8 @@ on:
       - 'android/**'
       - 'capacitor.config.json'
       - 'scripts/build-mobile.mjs'
+      - 'scripts/app-version.mjs'
+      - 'app-version.json'
       - 'web/backend.js'
       - 'web/gmais-fleet.js'
       - 'web/fuel-utils.js'
@@ -37,6 +39,8 @@ jobs:
           java-version: '21'
       - run: npm ci
       - run: npm test
+      - name: Select app version without digits 1 or 3
+        run: node scripts/app-version.mjs "$GITHUB_RUN_NUMBER" >> "$GITHUB_ENV"
       - run: npm run build:mobile
         env:
           SUPABASE_URL: ${{ vars.SUPABASE_URL }}
@@ -55,7 +59,7 @@ jobs:
         env:
           ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/abencoada.p12
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-        run: ./gradlew assembleRelease -PappVersionCode=${{ github.run_number }} -PappVersionName=1.0.${{ github.run_number }}
+        run: ./gradlew assembleRelease -PappVersionCode="$APP_VERSION_CODE" -PappVersionName="$APP_VERSION"
       - name: Verify signature
         run: |
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose android/app/build/outputs/apk/release/app-release.apk
@@ -78,4 +82,4 @@ jobs:
           Installable Android app with account login, fleet QR scanning, previous readings and offline refueling records. Requires Android 8 or later.
 
           NOTES
-          gh release create "android-1.0.${{ github.run_number }}" abencoada.apk abencoada.apk.sha256 --target "$GITHUB_SHA" --title "Abençoada · Android 1.0.${{ github.run_number }}" --notes-file "$RUNNER_TEMP/release-notes.md"
+          gh release create "android-${APP_VERSION}" abencoada.apk abencoada.apk.sha256 --target "$GITHUB_SHA" --title "Abençoada · Android ${APP_VERSION}" --notes-file "$RUNNER_TEMP/release-notes.md"
