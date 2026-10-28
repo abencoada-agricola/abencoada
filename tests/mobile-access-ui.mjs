@@ -70,3 +70,14 @@ state.navigator.onLine=true;state.localAccess.requireOnline=async()=>{revoked++}
 state.api=async()=>{throw Object.assign(Error('Network session missing'),{status:401,code:'LOCAL_AUTH_REQUIRED'})};await state.sync();assert.equal(state.needsLogin,false);assert.equal(revoked,0);assert.equal(state.syncIssue.label,'VALIDAR PARA ENVIAR');
 state.api=async()=>{throw Object.assign(Error('Access revoked'),{status:403})};await state.sync();assert.equal(state.needsLogin,true);assert.equal(revoked,1);
 console.log('Airplane mode skips auth refresh; missing local tokens preserve offline access; known server revocation requires online validation.');
+
+// Changing defaults persists first and never rewrites already queued payloads or drafts.
+let editor;state.editContext=options=>{editor=options};nodes.set('#change-context',element());
+state.session.user.permissions=all;state.screen='menu';state.context={localCode:'1',materialCode:'9'};state.fixedContext={...state.context};
+state.queue=[{id:'keep-original',localCode:'1',materialCode:'9',userId:'operator'}];state.draft={fleet:'1001',km:'500'};
+const pendingBefore=structuredClone(state.queue),draftBefore=structuredClone(state.draft);
+state.renderFlow();assert.match(state.app.innerHTML,/id="change-context"/);nodes.get('#change-context').onclick();
+await editor.save({localCode:'2',materialCode:'8'});assert.equal(state.context.localCode,'2');assert.equal(state.fixedContext.materialCode,'8');
+assert.deepEqual(state.queue,pendingBefore);assert.deepEqual(state.draft,draftBefore);assert.ok(saved.some(value=>value.key==='operator:context'&&value.value.localCode==='2'));
+state.put=async()=>{throw Error('Storage failure')};await assert.rejects(editor.save({localCode:'4',materialCode:'5'}),/Storage failure/);assert.equal(state.context.localCode,'2');assert.equal(state.fixedContext.materialCode,'8');
+console.log('Default context changes preserve pending operation ownership, original codes and drafts; failed persistence leaves current context unchanged.');

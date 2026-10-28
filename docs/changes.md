@@ -1,5 +1,13 @@
 # Change log
 
+## 2026-10-28 — Alterar local e material na tela inicial
+
+Após o login, o resumo de Local/Material na tela inicial passa a ser um botão com indicação ALTERAR. Abre uma janela Material com os códigos atuais, sugestões do catálogo local e ações Salvar alteração/Cancelar. A mudança é gravada no aparelho para o usuário antes de atualizar o resumo e vale para os próximos registros; funciona offline. As outras telas conservam o resumo da operação em andamento.
+
+Cancelar não grava mudanças. Códigos são validados, falhas de armazenamento mantêm os valores anteriores e permitem nova tentativa, e salvamentos repetidos são bloqueados enquanto há gravação em andamento. Rascunhos e registros pendentes, incluindo seus códigos originais, não são regravados.
+
+Validação: suíte completa, regressões do editor e da persistência, build móvel e fluxo de navegador isolado em modo avião: configuração inicial, editar/salvar/cancelar, fila idêntica antes/depois e novos códigos preservados após sair e reiniciar. Revisão visual da janela nos estilos Material. Apenas dados fictícios foram usados.
+
 ## 2026-10-28 — Material Design 3 no aplicativo
 
 Padronizado o visual conforme a referência Material Design 3: botões preenchidos e contornados em cápsula, ações de ícone circulares com área de toque de 48px, campos com cantos de 12px, cartões de 16px e janelas de 28px. Estados de foco, toque e desabilitado compartilham estilos; menus, login, checklist, fotos, avisos e Ajustes usam o mesmo sistema. Mantidas a paleta do Abençoada e a escolha persistente de tema claro/escuro. CSS empacotado localmente, sem depender de fontes ou estilos de rede.

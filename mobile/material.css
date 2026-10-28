@@ -58,3 +58,6 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .occurrence-photo{border-radius:var(--md-sys-shape-corner-large)}
 @media(max-width:380px){.menu-actions button.primary{grid-template-columns:24px minmax(0,1fr);gap:10px;padding-inline:18px}.menu-actions .menu-icon{width:24px;height:24px}header{gap:4px}#connection-status{font-size:10px}#connection-status time{font-size:9px}}
 @media(prefers-reduced-motion:reduce){button,button::after{transition:none}}
+
+button.context-edit{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 20px;padding:14px 18px;margin:0 0 18px;border:1px solid var(--line);border-radius:var(--md-sys-shape-corner-large);background:var(--surface);color:var(--ink);font-size:clamp(16px,4.6vw,20px);font-weight:400}
+.context-edit-label{font-size:12px;letter-spacing:.06em;color:var(--accent);font-weight:600}.context-dialog label{text-align:left}.context-dialog input{text-align:left}.context-dialog p{font-size:16px;line-height:1.5}
