@@ -1,5 +1,11 @@
 # Change log
 
+## 2026-10-28 — Preparação para catálogo dinâmico GMAIS
+
+Adicionado contrato opcional e versionado de metadados por frota na resposta de sessão, com adaptação compartilhada entre web e Android. A unidade e a finalidade confirmada do medidor adicional definem os campos exigidos; capacidade desconhecida não vira estimativa. Catálogos locais, leituras existentes, rascunhos e pendências são preservados. Nenhum catálogo real foi incluído/importado e nenhuma conexão GMAIS foi ativada.
+
+Documentado em `docs/gmais-integration.md` o mapeamento esperado para a futura conexão do Luiz e as adaptações ainda necessárias no servidor (identidade, validação de envios, histórico e fonte de leituras). Validação: testes de contrato e sessão RPC, suíte completa, builds web/Android e atualização do mapa de arquitetura.
+
 ## 2026-10-28 — Administração na raiz do site
 
 Administração e login passam a abrir diretamente em `https://abencoada-agricola.github.io/abencoada/`, sem redirecionar para `admin.html`. O endereço anterior redireciona à raiz para preservar favoritos. Saída da conta, abertura do aplicativo web instalado e links atuais acompanham o endereço simplificado. Armazenamento e sessão existentes permanecem no mesmo domínio e banco local.

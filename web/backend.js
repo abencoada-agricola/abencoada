@@ -1,5 +1,6 @@
 import {createClient} from './vendor.js';
 import {config} from './config.js';
+import {normalizeGmaisSession} from './gmais-fleet.js';
 export const isConfigured=()=>/^https:\/\//.test(config.url)&&!!config.publishableKey;
 const client=isConfigured()?createClient(config.url,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'diesel-auth'}}):null;
 export async function getAuthUserId(){return (await client.auth.getSession()).data.session?.user.id||null}
@@ -45,7 +46,7 @@ export async function api(path,options={}){
   else throw Error('Operação inválida.');
   const {data,error,status:rpcStatus}=await client.rpc(rpc,args).abortSignal(controller.signal);
   if(error){const e=Error(error.message||'Não foi possível conectar ao banco.');e.status=rpcStatus||0;if(!e.status&&(error.name==='AbortError'||/aborterror|the user aborted a request|operation was aborted/i.test(e.message)))e.name='AbortError';if(error.code==='42501')e.status=403;if(['PGRST301','PGRST302','PGRST303'].includes(error.code))e.status=401;throw e}
-  if(data?.error){const e=Error(data.error);e.status=data.status||422;e.data=data;throw e}return data;
+  if(data?.error){const e=Error(data.error);e.status=data.status||422;e.data=data;throw e}return route==='session'?normalizeGmaisSession(data):data;
  }catch(error){if(error.name==='TypeError'||error.name==='AbortError')throw Object.assign(Error('Não foi possível conectar. Conecte o celular à internet e confira a data e hora automáticas. Os registros continuam salvos neste aparelho.'),{code:error.name==='AbortError'?'REQUEST_ABORTED':'NETWORK_ERROR'});throw error}finally{clearTimeout(timer)}
 }
 
@@ -58,6 +59,6 @@ export async function fieldApi(route,payload){
   const response=await fetch(config.url+'/rest/v1/rpc/'+(route==='session'?'diesel_field_session':'diesel_field_submit'),{method:'POST',headers:{apikey:config.publishableKey,'Content-Type':'application/json'},body:JSON.stringify(route==='session'?{}:{payload}),signal:controller.signal});
   const data=await response.json();
   if(!response.ok){const e=Error('Não foi possível conectar. O registro continua neste aparelho.');e.status=response.status;throw e}
-  if(data?.error){const e=Error(data.error);e.status=data.status||422;e.data=data;throw e}return data;
+  if(data?.error){const e=Error(data.error);e.status=data.status||422;e.data=data;throw e}return normalizeGmaisSession(data);
  }finally{clearTimeout(timer)}
 }

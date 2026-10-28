@@ -1,3 +1,4 @@
+import {gmaisMeterFields} from '../web/gmais-fleet.js';
 export function fleetQr(fleet){return JSON.stringify({app:'abencoada-diesel',v:1,fleet:String(fleet.id),name:String(fleet.name),type:String(fleet.type)})}
 export function readFleetQr(text){
  let data;try{data=JSON.parse(String(text))}catch{throw Error('QR Code inválido. Use o código gerado pela administração.')}
@@ -6,9 +7,10 @@ export function readFleetQr(text){
 }
 export const defaultMeters=type=>type==='Caminhão'?{km:true,engine:false,elevator:false}:type==='Colhedora'?{km:false,engine:true,elevator:true}:type==='Trator'?{km:false,engine:true,elevator:false}:{km:true,engine:false,elevator:false};
 export const meterLabels={km:'KM',engine:'HORÍMETRO MOTOR',elevator:'HORÍMETRO ELEVADOR'};
-// Elevator readings are available only for machine categories.
-export const canUseElevator=fleet=>['Trator','Colhedora'].includes(fleet?.type);
+// Confirmed integration metadata takes precedence; local fleets retain category rules.
+export const canUseElevator=fleet=>gmaisMeterFields(fleet)?.elevator??['Trator','Colhedora'].includes(fleet?.type);
 export function fleetMeters(fleet){
+ const external=gmaisMeterFields(fleet);if(external)return external;
  const meters={...(fleet.meter_fields||defaultMeters(fleet.type))};
  if(!canUseElevator(fleet)){meters.elevator=false;if(!meters.km&&!meters.engine)meters.km=true}
  return meters;
