@@ -1,0 +1,60 @@
+/* Material Design 3: shared shape, color, typography and interaction tokens.
+   Kept local so the installed application works without a network connection. */
+:root{
+ --md-sys-color-primary:var(--button);--md-sys-color-on-primary:var(--button-ink);
+ --md-sys-color-surface:var(--surface);--md-sys-color-surface-container:var(--surface-alt);
+ --md-sys-color-on-surface:var(--ink);--md-sys-color-on-surface-variant:var(--muted);
+ --md-sys-color-outline:var(--line);--md-sys-color-secondary-container:var(--hover);
+ --md-sys-shape-corner-small:8px;--md-sys-shape-corner-medium:12px;
+ --md-sys-shape-corner-large:16px;--md-sys-shape-corner-extra-large:28px;
+ --md-sys-shape-corner-full:999px;--md-sys-state-duration:160ms;
+}
+body,button,input,select,textarea{font-family:Roboto,system-ui,Arial,sans-serif}
+button{
+ position:relative;isolation:isolate;min-height:48px;padding:12px 24px;
+ border:1px solid transparent;border-radius:var(--md-sys-shape-corner-full);
+ background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);
+ font-size:16px;font-weight:600;line-height:1.4;letter-spacing:.02em;
+ -webkit-tap-highlight-color:transparent;
+ transition:background-color var(--md-sys-state-duration),box-shadow var(--md-sys-state-duration),opacity var(--md-sys-state-duration);
+}
+button::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;pointer-events:none;transition:opacity var(--md-sys-state-duration)}
+@media(hover:hover){button:hover:not(:disabled)::after{opacity:.08}}
+button:active:not(:disabled){transform:none;filter:none}button:active:not(:disabled)::after{opacity:.12}
+button:disabled{opacity:.38;cursor:default}
+button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+button.primary,button.secondary,button.back-button,.photo-button,.notification-setting,.settings-options button,.checklist-choice{
+ border-radius:var(--md-sys-shape-corner-full);min-height:56px;padding:14px 24px;
+ font-size:clamp(17px,4.8vw,21px);font-weight:600;line-height:1.4;
+}
+button.primary,.photo-button{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);border-color:transparent}
+button.secondary,button.back-button,.notification-setting{
+ background:transparent;color:var(--accent);border:1px solid var(--md-sys-color-outline);box-shadow:none;
+}
+.menu-actions button.primary{border-radius:var(--md-sys-shape-corner-full);min-height:80px;padding:20px 24px;font-size:clamp(20px,5.8vw,26px);grid-template-columns:28px minmax(0,1fr) 28px;gap:12px}
+.menu-actions .menu-icon{width:28px;height:28px}.menu-actions{gap:28px}
+header{grid-template-columns:44px minmax(0,1fr) 48px 48px 52px;gap:6px;padding-inline:8px}
+#header-logo{width:44px;border-radius:var(--md-sys-shape-corner-small)}
+header #open-settings,header #open-observation{width:48px;height:48px;min-height:48px;padding:12px;border-radius:var(--md-sys-shape-corner-full);border-color:transparent}
+header #logout{width:52px;min-height:48px;padding:8px 4px;border-radius:var(--md-sys-shape-corner-full);font-size:12px;border-color:transparent}
+body.login-screen #open-settings{width:48px;right:12px}
+.observation-button svg,.photo-button svg{width:24px;height:24px}
+input,select,textarea,.auth-field input{border-radius:var(--md-sys-shape-corner-medium);border:1px solid var(--md-sys-color-outline);min-height:56px;background:var(--input);color:var(--md-sys-color-on-surface)}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--focus);outline-offset:1px;border-color:var(--focus)}
+.auth-field input{height:60px;padding:18px 16px 12px}.auth-password input{padding-right:64px}
+.auth-password button{width:48px;height:48px;min-height:48px;top:6px;right:6px;padding:12px;border-radius:var(--md-sys-shape-corner-full);background:transparent;color:var(--ink)}
+#login{gap:24px}#login button.primary{min-height:56px;margin-top:8px;font-size:20px}
+.card,.checklist-question,.context-box,.liters-result{border-radius:var(--md-sys-shape-corner-large);border-color:var(--md-sys-color-outline);background:var(--md-sys-color-surface)}
+.card{padding:20px}.card .card{background:var(--md-sys-color-surface-container)}
+.capacity-dialog{border:0;border-radius:var(--md-sys-shape-corner-extra-large);background:var(--md-sys-color-surface);color:var(--ink);padding:24px;box-shadow:0 8px 28px #0003}
+.capacity-dialog::backdrop{background:#0006}.capacity-dialog h2{font-size:24px;font-weight:500;line-height:1.35}
+.settings-options{gap:12px}.settings-options button{min-height:56px;padding:14px 16px;border:1px solid var(--line);background:var(--surface-alt);color:var(--ink);font-size:16px}
+.settings-options button[aria-checked=true]{background:var(--button);color:var(--button-ink);border-color:transparent;box-shadow:none}
+.settings-options button[aria-checked=true]::before{content:'✓';margin-right:8px}
+.checklist-choices{gap:10px}.checklist-choice{padding:14px 6px;font-size:clamp(13px,3.7vw,17px);border-width:1px}
+.checklist-choice.selected{outline:2px solid var(--focus);outline-offset:3px}
+.status-message,.capacity-warning,.delivery-feedback{border-radius:var(--md-sys-shape-corner-large)}
+.delivery-feedback{box-shadow:0 4px 14px #0003;border-color:var(--md-sys-color-outline)}
+.occurrence-photo{border-radius:var(--md-sys-shape-corner-large)}
+@media(max-width:380px){.menu-actions button.primary{grid-template-columns:24px minmax(0,1fr);gap:10px;padding-inline:18px}.menu-actions .menu-icon{width:24px;height:24px}header{gap:4px}#connection-status{font-size:10px}#connection-status time{font-size:9px}}
+@media(prefers-reduced-motion:reduce){button,button::after{transition:none}}

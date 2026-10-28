@@ -1,5 +1,13 @@
 # Change log
 
+## 2026-10-28 — Material Design 3 no aplicativo
+
+Padronizado o visual conforme a referência Material Design 3: botões preenchidos e contornados em cápsula, ações de ícone circulares com área de toque de 48px, campos com cantos de 12px, cartões de 16px e janelas de 28px. Estados de foco, toque e desabilitado compartilham estilos; menus, login, checklist, fotos, avisos e Ajustes usam o mesmo sistema. Mantidas a paleta do Abençoada e a escolha persistente de tema claro/escuro. CSS empacotado localmente, sem depender de fontes ou estilos de rede.
+
+A camada `mobile/material.css` centraliza os estilos e é incluída no build móvel. Referências: [início do Material Design 3](https://m3.material.io/get-started), [botões Material](https://github.com/material-components/material-web/blob/main/docs/components/button.md) e [formas Material](https://github.com/material-components/material-components-android/blob/master/docs/theming/Shape.md).
+
+Validação: suíte de regressão, build móvel, fluxo de navegador isolado com login e captura offline, persistência de tema/pendências e revisão visual nos dois temas. Conferidos raios dos botões, alvos de toque e ausência de transbordamento em 390×844, 360×640 e altura reduzida para teclado. Nenhum registro operacional foi criado ou alterado.
+
 ## 2026-10-28 — Aparência, carregamento e confirmações de envio
 
 Paleta compartilhada com o site, temas claro/escuro persistentes e botão Ajustes ao lado de Ocorrências. Rótulos flutuantes no login, animação local de carregamento e bloqueio do botão durante a validação. Avisos distinguem gravação local de recebimento confirmado, com resumo da fila, data/hora da confirmação e retorno visual acessível.
