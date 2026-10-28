@@ -4,7 +4,7 @@ let appliedStyle;
 export async function configureSystemBars(force=true){
  const platform=Capacitor.getPlatform();if(!['android','ios'].includes(platform))return;
  const dark=document.documentElement.dataset.theme!=='light';
- const style=dark?SystemBarsStyle.Light:SystemBarsStyle.Dark;
+ const style=dark?SystemBarsStyle.Dark:SystemBarsStyle.Light;
  try{
   if(force||appliedStyle!==style){
    await SystemBars.setStyle({style,bar:SystemBarType.StatusBar});

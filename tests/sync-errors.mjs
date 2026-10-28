@@ -53,3 +53,5 @@ assert.equal(deliveries.length,0);mismatch=false;await state.sync();assert.equal
 console.log('Empty refreshes stay quiet, wrapped aborts are sanitized, recovery clears stale errors and pending uploads require a matching receipt.');
 
 assert.deepEqual(deliveries,[{user:'worker',ids:['pending-one']}]);
+
+const confirmedAt=state.session.lastDeliveryAt;await state.sync();assert.equal(state.session.lastDeliveryAt,confirmedAt);
