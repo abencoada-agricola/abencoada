@@ -1,0 +1,45 @@
+name: Validate iPhone app
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'ios/**'
+      - 'mobile/**'
+      - 'web/**'
+      - 'tests/ios-offline.swift'
+      - 'scripts/**'
+      - 'package*.json'
+      - 'capacitor.config.json'
+      - '.github/workflows/ios.yml'
+permissions:
+  contents: read
+jobs:
+  simulator:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run ios:test
+      - run: npm run ios:sync
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+          SUPABASE_LOGIN_KEY: ${{ vars.SUPABASE_LOGIN_KEY }}
+      - name: Build iPhone simulator app
+        run: >-
+          xcodebuild -project ios/App/App.xcodeproj -scheme App
+          -configuration Debug -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath ios/DerivedData CODE_SIGNING_ALLOWED=NO build
+      - name: Package simulator build
+        run: ditto -c -k --keepParent ios/DerivedData/Build/Products/Debug-iphonesimulator/App.app abencoada-iphone-simulator.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: abencoada-iphone-simulator
+          path: abencoada-iphone-simulator.zip

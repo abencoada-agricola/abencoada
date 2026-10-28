@@ -70,6 +70,7 @@ jobs:
             abencoada.apk
             abencoada.apk.sha256
       - name: Publish APK
+        if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

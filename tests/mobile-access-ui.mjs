@@ -14,7 +14,7 @@ const nodes=new Map();
 const element=()=>({hidden:false,disabled:false,innerHTML:'',classList:{toggle(){},add(){},remove(){}},focus(){this.focused=true}});
 for(const id of ['#login-logo','#header-logo','#open-observation','#form-error','#occurrence-form [name="notes"]'])nodes.set(id,element());
 const captured=[],saved=[];
-const state={screen:'menu',context:{},fixedContext:null,contextNext:'methods',mode:'manual',draft:{},editId:null,occurrenceReturn:null,photoBusy:false,queue:[],selected:null,message:'',syncIssue:null,connected:true,busy:false,needsLogin:false,nativeConfigured:false,
+const state={locked:false,localAccess:{refresh:async()=>{},requireOnline:async()=>{}},screen:'menu',context:{},fixedContext:null,contextNext:'methods',mode:'manual',draft:{},editId:null,occurrenceReturn:null,photoBusy:false,queue:[],selected:null,message:'',syncIssue:null,connected:true,busy:false,needsLogin:false,nativeConfigured:false,
  session:{user:{id:'operator',name:'OPERADOR',permissions:all},fleets:[],locations:[],materials:[],rules:{checklistEnabled:true}},
  app:{...element(),scrollTop:0},logout:element(),connectionStatus:element(),
  document:{body:element(),querySelector:selector=>nodes.get(selector)||null,querySelectorAll:()=>[]},
@@ -62,3 +62,11 @@ fresh.user.permissions={refuel:true,transfer:false,checklist:true};await state.s
 offline=true;await state.sync();assert.equal(state.session.user.permissions.transfer,false);
 offline=false;state.screen='occurrence';state.draft={notes:'NÃO DESCARTAR'};fresh.user.permissions=none;await state.sync();assert.equal(state.screen,'occurrence');assert.equal(state.draft.notes,'NÃO DESCARTAR');
 console.log('Mobile menus follow all permission combinations and live refreshes; occurrences remain available on every authenticated screen with drafts and queues preserved.');
+
+// Offline credentials are separate from an expired/missing network auth token.
+state.needsLogin=false;state.locked=false;state.busy=false;let checks=0,revoked=0;
+state.navigator={onLine:false};state.api=async()=>{checks++;throw Error('Should not call the server offline')};await state.sync();assert.equal(checks,0);
+state.navigator.onLine=true;state.localAccess.requireOnline=async()=>{revoked++};
+state.api=async()=>{throw Object.assign(Error('Network session missing'),{status:401,code:'LOCAL_AUTH_REQUIRED'})};await state.sync();assert.equal(state.needsLogin,false);assert.equal(revoked,0);assert.equal(state.syncIssue.label,'VALIDAR PARA ENVIAR');
+state.api=async()=>{throw Object.assign(Error('Access revoked'),{status:403})};await state.sync();assert.equal(state.needsLogin,true);assert.equal(revoked,1);
+console.log('Airplane mode skips auth refresh; missing local tokens preserve offline access; known server revocation requires online validation.');

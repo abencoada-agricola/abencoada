@@ -1,0 +1,2 @@
+const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function loginFields(username,eye){return `<label>USUÁRIO<input name="username" autocomplete="username" autocapitalize="characters" required value="${escape(username)}"></label><label>SENHA<div class="password-field"><input name="password" type="password" data-password autocomplete="current-password" required><button type="button" id="toggle-password" aria-label="MOSTRAR SENHA" aria-pressed="false">${eye}</button></div></label>`;}

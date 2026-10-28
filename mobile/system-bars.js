@@ -2,6 +2,10 @@ import {Capacitor,SystemBars,SystemBarsStyle,SystemBarType} from '@capacitor/cor
 
 let appliedNavigationStyle;
 export async function configureSystemBars(force=true){
+ if(Capacitor.getPlatform()==='ios'){
+  try{await SystemBars.setStyle({style:SystemBarsStyle.Light,bar:SystemBarType.StatusBar});await SystemBars.show({bar:SystemBarType.StatusBar})}catch(error){console.warn('Não foi possível ajustar a barra de status.',error)}
+  return;
+ }
  if(Capacitor.getPlatform()!=='android')return;
  // New WebViews draw the green page behind the gesture bar. Older versions
  // reserve a native inset, painted white by the activity's window background.

@@ -1,5 +1,11 @@
 # Change log
 
+## 2026-10-28 — Desbloqueio offline com a senha do login
+
+Primeiro acesso online habilita desbloqueio local com a mesma senha validada, sem armazenar senha legível. Catálogo/sessão passam a ser cifrados com AES-GCM e chave derivada por PBKDF2; filas e rascunhos são preservados. Conta oferece Bloquear app e Sair da conta, impedindo saída/troca com registros pendentes. Prazo inicial de 30 dias renovado por validação de sessão online; token local expirado não equivale a revogação de acesso offline. Autenticação GMAIS permanece responsabilidade da futura conexão do servidor.
+
+Campos de usuário e senha adaptados à referência de rótulo flutuante do Bencho, com CSS local e acessibilidade. Regras e limites documentados em `docs/offline-access.md`. Validação: testes criptográficos/estados, suíte existente, fluxo de navegador em modo avião com registro/reinício/bloqueio, revisão visual e builds web/móvel.
+
 ## 2026-10-28 — Barra de status e disposição das telas Android
 
 Fixado o contraste da barra de status sobre o cabeçalho branco, inclusive no tema escuro do aparelho, usando SystemBars do Capacitor. O tema inicial e o fundo nativo acompanham a configuração; a navegação considera a área reservada por WebViews antigos e a área verde em edge-to-edge. Insets fornecidos pelo Capacitor passam a ser respeitados no CSS.
@@ -148,3 +154,34 @@ Record material changes here with the request, resulting behavior, affected area
 - Added general-occurrences.sql after operation-fleets.sql: occurrence context columns are nullable, transfer context remains required, and general submissions retain authentication, duplicate receipts, photo validation, atomic photo storage and removal/restoration. Other operation types continue through the existing validation chain. Dashboard lists/details omit absent metadata.
 - Validation: full suite and builds, new migration/legacy/photo/device/idempotency tests, mobile context-free payload tests and dashboard rendering checks. Browser simulation saved a report offline, reopened it with the pending queue intact and confirmed delivery after reconnection.
 - Applied the migration to the existing Supabase project after verifying the previous schema. A live transactional submission without codes and a duplicate retry succeeded, then were rolled back. Existing operation/photo counts remained 2/1. No GMAIS changes.
+
+## 2026-10-28 — iPhone application
+
+- Added an iOS 15+ iPhone project with Capacitor 8.5.3 and Swift Package Manager, reusing the Android mobile interface, assets, login, permissions, operation rules, photos, fleet QR reader and offline IndexedDB storage. Added Portuguese camera/photo explanations, portrait layout, safe-area handling and dark status-bar content over the white header.
+- Implemented the iOS OfflineSync bridge and a persistent AES-GCM queue with a device-only Keychain key. Preserved pending records during credential renewal, blocked account changes with pending records/receipts, retained receipts until JavaScript acknowledgment, and guarded uploads against stale snapshots after edits. Local/material/fleet dependencies retain record order after failures. The uploader uses the same restricted Supabase RPC endpoint as Android.
+- Added network/resume retries and system-scheduled background processing with cancellation and completion handling. iOS determines background execution time; foreground synchronization remains available. No live operational records, database migrations, Android data or GMAIS data changed.
+- Added iOS commands, setup/signing/device-validation documentation and a macOS workflow producing an unsigned simulator artifact. Excluded generated iOS assets/dependency caches from the local architecture map and refreshed the map.
+- Validation: all 24 existing application test programs passed; native Swift queue regressions passed (account isolation, pending/receipt preservation, restart, stale edits, invalid receipts, credential renewal, errors, photos and operation dependencies). Mobile permissions UI regressions passed after the status-bar update. Xcode Debug simulator and unsigned Release iPhone device builds succeeded and the app launched on an iPhone simulator; reviewed the login screenshot. Used the existing production site's public client configuration for the local bundle. No login or operational submissions were made. Physical camera/QR, background scheduling and signed-device distribution remain to be validated on an iPhone.
+
+## 2026-10-28 — iPhone login transport
+
+- Reproduced the installed app's username-login failure: the live diesel-login preflight allows https://localhost (Android) but returns 403 for capacitor://localhost (iOS). Confirmed this using OPTIONS requests without credentials or account lookups.
+- Added a scoped native HTTPS transport for username login on iOS using the built-in CapacitorHttp bridge. Authentication still runs through the same endpoint and supplies the resulting tokens to Supabase. Android and browser requests retain fetch. Network failures and aborts keep their existing user messages and offline fallback; server credential rejection still prevents offline fallback.
+- Validation: full application suite, native-transport regressions covering success, rejection, public headers, aborts and network failure; signed Release iPhone build. A native URLSession probe using a deliberately malformed short username reached the live authentication handler and received its expected 401 without querying accounts. No production login, password reset, schema/data change, or server deployment was performed. The account owner must confirm their real login after the update.
+
+## 2026-10-28 — Restore classic mobile appearance
+
+- Restored the previous green/yellow interface, original header without appearance/settings controls, and traditional centered USUÁRIO/SENHA labels and inputs. Removed the floating-label login introduction and restored the ENTRAR action. Stored credentials and offline records were preserved; the iOS native login connection fix remains enabled.
+- Validation: login/offline UI, iOS native login transport and mobile permission regressions passed; signed iPhone Release and simulator builds succeeded. Updated the installed iPhone app in place.
+
+## 2026-10-28 — Direct sign-out action
+
+- Replaced the CONTA dialog and its manual lock/leave/back choices with a single SAIR header action. Successful sign-out closes the account directly. Pending records, active saves and uploads still prevent sign-out and show their existing status feedback; pending data is never cleared. Removed the suggestion to manually lock the app from the pending-record message.
+- Validation: login UI regressions exercise the actual header button for successful sign-out and pending-record refusal. Offline login, native iOS login and mobile permission regressions passed. Signed Release iPhone build succeeded; prepared an in-place device update with existing local data preserved.
+
+
+## 2026-10-28 — Offline re-entry after SAIR on Android and iPhone
+
+- SAIR now closes the visible session and discards its in-memory decryption key while preserving the encrypted local account, cached catalog, drafts and pending records. The same user/password can re-enter offline after exiting or restarting. The first validation on each device still needs the existing authentication service; the 30-day offline validity and known-server-revocation rules remain in force.
+- Android now packages the shared offline credential flow with the classic login fields and a single SAIR action. Pending records remain tied to their original user; changing account cannot replace that user's local access until their queued records are delivered. Uploads already in progress finish before a new login becomes available.
+- Validation: full application suite including repeated offline exit/re-entry, process restart, wrong password, known account revocation, encrypted-cache preservation, pending drafts/records and account isolation. Non-main Android workflow runs now produce signed artifacts without publishing a production release.

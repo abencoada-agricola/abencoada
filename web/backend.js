@@ -4,25 +4,25 @@ import {normalizeGmaisSession} from './gmais-fleet.js';
 export const isConfigured=()=>/^https:\/\//.test(config.url)&&!!config.publishableKey;
 const client=isConfigured()?createClient(config.url,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'diesel-auth'}}):null;
 export async function getAuthUserId(){return (await client.auth.getSession()).data.session?.user.id||null}
-export async function signIn(username,password){
+export async function signIn(username,password,request=fetch){
  if(!client)throw Error('O banco ainda não foi conectado.');
  const login=String(username).trim().toLowerCase();
  // Compatibilidade com contas antigas durante a transição; a tela pede usuário.
- if(login.includes('@')){const {error}=await client.auth.signInWithPassword({email:login,password});if(error)throw Error('Usuário ou senha inválidos. Confira seus dados ou consulte o gestor.');return}
+ if(login.includes('@')){const {error}=await client.auth.signInWithPassword({email:login,password});if(error){if(!error.status||error.status>=500)throw Object.assign(Error('Não foi possível conectar. Tente novamente.'),{code:'NETWORK_ERROR'});throw Object.assign(Error('Usuário ou senha inválidos. Confira seus dados ou consulte o gestor.'),{status:error.status,code:'INVALID_CREDENTIALS'})}return}
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),18000);
  try{
-  const response=await fetch(config.url+'/functions/v1/diesel-login',{method:'POST',headers:{'Content-Type':'application/json',apikey:config.publishableKey,Authorization:'Bearer '+(config.loginKey||config.publishableKey)},body:JSON.stringify({username:login,password}),signal:controller.signal});
+  const response=await request(config.url+'/functions/v1/diesel-login',{method:'POST',headers:{'Content-Type':'application/json',apikey:config.publishableKey,Authorization:'Bearer '+(config.loginKey||config.publishableKey)},body:JSON.stringify({username:login,password}),signal:controller.signal});
   const data=await response.json();
-  if(!response.ok)throw Error(response.status===429?'Muitas tentativas. Aguarde cinco minutos e tente novamente.':response.status>=500?'Não foi possível conectar. Tente novamente.':'Usuário ou senha inválidos. Confira seus dados ou consulte o gestor.');
+  if(!response.ok)throw Object.assign(Error(response.status===429?'Muitas tentativas. Aguarde cinco minutos e tente novamente.':response.status>=500?'Não foi possível conectar. Tente novamente.':'Usuário ou senha inválidos. Confira seus dados ou consulte o gestor.'),{status:response.status,code:response.status===401?'INVALID_CREDENTIALS':'LOGIN_REJECTED'});
   if(!data.access_token||!data.refresh_token)throw Error('Não foi possível entrar. Tente novamente.');
   const {error}=await client.auth.setSession({access_token:data.access_token,refresh_token:data.refresh_token});
   if(error)throw Error('Não foi possível entrar. Tente novamente.');
- }catch(error){if(error.name==='TypeError'||error.name==='AbortError')throw Error('Não foi possível conectar. Conecte o celular à internet e confira a data e hora automáticas.');throw error}finally{clearTimeout(timer)}
+ }catch(error){if(error.name==='TypeError'||error.name==='AbortError')throw Object.assign(Error('Não foi possível conectar. Conecte o celular à internet e confira a data e hora automáticas.'),{code:error.name==='AbortError'?'REQUEST_ABORTED':'NETWORK_ERROR'});throw error}finally{clearTimeout(timer)}
 }
-export async function signOut(){await client.auth.signOut({scope:'local'})}
+export async function signOut(){if(client)await client.auth.signOut({scope:'local'})}
 export async function api(path,options={}){
  if(!client)throw Error('O banco ainda não foi conectado.');
- const {data:auth,error:authError}=await client.auth.getSession();if(authError)throw Error('Não foi possível confirmar a conexão. Os registros continuam neste aparelho.');if(!auth.session){const e=Error('Entre com seu usuário e senha.');e.status=401;throw e}
+ const {data:auth,error:authError}=await client.auth.getSession();if(authError)throw Error('Não foi possível confirmar a conexão. Os registros continuam neste aparelho.');if(!auth.session){const e=Error('Entre com seu usuário e senha.');e.status=401;e.code='LOCAL_AUTH_REQUIRED';throw e}
  const photoUpload=path==='operation-submit'&&options.body&&Boolean(JSON.parse(options.body).photo);
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),photoUpload?45000:18000);
  try{

@@ -1,10 +1,11 @@
 # Abençoada
 
-Android app and web dashboard for Abençoada Agrícola.
+Android/iPhone app and web dashboard for Abençoada Agrícola.
 
 Refueling, transfers, checklists and incident reports. Entries are saved offline and sent when the phone reconnects.
 
 - [Dashboard](https://abencoada-agricola.github.io/abencoada/)
+- [iPhone: setup and validation](docs/ios.md)
 - [Android APK](https://github.com/abencoada-agricola/abencoada/releases/latest/download/abencoada.apk)
 - [Database configuration](configuracao%20banco%20de%20dados.md)
 - [Contrato da futura conexão GMAIS](docs/gmais-integration.md)

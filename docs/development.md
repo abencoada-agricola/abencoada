@@ -66,3 +66,7 @@ The baseline parser reports partial/no-symbol extraction for some Android Gradle
 The health report also identifies self-loops and same-endpoint relationships that can be collapsed during traversal/clustering. Check the source and relevant tests when an exact relationship matters. These limitations do not indicate an application test failure.
 
 Do not index credentials, operational exports or GMAIS captures. Keep all future GMAIS investigation read-only unless the user explicitly changes that requirement.
+
+## iPhone app
+
+The `ios/` project shares the `mobile/` interface with Android. See [iOS setup](ios.md) for Xcode, signing and background limitations. Use `npm run ios:sync` with the same public Supabase build variables, then `npm run ios:open`. `npm run ios:test` runs native queue regressions on macOS; `npm test` covers the shared application and server rules. The iOS GitHub workflow builds an unsigned simulator artifact only. Generated web assets, Xcode caches and SPM dependencies are excluded from the architecture map.

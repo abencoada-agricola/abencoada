@@ -31,3 +31,8 @@ package-lock.json
 *.zip
 *.yaml
 *.yml
+ios/DerivedData/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/App/CapApp-SPM/

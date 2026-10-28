@@ -6,4 +6,4 @@ await rm('mobile-dist',{recursive:true,force:true});await mkdir('mobile-dist');
 await cp('mobile/index.html','mobile-dist/index.html');await cp('mobile/mobile.css','mobile-dist/mobile.css');await cp('mobile/app-icon.png','mobile-dist/app-icon.png');await cp('mobile/login-logo.png','mobile-dist/login-logo.png');await cp('mobile/header-logo.png','mobile-dist/header-logo.png');
 for(const file of ['logo.png','fleets.json'])await cp('web/'+file,'mobile-dist/'+file);
 await build({entryPoints:['mobile/app.js'],outfile:'mobile-dist/mobile.js',bundle:true,format:'esm',platform:'browser',target:'es2022',minify:true,plugins:[{name:'public-config',setup(b){b.onLoad({filter:/web\/config\.js$/},()=>({contents:'export const config='+JSON.stringify(config),loader:'js'}))}}]});
-console.log('Interface Android preparada.');
+console.log('Interface Android/iOS preparada.');
