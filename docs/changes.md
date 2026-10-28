@@ -1,5 +1,11 @@
 # Change log
 
+## 2026-10-28 — Administração na raiz do site
+
+Administração e login passam a abrir diretamente em `https://abencoada-agricola.github.io/abencoada/`, sem redirecionar para `admin.html`. O endereço anterior redireciona à raiz para preservar favoritos. Saída da conta, abertura do aplicativo web instalado e links atuais acompanham o endereço simplificado. Armazenamento e sessão existentes permanecem no mesmo domínio e banco local.
+
+Validação: testes completos, build de produção e verificação no navegador da raiz e do redirecionamento legado.
+
 ## 2026-10-28 — Nome técnico em minúsculas
 
 Repositório renomeado de `Abencoada` para `abencoada`, conforme solicitado. Links atuais de documentação, downloads e GitHub Pages atualizados para `https://abencoada-agricola.github.io/abencoada/admin.html`. Nome público do aplicativo continua Abençoada. Validação: nome confirmado pela API do GitHub e publicação do Pages acompanhada.

@@ -4,7 +4,7 @@ Android app and web dashboard for Abençoada Agrícola.
 
 Refueling, transfers, checklists and incident reports. Entries are saved offline and sent when the phone reconnects.
 
-- [Dashboard](https://abencoada-agricola.github.io/abencoada/admin.html)
+- [Dashboard](https://abencoada-agricola.github.io/abencoada/)
 - [Android APK](https://github.com/abencoada-agricola/abencoada/releases/latest/download/abencoada.apk)
 - [Database configuration](configuracao%20banco%20de%20dados.md)
 

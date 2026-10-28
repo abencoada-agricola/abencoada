@@ -45,7 +45,7 @@ npm run android:sync
 
 Open `android/` in Android Studio to run on a phone. For a signed release, pass `ANDROID_KEYSTORE_PATH` and `ANDROID_KEYSTORE_PASSWORD` to Gradle and build `assembleRelease`. Supply the public Supabase variables before `android:sync`; a build without them only previews the interface.
 
-The Android app bundles the interface in the APK and uses the native camera scanner. The former web entry page redirects to administration.
+The Android app bundles the interface in the APK and uses the native camera scanner. The web administration opens directly at the site root. The former admin.html address redirects to that root.
 
 
 ## Remaining database migrations

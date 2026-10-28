@@ -18,7 +18,7 @@ Abençoada · 28/10/2026
 ## Links
 
 - [Repositório](https://github.com/abencoada-agricola/abencoada)
-- [Administração](https://abencoada-agricola.github.io/abencoada/admin.html)
+- [Administração](https://abencoada-agricola.github.io/abencoada/)
 - [APK Android](https://github.com/abencoada-agricola/abencoada/releases/latest/download/abencoada.apk)
 - [Supabase](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum)
 - [SQL Editor](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum/sql/new)
