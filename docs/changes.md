@@ -1,5 +1,13 @@
 # Change log
 
+## 2026-10-28 — Faixa branca do login e marca na tela inicial
+
+Restaurada a faixa branca de largura total com a logo na tela de login. O botão Ajustes fica oculto e fora da navegação por teclado nessa tela, aparecendo novamente após entrar. O ícone de configuração agora usa uma engrenagem de oito dentes. Na tela inicial, a logo ocupa um bloco central maior e o nome do usuário aparece em negrito diretamente abaixo; as ações de status, Ajustes, Ocorrência e Sair continuam no topo.
+
+O contraste da barra de status acompanha a faixa branca do login e o tema após autenticar. O fundo nativo do Android acompanha esse estado, considerando também a área branca reservada por WebViews antigos na navegação. O login inicia com o estado visual correto antes de carregar o JavaScript.
+
+Validação: regressões de login/offline, permissões, contexto, barras do sistema nos dois temas e navegação antiga com inset; build móvel e revisão visual de login/menu. O fluxo isolado de navegador confirmou ausência de Ajustes no login, faixa branca nos dois temas, logo maior e nome em negrito abaixo dela, além de login e registros offline, troca de contexto, reinício e fila preservada. Telas estreitas e altura de teclado verificadas, usando apenas dados fictícios.
+
 ## 2026-10-28 — Alterar local e material na tela inicial
 
 Após o login, o resumo de Local/Material na tela inicial passa a ser um botão com indicação ALTERAR. Abre uma janela Material com os códigos atuais, sugestões do catálogo local e ações Salvar alteração/Cancelar. A mudança é gravada no aparelho para o usuário antes de atualizar o resumo e vale para os próximos registros; funciona offline. As outras telas conservam o resumo da operação em andamento.

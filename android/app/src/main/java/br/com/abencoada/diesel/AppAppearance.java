@@ -13,11 +13,12 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 public class AppAppearance extends Plugin {
  @PluginMethod public void apply(PluginCall call){
   final boolean dark=Boolean.TRUE.equals(call.getBoolean("dark",true));
+  final boolean login=Boolean.TRUE.equals(call.getBoolean("login",false));
   getActivity().runOnUiThread(()->{
    // Old WebViews reserve native space for system bars; modern ones draw the
    // page beneath them. Keep the native inset in the same palette as the header.
    View decor=getActivity().getWindow().getDecorView();
-   int color=Color.parseColor(dark?"#123a2b":"#eaf0e7");
+   int color=Color.parseColor(login?"#ffffff":dark?"#123a2b":"#eaf0e7");
    Drawable background=decor.getBackground();
    if(!(background instanceof ColorDrawable)||((ColorDrawable)background).getColor()!=color)decor.setBackgroundColor(color);
    call.resolve();

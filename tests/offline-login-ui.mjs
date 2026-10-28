@@ -12,9 +12,10 @@ let mode='accept',onlineCalls=0,logoutCalls=0,records=[];
 const initial={user:{id:'TEST-USER',name:'TESTE'},fleets:[],locations:[],rules:{}};let returned=initial;
 const input={type:'password',value:'',focus(){}};const error={textContent:''};const button={disabled:false};const form={querySelector:()=>button};const toggle={setAttribute(){},innerHTML:''};
 const node=()=>({hidden:false,classList:{add(){},remove(){}},setAttribute(){}});
-const state={reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},localAccess,loginFields,locked:true,busy:false,mirrorBusy:false,photoBusy:false,session:null,selected:null,draft:{},queue:[],needsLogin:false,nativeConfigured:false,connected:false,syncIssue:null,message:'',editId:null,occurrenceReturn:null,
+const settings=node();
+const state={configureSystemBars(){},reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},localAccess,loginFields,locked:true,busy:false,mirrorBusy:false,photoBusy:false,session:null,selected:null,draft:{},queue:[],needsLogin:false,nativeConfigured:false,connected:false,syncIssue:null,message:'',editId:null,occurrenceReturn:null,
  app:{...node(),innerHTML:'',scrollTop:0},logout:node(),connectionStatus:node(),navigator:{onLine:true},
- document:{body:node(),querySelector:s=>s==='#login'?form:s==='#login [name="password"]'?input:s==='#toggle-password'?toggle:s==='#login-error'?error:s.startsWith('#app form')?null:node()},
+ document:{body:node(),querySelector:s=>s==='#open-settings'?settings:s==='#login'?form:s==='#login [name="password"]'?input:s==='#toggle-password'?toggle:s==='#login-error'?error:s.startsWith('#app form')?null:node()},
  esc:String,passwordEye:()=>'',isConfigured:()=>true,
  credentials:{username:'test',password:'Fictional-ui-test-password!'},FormData:class{get(name){return state.credentials[name]}},
  loginRequest:undefined,
@@ -23,6 +24,7 @@ const state={reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:
  load:async()=>{},render:()=>{},updatePanels:()=>{},sync:async()=>{},saveDraft:async()=>{},mirrorQueue:async()=>{},console};
 vm.createContext(state);vm.runInContext(auth,state);
 const submit=async()=>{state.login();await form.onsubmit({preventDefault(){},target:form})};
+state.login();assert.equal(settings.hidden,true);
 await submit();assert.equal(state.locked,false);assert.ok((await read('last-session')).encrypted);assert.equal(onlineCalls,1);
 await state.lockApp();assert.equal(state.locked,true);assert.equal(state.session,null);assert.equal(localAccess.key,null);
 state.navigator.onLine=false;await submit();assert.equal(state.locked,false);assert.equal(onlineCalls,1);assert.equal(state.connected,false);
