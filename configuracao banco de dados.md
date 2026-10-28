@@ -17,14 +17,14 @@ Abençoada · 28/10/2026
 
 ## Links
 
-- [Repositório](https://github.com/abencoada-agricola/Abencoada)
-- [Administração](https://abencoada-agricola.github.io/Abencoada/admin.html)
-- [APK Android](https://github.com/abencoada-agricola/Abencoada/releases/latest/download/abencoada.apk)
+- [Repositório](https://github.com/abencoada-agricola/abencoada)
+- [Administração](https://abencoada-agricola.github.io/abencoada/admin.html)
+- [APK Android](https://github.com/abencoada-agricola/abencoada/releases/latest/download/abencoada.apk)
 - [Supabase](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum)
 - [SQL Editor](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum/sql/new)
-- [GitHub Actions](https://github.com/abencoada-agricola/Abencoada/actions)
-- [Variáveis e secrets](https://github.com/abencoada-agricola/Abencoada/settings/secrets/actions)
-- [GitHub Pages](https://github.com/abencoada-agricola/Abencoada/settings/pages)
+- [GitHub Actions](https://github.com/abencoada-agricola/abencoada/actions)
+- [Variáveis e secrets](https://github.com/abencoada-agricola/abencoada/settings/secrets/actions)
+- [GitHub Pages](https://github.com/abencoada-agricola/abencoada/settings/pages)
 - [SQLs](supabase/)
 
 ## Database Tables
