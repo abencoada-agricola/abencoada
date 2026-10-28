@@ -8,6 +8,8 @@ Android possui canal de notificações de envio, permissão solicitada após log
 
 Validação: regressões de confirmação/recibo divergente, permissão recusada/repetida, deduplicação, login e acesso offline; suíte completa e builds. Fluxo de navegador isolado validou temas, persistência, saída/retorno/reinício offline e conservação de pendências com dados fictícios.
 
+Validação nativa adicional: APK assinado instalado por atualização no emulador Android, sem limpar dados. Permissão recusada/permitida e notificação nativa com tela bloqueada verificadas usando identificador fictício, sem criar ou enviar registro operacional. Repetir a confirmação não publicou nova notificação. Corrigido o contraste de ícones das barras em cada tema e adicionada regressão Android/iOS; a data de confirmação permanece após atualização da sessão.
+
 ## 2026-10-28 — Desbloqueio offline com a senha do login
 
 Primeiro acesso online habilita desbloqueio local com a mesma senha validada, sem armazenar senha legível. Catálogo/sessão passam a ser cifrados com AES-GCM e chave derivada por PBKDF2; filas e rascunhos são preservados. SAIR fecha a sessão visível preservando o acesso offline, rascunhos e pendências; trocar de usuário com registros pendentes é impedido. Prazo inicial de 30 dias renovado por validação de sessão online; token local expirado não equivale a revogação de acesso offline. Autenticação GMAIS permanece responsabilidade da futura conexão do servidor.
