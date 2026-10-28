@@ -1,5 +1,11 @@
 # Change log
 
+## 2026-10-28 — Campos do login centralizados e em negrito
+
+Os campos de usuário/senha agora centralizam tanto os rótulos quanto o texto digitado, com peso 700. O rótulo flutuante permanece centralizado ao receber foco ou conteúdo. A borda passa a ter 2px e cantos de 24px, com destaque na cor de foco do tema. O campo de senha usa espaçamento simétrico para manter a centralização com o botão de mostrar/ocultar à direita.
+
+Validação: build móvel, regressão de login e revisão visual dos campos vazios/em foco nos dois temas; fluxo isolado de navegador com senha incorreta/correta, modo avião, contexto, pendências e reinício, além de telas estreitas e altura reduzida para teclado. Nenhuma credencial, fila ou regra de autenticação foi alterada.
+
 ## 2026-10-28 — Faixa branca do login e marca na tela inicial
 
 Restaurada a faixa branca de largura total com a logo na tela de login. O botão Ajustes fica oculto e fora da navegação por teclado nessa tela, aparecendo novamente após entrar. O ícone de configuração agora usa uma engrenagem de oito dentes. Na tela inicial, a logo ocupa um bloco central maior e o nome do usuário aparece em negrito diretamente abaixo; as ações de status, Ajustes, Ocorrência e Sair continuam no topo.
