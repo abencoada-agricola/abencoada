@@ -1,10 +1,10 @@
-# Abastece — estrutura do banco de dados
+# Abençoada — estrutura do banco de dados
 
 Estrutura do banco de dados. Revisão: 19/10/2026.
 
 ## Resumo
 
-O Abastece usa PostgreSQL hospedado no Supabase. O aplicativo Android foi feito com JavaScript e Capacitor; a administração web fica no GitHub Pages. Foram criadas 15 tabelas próprias: 9 no schema public e 6 no schema private, somando 125 colunas. A autenticação fica no Supabase Auth, separado dessas 15 tabelas. O app não se conecta diretamente ao SQL: envia dados por HTTPS para funções RPC, que validam usuário, permissões e leituras. Sem internet, guarda os registros no celular e sincroniza depois. Hoje o banco é independente do GMAIS; a integração ainda precisa ser definida.
+A Abençoada usa PostgreSQL hospedado no Supabase. O aplicativo Android foi feito com JavaScript e Capacitor; a administração web fica no GitHub Pages. Foram criadas 15 tabelas próprias: 9 no schema public e 6 no schema private, somando 125 colunas. A autenticação fica no Supabase Auth, separado dessas 15 tabelas. O app não se conecta diretamente ao SQL: envia dados por HTTPS para funções RPC, que validam usuário, permissões e leituras. Sem internet, guarda os registros no celular e sincroniza depois. Hoje o banco é independente do GMAIS; a integração ainda precisa ser definida.
 
 ## 1. O que existe em cada camada
 
@@ -319,7 +319,7 @@ Uma pergunta tem UUID e texto. A resposta guarda o UUID, o texto vigente e o sta
 
 ## 6. Fluxo de dados
 
-1. O funcionário entra online. A função de login resolve o username e valida a senha no Supabase Auth. As senhas não ficam em members nem em uma tabela própria do Abastece.
+1. O funcionário entra online. A função de login resolve o username e valida a senha no Supabase Auth. As senhas não ficam em members nem em uma tabela própria da Abençoada.
 2. O app recebe a conta, as permissões, o catálogo de frotas, as leituras de referência, locais/materiais e perguntas de checklist.
 3. A escolha da frota é pelo QR Code ou pelo código digitado. O QR identifica a frota; ele não é a fonte atualizada do último KM/horímetro.
 4. O app calcula as referências usando os dados já recebidos e os registros pendentes anteriores do próprio aparelho.
@@ -421,6 +421,6 @@ Foi guardada uma cópia local das 15 tabelas e um script de restauração fora d
 
 Para a integração, o principal é mapear o código da frota, material, local/registradora e usuário aos identificadores oficiais do GMAIS, além dos campos de data, KM, horímetros e litros. Precisamos definir qual sistema será a fonte de cada cadastro e da última leitura.
 
-O contrato também precisa estabelecer como enviar um UUID externo sem duplicar lançamentos, como consultar alterações desde a última sincronização, como tratar conflitos e estornos, qual autenticação oficial usar e quais permissões de leitura/escrita serão liberadas. Não é necessário copiar todas as tabelas do GMAIS para o Abastece. Uma API ou interface oficial de integração pode permitir que as duas estruturas continuem diferentes.
+O contrato também precisa estabelecer como enviar um UUID externo sem duplicar lançamentos, como consultar alterações desde a última sincronização, como tratar conflitos e estornos, qual autenticação oficial usar e quais permissões de leitura/escrita serão liberadas. Não é necessário copiar todas as tabelas do GMAIS para a Abençoada. Uma API ou interface oficial de integração pode permitir que as duas estruturas continuem diferentes.
 
 Pontos para revisão da integração: locais/materiais não estão totalmente normalizados por chaves estrangeiras; os itens de checklist estão em JSONB; fotos estão em base64; leituras de referência usam um campo chamado gmais_readings sem integração ativa; e os dados atuais são de teste. Esses pontos são decisões do protótipo e podem ser ajustados ao contrato oficial de integração.

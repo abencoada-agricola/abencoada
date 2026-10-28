@@ -12,7 +12,7 @@ Rules:
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
 - A committed graphify-out/graph.json is rewritten whole on every build, so a large diff to it in a pull request is expected. Do not flag it as churn or suggest skipping the graph rebuild or its hooks.
 
-## Abastece development workflow
+## Abençoada development workflow
 
 - Run Graphify through `node scripts/project-graph.mjs <command>` from this repository. This wrapper uses the isolated, pinned installation; replace bare `graphify` commands above with this wrapper. Start with `query`, then inspect the source locations it returns. If a query has no result, refine it or inspect the relevant source; do not treat missing edges as proof that no dependency exists.
 - Run `node scripts/project-graph.mjs update` after source changes. A local post-commit hook also updates the map. Generated `graphify-out/` files stay local; GitHub Actions publishes downloadable snapshots with their source commit and health report.

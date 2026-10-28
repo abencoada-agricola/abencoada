@@ -1,5 +1,13 @@
 # Change log
 
+## 2026-10-28 — Abençoada: nome e ícone
+
+Nome público unificado para Abençoada no Android, títulos web, manifesto, documentação e releases. Ícone fornecido em `icone-app.png` aplicado ao launcher Android (adaptativo e legado), abertura do app, favicon e instalação web. Pacote npm e APK passam a `abencoada` e `abencoada.apk`. Repositório passa a `Abencoada` (GitHub não aceita ç/acentos no nome técnico), com a marca Abençoada no README e descrição. Links de administração atualizados para `https://abencoada-agricola.github.io/Abencoada/admin.html`.
+
+Identidade Android, assinatura, armazenamento offline, chaves de sincronização e contratos de QR/login permanecem compatíveis com instalações existentes. Ícones e manifesto agora participam da versão do cache web.
+
+Validação: testes completos, builds web/Android e atualização do mapa de arquitetura.
+
 ## 2026-10-19 — Nome do repositório
 
 Repositório renomeado para `app-abencoada`, apresentado como APP Abençoada. Atualizados os links de administração, downloads e documentação. O endereço da administração passa a ser `https://abencoada-agricola.github.io/app-abencoada/admin.html`. Identificadores do Android, banco e fila offline foram preservados.

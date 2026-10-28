@@ -1,6 +1,6 @@
 # Configuração do banco de dados
 
-Abastece · APP Abençoada · 19/10/2026
+Abençoada · 28/10/2026
 
 ## Ambiente
 
@@ -17,14 +17,14 @@ Abastece · APP Abençoada · 19/10/2026
 
 ## Links
 
-- [Repositório](https://github.com/abencoada-agricola/app-abencoada)
-- [Administração](https://abencoada-agricola.github.io/app-abencoada/admin.html)
-- [APK Android](https://github.com/abencoada-agricola/app-abencoada/releases/latest/download/abencoada-diesel.apk)
+- [Repositório](https://github.com/abencoada-agricola/Abencoada)
+- [Administração](https://abencoada-agricola.github.io/Abencoada/admin.html)
+- [APK Android](https://github.com/abencoada-agricola/Abencoada/releases/latest/download/abencoada.apk)
 - [Supabase](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum)
 - [SQL Editor](https://supabase.com/dashboard/project/pqsbcwmtemlwvcpkcyum/sql/new)
-- [GitHub Actions](https://github.com/abencoada-agricola/app-abencoada/actions)
-- [Variáveis e secrets](https://github.com/abencoada-agricola/app-abencoada/settings/secrets/actions)
-- [GitHub Pages](https://github.com/abencoada-agricola/app-abencoada/settings/pages)
+- [GitHub Actions](https://github.com/abencoada-agricola/Abencoada/actions)
+- [Variáveis e secrets](https://github.com/abencoada-agricola/Abencoada/settings/secrets/actions)
+- [GitHub Pages](https://github.com/abencoada-agricola/Abencoada/settings/pages)
 - [SQLs](supabase/)
 
 ## Database Tables
