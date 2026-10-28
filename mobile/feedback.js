@@ -8,7 +8,7 @@ function notice(kind,title,detail){
  clearTimeout(timer);timer=setTimeout(()=>{element.hidden=true},7000);
 }
 export const showSaved=()=>notice('saved','Salvo no aparelho','Seus dados estão seguros aqui. Aguardando confirmação do envio.');
-export const showDelivered=count=>notice('sent',count===1?'Enviado com sucesso':`${count} registros enviados`,'A administração confirmou o recebimento.');
+export const showDelivered=count=>notice('sent',count===1?'Enviado com sucesso':`${count} registros enviados`,'Recebimento confirmado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'.');
 export function loginLoading(button,loading,label){
  button.disabled=loading;button.replaceChildren();button.setAttribute('aria-busy',String(loading));
  if(loading){const spinner=document.createElement('span');spinner.className='auth-spinner';spinner.setAttribute('aria-hidden','true');button.append(spinner);}

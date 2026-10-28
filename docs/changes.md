@@ -2,7 +2,7 @@
 
 ## 2026-10-28 — Aparência, carregamento e confirmações de envio
 
-Paleta compartilhada com o site, temas claro/escuro persistentes e botão Ajustes ao lado de Ocorrências. Rótulos flutuantes no login, animação local de carregamento e bloqueio do botão durante a validação. Avisos distinguem gravação local de recebimento confirmado, com resumo da fila e retorno visual acessível.
+Paleta compartilhada com o site, temas claro/escuro persistentes e botão Ajustes ao lado de Ocorrências. Rótulos flutuantes no login, animação local de carregamento e bloqueio do botão durante a validação. Avisos distinguem gravação local de recebimento confirmado, com resumo da fila, data/hora da confirmação e retorno visual acessível.
 
 Android possui canal de notificações de envio, permissão solicitada após login e opção de solicitar novamente em Ajustes. Confirmações do envio em primeiro ou segundo plano geram notificação nativa, inclusive com tela bloqueada quando permitido pelo sistema. Duplicatas são evitadas por identidade/registro em armazenamento nativo persistente. Erros de rede, recibos divergentes e simples gravação local não disparam confirmação. O agendamento de fundo depende do Android e de suas restrições de bateria/rede.
 
