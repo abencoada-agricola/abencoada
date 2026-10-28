@@ -1,5 +1,13 @@
 # Change log
 
+## 2026-10-28 — Barra de status e disposição das telas Android
+
+Fixado o contraste da barra de status sobre o cabeçalho branco, inclusive no tema escuro do aparelho, usando SystemBars do Capacitor. O tema inicial e o fundo nativo acompanham a configuração; a navegação considera a área reservada por WebViews antigos e a área verde em edge-to-edge. Insets fornecidos pelo Capacitor passam a ser respeitados no CSS.
+
+O formulário de login fica centralizado no espaço disponível abaixo da logo com teclado fechado e permanece rolável em áreas menores. A logo se adapta em telas baixas. Aumentado o intervalo entre os botões de abastecimento, transferência e checklist, mantendo botões acessíveis em telas menores.
+
+Validação: suíte completa; build e sincronização Android; revisão visual em 390×844, 360×640, paisagem e altura reduzida por teclado; compilação assinada e conferência Android.
+
 ## 2026-10-28 — Preparação para catálogo dinâmico GMAIS
 
 Adicionado contrato opcional e versionado de metadados por frota na resposta de sessão, com adaptação compartilhada entre web e Android. A unidade e a finalidade confirmada do medidor adicional definem os campos exigidos; capacidade desconhecida não vira estimativa. Catálogos locais, leituras existentes, rascunhos e pendências são preservados. Nenhum catálogo real foi incluído/importado e nenhuma conexão GMAIS foi ativada.

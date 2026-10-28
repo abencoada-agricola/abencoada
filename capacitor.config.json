@@ -2,6 +2,18 @@
   "appId": "br.com.abencoada.diesel",
   "appName": "Abençoada",
   "webDir": "mobile-dist",
-  "server": {"androidScheme": "https"},
-  "android": {"backgroundColor": "#193c2b"}
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#193c2b"
+  },
+  "plugins": {
+    "SystemBars": {
+      "style": "LIGHT",
+      "hidden": false,
+      "insetsHandling": "css",
+      "initialViewportFitValueHint": "cover"
+    }
+  }
 }
