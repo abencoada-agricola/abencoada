@@ -24,5 +24,5 @@ const html=await readFile('mobile/index.html','utf8'),bootstrap=html.match(/<scr
 const preferences=new Map([['diesel-theme','light'],['unrelated','keep']]);const page={documentElement:{dataset:{}}};
 const bootState={document:page,localStorage:{getItem:k=>preferences.get(k),setItem:(k,v)=>preferences.set(k,v)}};
 vm.runInNewContext(bootstrap,bootState);assert.equal(page.documentElement.dataset.theme,'dark');assert.equal(preferences.get('diesel-theme'),'dark');
-preferences.set('diesel-theme','light');vm.runInNewContext(bootstrap,bootState);assert.equal(page.documentElement.dataset.theme,'light');assert.equal(preferences.get('unrelated'),'keep');
-console.log('Compact white header restores dark once and preserves later theme choices.');
+preferences.set('diesel-theme','light');vm.runInNewContext(bootstrap,bootState);assert.equal(page.documentElement.dataset.theme,'dark');assert.equal(preferences.get('unrelated'),'keep');
+console.log('Green appearance is enforced even when an older light preference exists.');

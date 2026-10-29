@@ -14,7 +14,7 @@ const nodes=new Map();
 const element=()=>({hidden:false,disabled:false,innerHTML:'',classList:{contains(){return false},toggle(){},add(){},remove(){}},focus(){this.focused=true}});
 for(const id of ['#login-logo','#header-logo','#header-details','#header-user','#open-settings','#open-observation','#form-error','#occurrence-form [name="notes"]'])nodes.set(id,element());
 const captured=[],saved=[];
-const state={configureSystemBars(){},reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},locked:false,localAccess:{refresh:async()=>{},requireOnline:async()=>{}},screen:'menu',context:{},fixedContext:null,contextNext:'methods',mode:'manual',draft:{},editId:null,occurrenceReturn:null,photoBusy:false,queue:[],selected:null,message:'',syncIssue:null,connected:true,busy:false,needsLogin:false,nativeConfigured:false,
+const state={contextRequired:false,configureSystemBars(){},reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},locked:false,localAccess:{refresh:async()=>{},requireOnline:async()=>{}},screen:'menu',context:{},fixedContext:null,contextNext:'methods',mode:'manual',draft:{},editId:null,occurrenceReturn:null,photoBusy:false,queue:[],selected:null,message:'',syncIssue:null,connected:true,busy:false,needsLogin:false,nativeConfigured:false,
  session:{user:{id:'operator',name:'OPERADOR',permissions:all},fleets:[],locations:[],materials:[],rules:{checklistEnabled:true}},
  app:{...element(),scrollTop:0},logout:element(),connectionStatus:element(),
  document:{body:element(),querySelector:selector=>nodes.get(selector)||null,querySelectorAll:()=>[]},
@@ -71,15 +71,13 @@ state.api=async()=>{throw Object.assign(Error('Network session missing'),{status
 state.api=async()=>{throw Object.assign(Error('Access revoked'),{status:403})};await state.sync();assert.equal(state.needsLogin,true);assert.equal(revoked,1);
 console.log('Airplane mode skips auth refresh; missing local tokens preserve offline access; known server revocation requires online validation.');
 
-// Changing defaults persists first and never rewrites already queued payloads or drafts.
-let editor;state.editContext=options=>{editor=options};nodes.set('#change-context',element());
-state.session.user.permissions=all;state.screen='menu';state.context={localCode:'1',materialCode:'9'};state.fixedContext={...state.context};
-state.queue=[{id:'keep-original',localCode:'1',materialCode:'9',userId:'operator'}];state.draft={fleet:'1001',km:'500'};
-const pendingBefore=structuredClone(state.queue),draftBefore=structuredClone(state.draft);
-state.renderFlow();assert.match(state.app.innerHTML,/id="change-context"/);nodes.get('#change-context').onclick();
-await editor.save({localCode:'2',materialCode:'8'});assert.equal(state.context.localCode,'2');assert.equal(state.fixedContext.materialCode,'8');
-assert.deepEqual(state.queue,pendingBefore);assert.deepEqual(state.draft,draftBefore);assert.ok(saved.some(value=>value.key==='operator:context'&&value.value.localCode==='2'));
-state.put=async()=>{throw Error('Storage failure')};await assert.rejects(editor.save({localCode:'4',materialCode:'5'}),/Storage failure/);assert.equal(state.context.localCode,'2');assert.equal(state.fixedContext.materialCode,'8');
-console.log('Default context changes preserve pending operation ownership, original codes and drafts; failed persistence leaves current context unchanged.');
-
-assert.equal(nodes.get('#open-settings').hidden,false);assert.equal(nodes.get('#header-user').textContent,state.session.user.name);assert.ok(!state.app.innerHTML.includes('home-brand'));
+// A fresh entry must select context, including users without refuel permission.
+const contextButton={disabled:false},contextError={textContent:''};const contextForm={values:{localCode:'2',materialCode:'8'},querySelector:s=>s==='button'?contextButton:contextError};
+nodes.set('#context-form',contextForm);state.session.user.permissions=none;state.screen='menu';state.contextRequired=true;state.context={};state.fixedContext=null;state.contextNext='menu';
+state.queue=[{id:'keep-original',localCode:'1',materialCode:'9',userId:'operator'}];state.draft={fleet:'1001',km:'500',context:{localCode:'old',materialCode:'old'}};
+const pendingBefore=structuredClone(state.queue);state.renderFlow();assert.equal(state.screen,'context');assert.match(state.app.innerHTML,/id="context-form"/);assert.doesNotMatch(state.app.innerHTML,/data-screen="menu"/);
+state.writeMeta=async()=>{throw Error('Storage failure')};await contextForm.onsubmit({preventDefault(){}});assert.match(contextError.textContent,/Storage failure/);assert.equal(state.contextRequired,true);assert.equal(state.fixedContext,null);assert.equal(contextButton.disabled,false);
+state.writeMeta=async batch=>{for(const[key,value]of Object.entries(batch))saved.push({key,value:structuredClone(value)})};await contextForm.onsubmit({preventDefault(){}});assert.equal(state.screen,'menu');assert.equal(state.contextRequired,false);assert.equal(state.fixedContext.localCode,'2');assert.equal(state.fixedContext.materialCode,'8');assert.equal(state.draft.km,'500');assert.equal(state.draft.context,undefined);assert.deepEqual(state.queue,pendingBefore);assert.doesNotMatch(state.app.innerHTML,/change-context|ALTERAR/);
+assert.equal(nodes.get('#header-user').textContent,state.session.user.name);assert.ok(!state.app.innerHTML.includes('home-brand'));
+vm.runInContext(source.slice(source.indexOf('function connectionHTML(){'),source.indexOf('function statusHTML(){')),state);state.session.cachedAt='2026-10-29T09:00:00Z';assert.doesNotMatch(state.connectionHTML(),/<time|2026/);
+console.log('New entries require context without permission bypass; failed writes keep setup open, pending codes/drafts stay intact and connection timestamps are hidden.');

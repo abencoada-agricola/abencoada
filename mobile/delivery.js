@@ -3,11 +3,11 @@ import {showDelivered} from './feedback.js';
 const native=registerPlugin('DeliveryNotifications');
 const seen=new Set();
 export const deliveryNotificationsSupported=()=>Capacitor.getPlatform()==='android';
-export async function requestDeliveryNotifications(explicit=false){
+export async function requestDeliveryNotifications(){
  if(!deliveryNotificationsSupported())return {enabled:false,supported:false};
  try{
-  if(!explicit&&localStorage.getItem('delivery-permission-asked')==='yes')return native.status();
-  localStorage.setItem('delivery-permission-asked','yes');return await native.request();
+  const status=await native.status();
+  return status.enabled?status:await native.request();
  }catch{return {enabled:false}}
 }
 export function reportDelivery(userId,ids){

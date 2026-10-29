@@ -1,5 +1,15 @@
 # Change log
 
+## 2026-10-29 — Tela verde simplificada e contexto obrigatório em cada entrada
+
+Fontes reforçadas, logo maior e afastada da borda esquerda, ícones maiores e deslocados para dentro dos botões. Removidos Ajustes/engrenagem, os modos claro/escuro, a ação ALTERAR do resumo e a data/hora abaixo da conexão. O app usa apenas a aparência verde e mantém o cabeçalho branco.
+
+Após autenticar, inclusive offline e ao reabrir, o usuário precisa informar novamente Local e Material antes de acessar o menu. Defaults da entrada anterior não são reutilizados. A escolha é salva de forma atômica com o rascunho; erro de armazenamento mantém a etapa aberta. Rascunhos de operações e pendências, com seus códigos e autoria originais, são preservados. O resumo de Local/Material é somente informativo durante a entrada atual.
+
+Avisos de envio ficam automáticos, sem opção de desligamento no app. A cada login, o cliente verifica a permissão nativa e a solicita quando necessário, ignorando preferências antigas de ativação. O Android continua controlando a permissão e o canal de notificações; recusá-los não impede salvar/enviar registros.
+
+Validação: suíte completa, testes de login/contexto/permissões de acesso, persistência com falha, tema fixo e avisos automáticos. Navegador isolado em 320/360/390px verificou logo/ícones/fonte, ausência das opções removidas, nova escolha após sair e reiniciar offline, e fila byte a byte inalterada ao trocar de contexto. Apenas dados fictícios foram usados.
+
 ## 2026-10-29 — Barra superior branca e tela inicial verde escura
 
 Removida a marca grande do centro da tela inicial. A logo pequena, o nome do usuário em negrito, a conexão/data e as ações de Ajustes, Ocorrência e Sair ficam reunidos na barra branca. O corpo volta ao verde escuro #193c2b. A primeira abertura deste layout restaura o tema escuro uma vez; escolhas posteriores em Ajustes continuam persistentes. A faixa branca do login e os campos centralizados são mantidos.
