@@ -14,7 +14,7 @@ const nodes=new Map();
 const element=()=>({hidden:false,disabled:false,innerHTML:'',classList:{contains(){return false},toggle(){},add(){},remove(){}},focus(){this.focused=true}});
 for(const id of ['#login-logo','#header-logo','#header-details','#header-user','#open-settings','#open-observation','#form-error','#occurrence-form [name="notes"]'])nodes.set(id,element());
 const captured=[],saved=[];
-const state={contextRequired:false,configureSystemBars(){},reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},locked:false,localAccess:{refresh:async()=>{},requireOnline:async()=>{}},screen:'menu',context:{},fixedContext:null,contextNext:'methods',mode:'manual',draft:{},editId:null,occurrenceReturn:null,photoBusy:false,queue:[],selected:null,message:'',syncIssue:null,connected:true,busy:false,needsLogin:false,nativeConfigured:false,
+const state={configureSystemBars(){},reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},locked:false,localAccess:{refresh:async()=>{},requireOnline:async()=>{}},screen:'menu',context:{},fixedContext:null,contextNext:'methods',mode:'manual',draft:{},editId:null,occurrenceReturn:null,photoBusy:false,queue:[],selected:null,message:'',syncIssue:null,connected:true,busy:false,needsLogin:false,nativeConfigured:false,
  session:{user:{id:'operator',name:'OPERADOR',permissions:all},fleets:[],locations:[],materials:[],rules:{checklistEnabled:true}},
  app:{...element(),scrollTop:0},logout:element(),connectionStatus:element(),
  document:{body:element(),querySelector:selector=>nodes.get(selector)||null,querySelectorAll:()=>[]},
@@ -71,19 +71,27 @@ state.api=async()=>{throw Object.assign(Error('Network session missing'),{status
 state.api=async()=>{throw Object.assign(Error('Access revoked'),{status:403})};await state.sync();assert.equal(state.needsLogin,true);assert.equal(revoked,1);
 console.log('Airplane mode skips auth refresh; missing local tokens preserve offline access; known server revocation requires online validation.');
 
-// A fresh entry must select context, including users without refuel permission.
+// Login/menu, checklist and occurrences do not require a context. Fuel workflows do.
 const contextButton={disabled:false},contextError={textContent:''};const contextForm={values:{localCode:'2',materialCode:'8'},querySelector:s=>s==='button'?contextButton:contextError};
-nodes.set('#context-form',contextForm);state.session.user.permissions=none;state.screen='menu';state.contextRequired=true;state.context={};state.fixedContext=null;state.contextNext='menu';
-state.queue=[{id:'keep-original',localCode:'1',materialCode:'9',userId:'operator'}];state.draft={fleet:'1001',km:'500',context:{localCode:'old',materialCode:'old'}};
-const pendingBefore=structuredClone(state.queue);state.renderFlow();assert.equal(state.screen,'context');assert.match(state.app.innerHTML,/id="context-form"/);assert.doesNotMatch(state.app.innerHTML,/data-screen="menu"/);
-state.writeMeta=async()=>{throw Error('Storage failure')};await contextForm.onsubmit({preventDefault(){}});assert.match(contextError.textContent,/Storage failure/);assert.equal(state.contextRequired,true);assert.equal(state.fixedContext,null);assert.equal(contextButton.disabled,false);
-state.writeMeta=async batch=>{for(const[key,value]of Object.entries(batch))saved.push({key,value:structuredClone(value)})};await contextForm.onsubmit({preventDefault(){}});assert.equal(state.screen,'menu');assert.equal(state.contextRequired,false);assert.equal(state.fixedContext.localCode,'2');assert.equal(state.fixedContext.materialCode,'8');assert.equal(state.draft.km,'500');assert.equal(state.draft.context,undefined);assert.deepEqual(state.queue,pendingBefore);assert.doesNotMatch(state.app.innerHTML,/change-context|ALTERAR/);
+const refuelEntry={...element(),dataset:{workflow:'methods'}},transferEntry={...element(),dataset:{workflow:'transfer'}};
+state.document.querySelectorAll=selector=>selector==='[data-workflow]'?[refuelEntry,transferEntry]:[];
+state.document.querySelector=selector=>selector==='#context-form'?(state.app.innerHTML.includes('id="context-form"')?contextForm:null):nodes.get(selector)||null;
+state.session.user.permissions=all;state.screen='menu';state.context={};state.fixedContext=null;state.contextNext='methods';
+state.queue=[{id:'keep-original',localCode:'1',materialCode:'9',userId:'operator'}];state.draft={fleet:'1001',km:'500'};const pendingBefore=structuredClone(state.queue);
+state.renderFlow();assert.equal(state.screen,'menu');assert.doesNotMatch(state.app.innerHTML,/id="context-form"/);
+state.screen='checklist-fleet';state.renderFlow();assert.equal(state.screen,'checklist-fleet');assert.doesNotMatch(state.app.innerHTML,/id="context-form"/);
+nodes.get('#open-observation').onclick();assert.equal(state.screen,'occurrence');assert.doesNotMatch(state.app.innerHTML,/id="context-form"/);state.occurrenceReturn=null;
+state.screen='menu';state.renderFlow();refuelEntry.onclick();assert.equal(state.screen,'context');assert.equal(state.contextNext,'methods');assert.match(state.app.innerHTML,/id="context-form"/);assert.match(state.app.innerHTML,/data-screen="menu"/);
+state.writeMeta=async()=>{throw Error('Storage failure')};await contextForm.onsubmit({preventDefault(){}});assert.match(contextError.textContent,/Storage failure/);assert.equal(state.screen,'context');assert.equal(state.fixedContext,null);assert.equal(contextButton.disabled,false);
+state.writeMeta=async batch=>{for(const[key,value]of Object.entries(batch))saved.push({key,value:structuredClone(value)})};await contextForm.onsubmit({preventDefault(){}});assert.equal(state.screen,'methods');assert.equal(state.fixedContext.localCode,'2');assert.equal(state.fixedContext.materialCode,'8');assert.equal(state.draft.km,'500');assert.equal(state.draft.context,undefined);assert.deepEqual(state.queue,pendingBefore);
+state.screen='menu';state.renderFlow();transferEntry.onclick();assert.equal(state.screen,'transfer');
+state.fixedContext=null;state.context={};state.screen='menu';state.renderFlow();transferEntry.onclick();assert.equal(state.screen,'context');assert.equal(state.contextNext,'transfer');contextForm.values={localCode:'3',materialCode:'7'};await contextForm.onsubmit({preventDefault(){}});assert.equal(state.screen,'transfer');assert.deepEqual(state.queue,pendingBefore);
 assert.equal(nodes.get('#header-user').textContent,state.session.user.name);assert.ok(!state.app.innerHTML.includes('home-brand'));
 vm.runInContext(source.slice(source.indexOf('function connectionHTML(){'),source.indexOf('function statusHTML(){')),state);state.session.cachedAt='2026-10-29T09:00:00Z';assert.doesNotMatch(state.connectionHTML(),/<time|2026/);
-console.log('New entries require context without permission bypass; failed writes keep setup open, pending codes/drafts stay intact and connection timestamps are hidden.');
+console.log('Menu/checklist/occurrences skip context; refuel and transfer require it only when unselected, resume their own workflow, permit returning, preserve queues/drafts and handle storage failure.');
 
 // New transfers omit fleet, even with a stale draft/form value; corrections retain legacy links.
-state.session.user.permissions=all;state.session.fleets=[];state.contextRequired=false;state.screen='transfer';state.context={localCode:'1',materialCode:'9'};state.fixedContext={...state.context};state.editId=null;state.queue=[];state.draft={transfer:{fleet:'STALE',recorderEnd:'10050',destination:'2'}};state.renderFlow();
+state.session.user.permissions=all;state.session.fleets=[];state.screen='transfer';state.context={localCode:'1',materialCode:'9'};state.fixedContext={...state.context};state.editId=null;state.queue=[];state.draft={transfer:{fleet:'STALE',recorderEnd:'10050',destination:'2'}};state.renderFlow();
 assert.doesNotMatch(state.app.innerHTML,/name="fleet"|event-fleets|FROTA \(OPCIONAL\)/);
 const countBeforeTransfer=captured.length;await state.saveEvent(event({destination:'2',recorderEnd:'10050'}),'transfer');assert.equal(captured.length,countBeforeTransfer+1);assert.equal(captured.at(-1).fleet,undefined);assert.equal(captured.at(-1).localCode,'1');assert.equal(captured.at(-1).materialCode,'9');assert.equal(captured.at(-1).recorderLiters,50);
 await state.saveEvent(event({destination:'2',recorderEnd:'10060',fleet:'STALE'}),'transfer');assert.equal(captured.at(-1).fleet,undefined);

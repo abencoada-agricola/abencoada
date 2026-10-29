@@ -12,7 +12,7 @@ let mode='accept',onlineCalls=0,logoutCalls=0,records=[];
 const initial={user:{id:'TEST-USER',name:'TESTE'},fleets:[],locations:[],rules:{}};let returned=initial;
 const input={type:'password',value:'',focus(){}};const error={textContent:''};const button={disabled:false};const form={querySelector:()=>button};const toggle={setAttribute(){},innerHTML:''};
 const node=()=>({hidden:false,classList:{add(){},remove(){}},setAttribute(){}});
-const state={contextRequired:false,context:{localCode:'1',materialCode:'9'},fixedContext:{localCode:'1',materialCode:'9'},contextNext:'methods',configureSystemBars(){},reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},localAccess,loginFields,locked:true,busy:false,mirrorBusy:false,photoBusy:false,session:null,selected:null,draft:{},queue:[],needsLogin:false,nativeConfigured:false,connected:false,syncIssue:null,message:'',editId:null,occurrenceReturn:null,
+const state={context:{localCode:'1',materialCode:'9'},fixedContext:{localCode:'1',materialCode:'9'},contextNext:'methods',configureSystemBars(){},reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},localAccess,loginFields,locked:true,busy:false,mirrorBusy:false,photoBusy:false,session:null,selected:null,draft:{},queue:[],needsLogin:false,nativeConfigured:false,connected:false,syncIssue:null,message:'',editId:null,occurrenceReturn:null,
  app:{...node(),innerHTML:'',scrollTop:0},logout:node(),connectionStatus:node(),navigator:{onLine:true},
  document:{body:node(),querySelector:s=>s==='#login'?form:s==='#login [name="password"]'?input:s==='#toggle-password'?toggle:s==='#login-error'?error:s.startsWith('#app form')?null:node()},
  esc:String,passwordEye:()=>'',isConfigured:()=>true,
@@ -24,9 +24,9 @@ const state={contextRequired:false,context:{localCode:'1',materialCode:'9'},fixe
 vm.createContext(state);vm.runInContext(auth,state);
 const submit=async()=>{state.login();await form.onsubmit({preventDefault(){},target:form})};
 state.login();assert.doesNotMatch(source,/open-settings/);
-await submit();assert.equal(state.screen,'context');assert.equal(state.contextRequired,true);assert.equal(state.fixedContext,null);assert.equal(Object.keys(state.context).length,0);assert.equal(state.locked,false);assert.ok((await read('last-session')).encrypted);assert.equal(onlineCalls,1);
+await submit();assert.equal(state.screen,'menu');assert.equal(state.fixedContext,null);assert.equal(Object.keys(state.context).length,0);assert.equal(state.locked,false);assert.ok((await read('last-session')).encrypted);assert.equal(onlineCalls,1);
 await state.lockApp();assert.equal(state.locked,true);assert.equal(state.session,null);assert.equal(localAccess.key,null);
-state.navigator.onLine=false;state.fixedContext={localCode:'7',materialCode:'8'};state.context={...state.fixedContext};await submit();assert.equal(state.screen,'context');assert.equal(state.contextRequired,true);assert.equal(state.fixedContext,null);assert.equal(state.locked,false);assert.equal(onlineCalls,1);assert.equal(state.connected,false);
+state.navigator.onLine=false;state.fixedContext={localCode:'7',materialCode:'8'};state.context={...state.fixedContext};await submit();assert.equal(state.screen,'menu');assert.equal(state.fixedContext,null);assert.equal(state.locked,false);assert.equal(onlineCalls,1);assert.equal(state.connected,false);
 await state.lockApp();state.credentials.password='wrong';await submit();assert.equal(state.locked,true);assert.match(error.textContent,/inválidos/);
 state.credentials.password='Fictional-ui-test-password!';state.navigator.onLine=true;mode='reject';await submit();assert.equal(state.locked,true);assert.equal((await read('offline-access')).requiresOnline,true);
 state.navigator.onLine=false;await submit();assert.equal(state.locked,true);assert.match(error.textContent,/validar sua conta/);

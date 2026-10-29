@@ -26,9 +26,9 @@ const app=document.querySelector('#app'),logout=document.querySelector('#logout'
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>Number(v||0).toLocaleString('pt-BR',{maximumFractionDigits:2});
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo'}).format(new Date());
-let screen='context',context={},fixedContext=null,mode='manual',occurrenceReturn=null,contextNext='methods';
+let screen='menu',context={},fixedContext=null,mode='manual',occurrenceReturn=null,contextNext='methods';
 let db,session,draft={},queue=[],selected=null,busy=false,connected=false,needsLogin=false,editId=null,message='',syncIssue=null,photoBusy=false;
-let locked=true,contextRequired=true;
+let locked=true;
 async function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open('abencoada-diesel-mobile',1);req.onupgradeneeded=()=>{req.result.createObjectStore('meta',{keyPath:'key'});req.result.createObjectStore('queue',{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
 function op(store,mode,fn){return new Promise((resolve,reject)=>{const tx=db.transaction(store,mode),req=fn(tx.objectStore(store));let value;req.onsuccess=()=>value=req.result;tx.oncomplete=()=>resolve(value);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})}
 const readMeta=async key=>(await op('meta','readonly',s=>s.get(key)))?.value;
@@ -88,11 +88,11 @@ function login(error=''){
    }
    if(!online)restored=await localAccess.unlock({username,password:secret});
    session=restored;locked=false;needsLogin=false;nativeConfigured=false;connected=online;syncIssue=null;message='';
-   await load();context={};fixedContext=null;delete draft.context;contextRequired=true;contextNext='menu';screen='context';render();requestDeliveryNotifications().catch(()=>{});sync();
+   await load();context={};fixedContext=null;delete draft.context;contextNext='methods';screen='menu';render();requestDeliveryNotifications().catch(()=>{});sync();
   }catch(error){const node=document.querySelector('#login-error');if(node)node.textContent=error.message;loginLoading(button,false,'ENTRAR');password.value='';}
  };
 }
-async function finishAppLock(){await localAccess.lock();session=null;selected=null;context={};fixedContext=null;contextRequired=true;draft={};queue=[];needsLogin=false;login();}
+async function finishAppLock(){await localAccess.lock();session=null;selected=null;context={};fixedContext=null;draft={};queue=[];needsLogin=false;login();}
 async function lockApp(){if(!session)return;if(photoBusy||document.querySelector('#app form button[type=submit]:disabled,#save:disabled'))throw Error('Aguarde o registro atual terminar de ser salvo.');await saveDraft();locked=true;login();if(!busy)await finishAppLock();}
 // SAIR closes the visible session while retaining encrypted offline access.
 async function leaveAccount(){await lockApp();}
@@ -104,9 +104,8 @@ window.addEventListener('online',sync);document.addEventListener('visibilitychan
 async function boot(){try{db=await openDB();await localAccess.load();locked=true;login();setInterval(sync,15000)}catch{app.innerHTML='<p class="error">Não foi possível abrir o armazenamento do aplicativo.</p>'}}
 boot();
 
-function activeFeature(){if(screen.startsWith('checklist'))return 'checklist';if(['methods','scan','refuel'].includes(screen))return 'refuel';if(screen==='transfer')return 'transfer';if(screen==='context')return contextNext==='menu'?null:contextNext==='transfer'?'transfer':'refuel';return null}
+function activeFeature(){if(screen.startsWith('checklist'))return 'checklist';if(['methods','scan','refuel'].includes(screen))return 'refuel';if(screen==='transfer')return 'transfer';if(screen==='context')return contextNext==='transfer'?'transfer':'refuel';return null}
 function renderFlow(){
- if(contextRequired&&screen==='menu'){screen='context';contextNext='menu'}
  const feature=activeFeature();if(feature&&!canUseFeature(session,feature)){screen='menu';message='FUNÇÃO NÃO LIBERADA PARA SEU USUÁRIO. CONSULTE O ADMINISTRADOR.'}
  if(screen.startsWith('checklist')&&!checklistEnabled(session)&&!queue.some(r=>r.id===editId&&r.kind==='checklist')){screen='menu';message='CHECKLIST DESATIVADO PELO GESTOR.'}
  if(fixedContext&&screen==='context')screen=contextNext;if(fixedContext&&screen==='menu')context={...fixedContext};
@@ -121,12 +120,12 @@ function renderFlow(){
  else if(screen==='refuel')content=selected?formHTML():'';
  else if(screen==='transfer'){const d=editId?draft:(draft.transfer||{}),base=transferRecorderBase(session.locations||[],queue,context.localCode,context.materialCode,editId);content=`<form id="transfer-form"><p>LOCAL ATUAL: <b>${esc(context.localCode)}</b><br>MATERIAL: <b>${esc(context.materialCode)}</b></p><p>REGISTRADORA ANTERIOR<br><b class="reading" id="recorder-base">${base===null?'SEM LEITURA INICIAL':num(base)}</b></p>${decimal('recorderEnd','FINAL DA REGISTRADORA DO LOCAL ATUAL',d.recorderEnd??'')}<div class="liters-result"><span>LITROS DESDE O ÚLTIMO REGISTRO</span><strong id="transfer-liters">—</strong></div><label>NOVO CÓDIGO DO LOCAL<input name="destination" inputmode="numeric" pattern="[0-9]{1,30}" required maxlength="30" value="${esc(d.destination||'')}" list="transfer-locations"></label><datalist id="transfer-locations">${(session.locations||[]).filter(l=>l.material_code===context.materialCode&&l.local_code!==context.localCode).map(l=>`<option value="${esc(l.local_code)}">${esc(l.name)}</option>`).join('')}</datalist><p>ÚLTIMA LEITURA DO NOVO LOCAL<br><b class="reading" id="destination-base">—</b></p><p class="error" id="form-error" role="alert"></p><button class="primary">CONFIRMAR TRANSFERÊNCIA</button></form>`;}
  else if(screen==='occurrence')content=`<form id="occurrence-form"><label>OBSERVAÇÃO OU OCORRÊNCIA<textarea name="notes" maxlength="2000" rows="5">${esc(draft.notes||'')}</textarea></label><div class="photo-actions"><button type="button" class="photo-button" id="take-photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5 10 3h4l2 2h5v16H3V5h5Z"/><circle cx="12" cy="13" r="4"/></svg>ADICIONAR FOTO</button><button type="button" class="photo-button" id="choose-photo">GALERIA</button></div><input type="file" id="camera-photo" accept="image/*" capture="environment" hidden><input type="file" id="gallery-photo" accept="image/*" hidden><div id="photo-preview">${photoHTML()}</div><p id="photo-status" role="status"></p><p class="error" id="form-error" role="alert"></p><button class="primary" id="save-occurrence" type="submit">SALVAR OCORRÊNCIA</button></form>`;
- app.innerHTML=header+content+(screen!=='menu'&&!(screen==='context'&&contextNext==='menu')?(screen==='occurrence'&&occurrenceReturn?'<button class="secondary back-button" id="back-observation">VOLTAR</button>':'<button class="secondary back-button" data-screen="menu">VOLTAR AO MENU</button>'):'')+`<div id="pending">${pendingHTML()}</div>`;
+ app.innerHTML=header+content+(screen!=='menu'?(screen==='occurrence'&&occurrenceReturn?'<button class="secondary back-button" id="back-observation">VOLTAR</button>':'<button class="secondary back-button" data-screen="menu">VOLTAR AO MENU</button>'):'')+`<div id="pending">${pendingHTML()}</div>`;
  document.querySelectorAll('[data-workflow]').forEach(button=>button.onclick=()=>{contextNext=button.dataset.workflow;if(!syncIssue)message='';editId=null;screen=fixedContext?contextNext:'context';render()});
  document.querySelectorAll('[data-screen]').forEach(b=>b.onclick=()=>{screen=b.dataset.screen;if(screen==='checklist-fleet'&&!syncIssue)message='';editId=null;render()});
  const observationButton=document.querySelector('#open-observation');if(observationButton)observationButton.onclick=()=>{if(screen==='occurrence'){document.querySelector('#occurrence-form [name="notes"]')?.focus();return}occurrenceReturn={screen,editId};editId=null;screen='occurrence';render()};
  const backObservation=document.querySelector('#back-observation');if(backObservation)backObservation.onclick=()=>{({screen,editId}=occurrenceReturn);occurrenceReturn=null;render()};
- const ctx=document.querySelector('#context-form');if(ctx){ctx.oninput=()=>{draft.context=Object.fromEntries(new FormData(ctx));saveDraft().catch(()=>{})};ctx.onsubmit=async e=>{e.preventDefault();const button=ctx.querySelector('button'),error=ctx.querySelector('#context-error');button.disabled=true;error.textContent='';try{const next=Object.fromEntries(new FormData(ctx));if(!/^[0-9]{1,30}$/.test(next.localCode)||!/^[0-9]{1,30}$/.test(next.materialCode))throw Error('Informe os códigos de local e material usando apenas números.');const remaining={...draft};delete remaining.context;await writeMeta({[key('context')]:next,[key('draft')]:remaining});context={...next};fixedContext={...next};contextRequired=false;draft=remaining;screen=contextNext;render()}catch(failure){error.textContent=failure.message||'Não foi possível salvar os códigos. Tente novamente.';button.disabled=false}}};
+ const ctx=document.querySelector('#context-form');if(ctx){ctx.oninput=()=>{draft.context=Object.fromEntries(new FormData(ctx));saveDraft().catch(()=>{})};ctx.onsubmit=async e=>{e.preventDefault();const button=ctx.querySelector('button'),error=ctx.querySelector('#context-error');button.disabled=true;error.textContent='';try{const next=Object.fromEntries(new FormData(ctx));if(!/^[0-9]{1,30}$/.test(next.localCode)||!/^[0-9]{1,30}$/.test(next.materialCode))throw Error('Informe os códigos de local e material usando apenas números.');const remaining={...draft};delete remaining.context;await writeMeta({[key('context')]:next,[key('draft')]:remaining});context={...next};fixedContext={...next};draft=remaining;screen=contextNext;render()}catch(failure){error.textContent=failure.message||'Não foi possível salvar os códigos. Tente novamente.';button.disabled=false}}};
  bindChecklist();
  const qr=document.querySelector('#qr-method');if(qr)qr.onclick=()=>{mode='recorder';editId=null;selected=null;screen='scan';render()};const man=document.querySelector('#manual-method');if(man)man.onclick=()=>{mode='manual';editId=null;selected=null;screen='scan';render()};
  const scanButton=document.querySelector('#scan');if(scanButton)scanButton.onclick=()=>scan();

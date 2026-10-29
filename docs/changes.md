@@ -1,5 +1,11 @@
 # Change log
 
+## 2026-10-29 — Local/Material somente nos fluxos de combustível
+
+O login volta a abrir diretamente no menu. A escolha de Local e Material é solicitada somente ao entrar em Abastecimento ou Transferência, quando ainda não há seleção na entrada atual; após confirmar, o usuário segue para a operação que escolheu. Checklist e Ocorrência não exigem essa etapa. É possível voltar ao menu sem escolher códigos. A seleção continua sendo reiniciada após sair/entrar novamente, e pendências mantêm os valores originais.
+
+Validação: regressões de login/permissões/roteamento, falha de gravação e preservação de rascunhos/pendências; build móvel e navegador isolado em modo avião. Conferidos acesso direto ao menu e a Checklist/Ocorrência, cancelamento da seleção, continuidade em Abastecimento e Transferência, reutilização da seleção na mesma entrada e nova solicitação somente na primeira operação após reabrir. Transferência sem frota e cálculos de registradora seguem aprovados.
+
 ## 2026-10-29 — Remoção de documentação pública
 
 Removidos o documento de especificação da futura integração e seu atalho no README, conforme solicitado. A alteração é documental e não modifica o aplicativo, a fila offline ou o código de integração. Validação: conferidos o diff e a ausência de referências ao arquivo removido.
