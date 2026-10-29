@@ -1,5 +1,9 @@
 # Change log
 
+## 2026-10-29 — Remoção de documentação pública
+
+Removidos o documento de especificação da futura integração e seu atalho no README, conforme solicitado. A alteração é documental e não modifica o aplicativo, a fila offline ou o código de integração. Validação: conferidos o diff e a ausência de referências ao arquivo removido.
+
 ## 2026-10-29 — Transferência sem campo de frota
 
 Removido o campo FROTA (OPCIONAL) da tela de transferência. Novas transferências omitem o vínculo de frota, inclusive quando há valor antigo no rascunho/formulário. A correção de uma transferência pendente antiga mantém sua frota original, sem exigir que ainda esteja no catálogo, para preservar histórico e identidade de reenvio. Regras de local/material, destino e registradora continuam iguais.
@@ -82,7 +86,7 @@ Validação: suíte completa; build e sincronização Android; revisão visual e
 
 Adicionado contrato opcional e versionado de metadados por frota na resposta de sessão, com adaptação compartilhada entre web e Android. A unidade e a finalidade confirmada do medidor adicional definem os campos exigidos; capacidade desconhecida não vira estimativa. Catálogos locais, leituras existentes, rascunhos e pendências são preservados. Nenhum catálogo real foi incluído/importado e nenhuma conexão GMAIS foi ativada.
 
-Documentado em `docs/gmais-integration.md` o mapeamento esperado para a futura conexão do Luiz e as adaptações ainda necessárias no servidor (identidade, validação de envios, histórico e fonte de leituras). Validação: testes de contrato e sessão RPC, suíte completa, builds web/Android e atualização do mapa de arquitetura.
+Registrado o mapeamento esperado para a futura conexão do Luiz e as adaptações ainda necessárias no servidor (identidade, validação de envios, histórico e fonte de leituras). Validação: testes de contrato e sessão RPC, suíte completa, builds web/Android e atualização do mapa de arquitetura.
 
 ## 2026-10-28 — Administração na raiz do site
 
