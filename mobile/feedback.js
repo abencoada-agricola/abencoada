@@ -1,3 +1,4 @@
+import {loadingIconsHTML} from '../web/vehicle-icons.js';
 let timer;
 function notice(kind,title,detail){
  let element=document.querySelector('#delivery-feedback');
@@ -11,6 +12,6 @@ export const showSaved=()=>notice('saved','Salvo no aparelho','Seus dados estão
 export const showDelivered=count=>notice('sent',count===1?'Enviado com sucesso':`${count} registros enviados`,'Recebimento confirmado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'.');
 export function loginLoading(button,loading,label){
  button.disabled=loading;button.replaceChildren();button.setAttribute('aria-busy',String(loading));
- if(loading){const spinner=document.createElement('span');spinner.className='auth-spinner';spinner.setAttribute('aria-hidden','true');button.append(spinner);}
+ if(loading){const spinner=document.createElement('span');spinner.className='auth-spinner vehicle-loader';spinner.innerHTML=loadingIconsHTML();spinner.setAttribute('aria-hidden','true');button.append(spinner);}
  button.append(document.createTextNode(label));
 }

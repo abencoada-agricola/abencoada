@@ -1,0 +1,15 @@
+/* The ring turns; the pictograms stay upright and change every 450 ms. */
+.vehicle-loader{position:relative;display:inline-block;flex:0 0 auto;width:36px;height:36px;vertical-align:middle;color:inherit}
+.vehicle-loader::before{content:"";position:absolute;inset:0;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:vehicle-ring .7875s linear infinite}
+.vehicle-loader .vehicle-icon{position:absolute;width:22px;height:22px;inset:7px;opacity:0;animation:vehicle-swap 3.15s step-end infinite}
+.vehicle-loader .vehicle-icon:nth-child(2){animation-delay:.45s}
+.vehicle-loader .vehicle-icon:nth-child(3){animation-delay:.9s}
+.vehicle-loader .vehicle-icon:nth-child(4){animation-delay:1.35s}
+.vehicle-loader .vehicle-icon:nth-child(5){animation-delay:1.8s}
+.vehicle-loader .vehicle-icon:nth-child(6){animation-delay:2.25s}
+.vehicle-loader .vehicle-icon:nth-child(7){animation-delay:2.7s}
+.auth-spinner{margin-right:12px}
+.app-opening{display:flex;align-items:center;justify-content:center;gap:12px;min-height:160px;color:inherit}
+@keyframes vehicle-ring{to{transform:rotate(360deg)}}
+@keyframes vehicle-swap{0%{opacity:1}14.285714%,100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.vehicle-loader::before,.vehicle-loader .vehicle-icon{animation:none}.vehicle-loader .vehicle-icon:last-child{opacity:1}}
