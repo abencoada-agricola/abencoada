@@ -1,5 +1,13 @@
 # Change log
 
+## 2026-10-29 — Barra superior branca e tela inicial verde escura
+
+Removida a marca grande do centro da tela inicial. A logo pequena, o nome do usuário em negrito, a conexão/data e as ações de Ajustes, Ocorrência e Sair ficam reunidos na barra branca. O corpo volta ao verde escuro #193c2b. A primeira abertura deste layout restaura o tema escuro uma vez; escolhas posteriores em Ajustes continuam persistentes. A faixa branca do login e os campos centralizados são mantidos.
+
+Barras nativas usam ícones escuros sobre o cabeçalho branco em Android/iOS; a navegação considera a cor do corpo e eventuais áreas nativas brancas reservadas. Nenhum dado de sessão, rascunho ou fila é removido pela atualização visual.
+
+Validação: suíte automatizada, build móvel, regressões de cabeçalho/permissões/barras e migração de preferência; revisão em 320/360/390px, sem transbordamento e com alvos de toque de 48px. Navegador isolado validou logo pequena/nome/conexão dentro da barra, corpo verde, temas e entrada/reinício offline usando conta fictícia. Simulador Android aberto para revisão da tela.
+
 ## 2026-10-28 — Campos do login centralizados e em negrito
 
 Os campos de usuário/senha agora centralizam tanto os rótulos quanto o texto digitado, com peso 700. O rótulo flutuante permanece centralizado ao receber foco ou conteúdo. A borda passa a ter 2px e cantos de 24px, com destaque na cor de foco do tema. O campo de senha usa espaçamento simétrico para manter a centralização com o botão de mostrar/ocultar à direita.

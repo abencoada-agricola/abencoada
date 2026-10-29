@@ -12,7 +12,7 @@ const sync=source.slice(source.indexOf('async function sync(){'),source.indexOf(
 const all={refuel:true,transfer:true,checklist:true},none={refuel:false,transfer:false,checklist:false};
 const nodes=new Map();
 const element=()=>({hidden:false,disabled:false,innerHTML:'',classList:{contains(){return false},toggle(){},add(){},remove(){}},focus(){this.focused=true}});
-for(const id of ['#login-logo','#header-logo','#open-settings','#open-observation','#form-error','#occurrence-form [name="notes"]'])nodes.set(id,element());
+for(const id of ['#login-logo','#header-logo','#header-details','#header-user','#open-settings','#open-observation','#form-error','#occurrence-form [name="notes"]'])nodes.set(id,element());
 const captured=[],saved=[];
 const state={configureSystemBars(){},reportDelivery(){},requestDeliveryNotifications:async()=>({enabled:false}),loginLoading:(button,loading)=>{button.disabled=loading},locked:false,localAccess:{refresh:async()=>{},requireOnline:async()=>{}},screen:'menu',context:{},fixedContext:null,contextNext:'methods',mode:'manual',draft:{},editId:null,occurrenceReturn:null,photoBusy:false,queue:[],selected:null,message:'',syncIssue:null,connected:true,busy:false,needsLogin:false,nativeConfigured:false,
  session:{user:{id:'operator',name:'OPERADOR',permissions:all},fleets:[],locations:[],materials:[],rules:{checklistEnabled:true}},
@@ -82,4 +82,4 @@ assert.deepEqual(state.queue,pendingBefore);assert.deepEqual(state.draft,draftBe
 state.put=async()=>{throw Error('Storage failure')};await assert.rejects(editor.save({localCode:'4',materialCode:'5'}),/Storage failure/);assert.equal(state.context.localCode,'2');assert.equal(state.fixedContext.materialCode,'8');
 console.log('Default context changes preserve pending operation ownership, original codes and drafts; failed persistence leaves current context unchanged.');
 
-assert.equal(nodes.get('#open-settings').hidden,false);assert.ok(state.app.innerHTML.indexOf('class="home-logo"')<state.app.innerHTML.indexOf('class="worker"'));
+assert.equal(nodes.get('#open-settings').hidden,false);assert.equal(nodes.get('#header-user').textContent,state.session.user.name);assert.ok(!state.app.innerHTML.includes('home-brand'));

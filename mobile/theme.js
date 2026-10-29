@@ -5,7 +5,7 @@ export function setTheme(theme){
  if(!['light','dark'].includes(theme))return;
  document.documentElement.dataset.theme=theme;
  try{localStorage.setItem(THEME_KEY,theme)}catch{}
- document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme==='dark'?'#0e3024':'#f3f6f2');
+ document.querySelector('meta[name="theme-color"]')?.setAttribute('content','#ffffff');
  window.dispatchEvent(new Event('app-theme-change'));
 }
 export function installThemeSettings(){

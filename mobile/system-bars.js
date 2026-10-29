@@ -5,9 +5,9 @@ export async function configureSystemBars(force=true){
  const platform=Capacitor.getPlatform();if(!['android','ios'].includes(platform))return;
  const dark=document.documentElement.dataset.theme!=='light';
  const login=document.body?.classList.contains('login-screen')===true;
- const style=dark&&!login?SystemBarsStyle.Dark:SystemBarsStyle.Light;
+ const style=SystemBarsStyle.Light;
  const reservedBottom=parseFloat(document.documentElement.style.getPropertyValue('--safe-area-inset-bottom'))||0;
- const navigationStyle=dark&&!(login&&reservedBottom>0)?SystemBarsStyle.Dark:SystemBarsStyle.Light;
+ const navigationStyle=dark&&reservedBottom<=0?SystemBarsStyle.Dark:SystemBarsStyle.Light;
  try{
   if(force||appliedStyle!==style||appliedNavigationStyle!==navigationStyle){
    await SystemBars.setStyle({style,bar:SystemBarType.StatusBar});
