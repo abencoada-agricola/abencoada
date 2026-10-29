@@ -6,7 +6,7 @@ import {checklistEnabled} from '../mobile/checklist.js';
 import {navigationSvg} from '../web/navigation-icons.js';
 import {describeSyncFailure,prepareBackgroundSync} from '../mobile/sync-errors.js';
 const source=await readFile('mobile/app.js','utf8');
-const ui=source.slice(source.indexOf('function activeFeature(){'),source.indexOf("function optionalEventFleet(value='')"));
+const ui=source.slice(source.indexOf('function activeFeature(){'),source.indexOf('function photoHTML(){'));
 const save=source.slice(source.indexOf('async function saveEvent('),source.indexOf('async function configureNative('));
 const sync=source.slice(source.indexOf('async function sync(){'),source.indexOf('function passwordEye'));
 const all={refuel:true,transfer:true,checklist:true},none={refuel:false,transfer:false,checklist:false};
@@ -19,7 +19,7 @@ const state={contextRequired:false,configureSystemBars(){},reportDelivery(){},re
  app:{...element(),scrollTop:0},logout:element(),connectionStatus:element(),
  document:{body:element(),querySelector:selector=>nodes.get(selector)||null,querySelectorAll:()=>[]},
  navigationSvg,canUseFeature,requireFeature,accessSignature,checklistEnabled,describeSyncFailure,prepareBackgroundSync,
- esc:value=>String(value??''),num:String,decimal:()=>'',formHTML:()=>'',checklistFormHTML:()=>'',optionalEventFleet:()=>'',photoHTML:()=>'',statusHTML:()=>'',pendingHTML:()=>'',connectionHTML:()=>'',
+ esc:value=>String(value??''),num:String,decimal:()=>'',formHTML:()=>'',checklistFormHTML:()=>'',photoHTML:()=>'',statusHTML:()=>'',pendingHTML:()=>'',connectionHTML:()=>'',
  bindPending(){},bindChecklist(){},bindPhotoControls(){},updateCalculated(){},updatePanels(){},operationDependencies:()=>[],
  transferRecorderBase:()=>10000,recorderBase:()=>10000,parseNumber:Number,isPhoto:()=>false,
  saveDraft:async()=>saved.push(structuredClone(state.draft)),put:async(key,value)=>saved.push({key,value:structuredClone(value)}),key:name=>'operator:'+name,
@@ -81,3 +81,11 @@ state.writeMeta=async batch=>{for(const[key,value]of Object.entries(batch))saved
 assert.equal(nodes.get('#header-user').textContent,state.session.user.name);assert.ok(!state.app.innerHTML.includes('home-brand'));
 vm.runInContext(source.slice(source.indexOf('function connectionHTML(){'),source.indexOf('function statusHTML(){')),state);state.session.cachedAt='2026-10-29T09:00:00Z';assert.doesNotMatch(state.connectionHTML(),/<time|2026/);
 console.log('New entries require context without permission bypass; failed writes keep setup open, pending codes/drafts stay intact and connection timestamps are hidden.');
+
+// New transfers omit fleet, even with a stale draft/form value; corrections retain legacy links.
+state.session.user.permissions=all;state.session.fleets=[];state.contextRequired=false;state.screen='transfer';state.context={localCode:'1',materialCode:'9'};state.fixedContext={...state.context};state.editId=null;state.queue=[];state.draft={transfer:{fleet:'STALE',recorderEnd:'10050',destination:'2'}};state.renderFlow();
+assert.doesNotMatch(state.app.innerHTML,/name="fleet"|event-fleets|FROTA \(OPCIONAL\)/);
+const countBeforeTransfer=captured.length;await state.saveEvent(event({destination:'2',recorderEnd:'10050'}),'transfer');assert.equal(captured.length,countBeforeTransfer+1);assert.equal(captured.at(-1).fleet,undefined);assert.equal(captured.at(-1).localCode,'1');assert.equal(captured.at(-1).materialCode,'9');assert.equal(captured.at(-1).recorderLiters,50);
+await state.saveEvent(event({destination:'2',recorderEnd:'10060',fleet:'STALE'}),'transfer');assert.equal(captured.at(-1).fleet,undefined);
+state.editId='legacy-transfer';state.queue=[{id:'legacy-transfer',kind:'transfer',userId:'operator',localCode:'1',materialCode:'9',fleet:'RETIRED',createdAt:'2026-10-28T12:00:00Z'}];await state.saveEvent(event({destination:'2',recorderEnd:'10070'}),'transfer');assert.equal(captured.at(-1).fleet,'RETIRED');assert.equal(captured.at(-1).id,'legacy-transfer');assert.equal(captured.at(-1).createdAt,'2026-10-28T12:00:00Z');
+console.log('Transfer form and new payloads omit fleet; stale values are ignored, readings/context remain correct and legacy corrections retain their original fleet.');

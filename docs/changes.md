@@ -1,5 +1,11 @@
 # Change log
 
+## 2026-10-29 — Transferência sem campo de frota
+
+Removido o campo FROTA (OPCIONAL) da tela de transferência. Novas transferências omitem o vínculo de frota, inclusive quando há valor antigo no rascunho/formulário. A correção de uma transferência pendente antiga mantém sua frota original, sem exigir que ainda esteja no catálogo, para preservar histórico e identidade de reenvio. Regras de local/material, destino e registradora continuam iguais.
+
+Validação: regressões do formulário/payload, envio offline sem frota, descarte de valor antigo, preservação de vínculo legado e cálculos de registradora; testes de operações e RPC de frotas opcionais/segundo plano; build móvel. Navegador isolado salvou transferência sem frota com os códigos e volume corretos e preservou a fila após nova entrada, usando apenas dados fictícios.
+
 ## 2026-10-29 — Tela verde simplificada e contexto obrigatório em cada entrada
 
 Fontes reforçadas, logo maior e afastada da borda esquerda, ícones maiores e deslocados para dentro dos botões. Removidos Ajustes/engrenagem, os modos claro/escuro, a ação ALTERAR do resumo e a data/hora abaixo da conexão. O app usa apenas a aparência verde e mantém o cabeçalho branco.
