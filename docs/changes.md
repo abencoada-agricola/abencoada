@@ -1,5 +1,11 @@
 # Change log
 
+## 2026-10-29 — Orientação vertical fixa no Android
+
+A atividade principal passa a declarar orientação portrait, mantendo login, menu e formulários em pé ao girar o aparelho. O leitor de QR já usa scanOrientation=1 (portrait). Adicionada a propriedade de compatibilidade do alvo Android 16/API 36 para respeitar a restrição também em telas grandes. Configuração conforme a [documentação oficial](https://developer.android.com/about/versions/16/behavior-changes-16#adaptive-layouts); o comportamento deve ser revisto antes de migrar para targetSdk 37, quando essa propriedade deixa de valer em telas grandes.
+
+Validação: XML conferido e geração do APK pelo fluxo Android; verificação de rotação no simulador com a versão instalada. A mudança não altera autenticação, captura de registros, rascunhos ou fila offline.
+
 ## 2026-10-29 — Local/Material somente nos fluxos de combustível
 
 O login volta a abrir diretamente no menu. A escolha de Local e Material é solicitada somente ao entrar em Abastecimento ou Transferência, quando ainda não há seleção na entrada atual; após confirmar, o usuário segue para a operação que escolheu. Checklist e Ocorrência não exigem essa etapa. É possível voltar ao menu sem escolher códigos. A seleção continua sendo reiniciada após sair/entrar novamente, e pendências mantêm os valores originais.
