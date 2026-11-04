@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Abençoada</title>
+<link rel="icon" href="./icon-192.png">
+<style>
+:root{--dark:#163a2c;--green:#28634b;--ink:#24382e;--muted:#52665a;--line:#dce5db;--paper:#f4f6ef;--gold:#e4c978}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,sans-serif}header,main,footer{padding-inline:clamp(18px,5vw,64px)}.wrap{max-width:1140px;margin:auto}header{background:var(--dark);color:white;padding-block:28px 40px}.top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.top span{color:#e4eddf}.tag{font-size:.78rem;font-weight:650;letter-spacing:.1em;text-transform:uppercase}h1{font-size:clamp(36px,7vw,74px);line-height:1.04;letter-spacing:-.055em;margin:30px 0 10px}h2{font-size:clamp(23px,4vw,31px);margin:0 0 12px;letter-spacing:-.03em}h3{margin:0 0 8px}p{margin:0 0 12px}main{padding-block:28px 52px}section{margin-bottom:28px}.grid{display:grid;gap:14px;grid-template-columns:repeat(4,minmax(0,1fr))}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card,details{background:white;border:1px solid var(--line);border-radius:12px;padding:18px}.metric{display:block;color:var(--green);font-size:clamp(24px,4vw,38px);font-weight:730;line-height:1.12;letter-spacing:-.035em}.muted,small{color:var(--muted)}small{display:block;font-size:13px}.label{display:block;font-weight:650;margin:6px 0}.flow{display:grid;gap:7px}.flow div{border-left:4px solid var(--green);padding:7px 10px;background:#eef3eb;border-radius:4px}.flow div+div::before{content:'↓ ';color:var(--green);font-weight:700}.bar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--gold);margin:14px 0 12px}.bar span{background:var(--green);width:81.72%}.legend{display:flex;flex-wrap:wrap;gap:12px}.legend span::before{content:'';display:inline-block;width:10px;height:10px;background:var(--green);margin-right:6px;border-radius:2px}.legend span+span::before{background:var(--gold)}details{margin-bottom:8px}summary{cursor:pointer;font-weight:650}summary+p{margin-top:8px}footer{border-top:1px solid var(--line);padding-block:18px}a{color:inherit}nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}nav a{border:1px solid #7a9687;padding:4px 10px;border-radius:6px;text-decoration:none}a:focus-visible,summary:focus-visible{outline:3px solid #a08b39;outline-offset:4px}@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){.two{grid-template-columns:1fr}.card{padding:14px}}
+
+</style>
+<style>
+.brand{display:inline-flex;background:#fff;padding:10px 15px;border-radius:10px;align-items:center}
+.brand img{width:155px;height:auto;display:block}
+.top{align-items:center}
+.icon{width:1.18em;height:1.18em;vertical-align:-.18em;margin-right:.42em;color:var(--green)}
+.card{transition:box-shadow .2s,border-color .2s}
+.card:hover{border-color:#a9bfb1;box-shadow:0 4px 12px #163a2c12}
+header nav a:hover{background:#ffffff20}
+select{display:block;max-width:100%;font:inherit;color:inherit;background:white;border:1px solid #96ac9c;border-radius:7px;padding:8px;margin:5px 0 14px}
+label{font-size:14px;font-weight:650}
+#area-map svg{width:100%;height:auto;display:block;overflow:visible}
+#area-map rect{fill:#28634b;stroke:#fff;stroke-width:2px;cursor:pointer;transition:fill .18s}
+#area-map rect.missing{fill:#e4c978}
+#area-map rect:hover,#area-map rect:focus-visible,#area-map rect.selected{fill:#163a2c;stroke:#f0ad39;stroke-width:4px}
+#area-map text{pointer-events:none;fill:white;font-size:13px;font-weight:650}
+#area-map .missing-label{fill:#24382e}
+#mapa .legend{margin:10px 0 18px}
+#plot-info{border-left:3px solid var(--green);padding-left:12px;margin:14px 0}
+#plot-info p{margin:3px 0}
+@keyframes appear{from{opacity:.45;transform:translateY(5px)}to{opacity:1;transform:none}}
+#area-map svg,#plot-info,.flow-visible{animation:appear .24s ease-out}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.data-table{overflow:auto;max-height:430px;margin:10px 0}
+.data-table table{border-collapse:collapse;width:100%;font-size:14px;text-align:left}
+.data-table th,.data-table td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}
+.data-table th{background:#ecf2e9;position:sticky;top:0}
+#trabalho input{display:block;width:min(100%,430px);font:inherit;padding:8px;border:1px solid #96ac9c;border-radius:7px;margin:5px 0 10px}
+
+</style>
+<style>
+.map { display:grid; gap:12px; }
+.lane { display:grid; grid-template-columns: minmax(140px,.8fr) repeat(4,minmax(0,1fr)); gap:22px; align-items:stretch; }
+.lane h3 { margin:auto 0; font-size:1rem; }
+.node { position:relative; display:grid; align-content:center; min-height:64px; padding:10px; background:#eef3eb; border:1px solid #d1dfd2; border-radius:8px; font-size:14px; }
+.node:not(:last-child)::after { content:'→'; position:absolute; left:calc(100% + 4px); top:50%; transform:translateY(-50%); color:var(--green); font-weight:700; }
+.sinks { margin-top:16px; }
+@media(max-width:760px) {
+  .lane { grid-template-columns:1fr; gap:18px; }
+  .node:not(:last-child)::after { content:'↓'; left:50%; top:100%; transform:translateX(-50%); }
+}
+</style>
+<style>
+.card.edge { position:relative; }
+.card.edge::after { content:''; position:absolute; inset:0; pointer-events:none; border:1px solid transparent; border-radius:inherit; background:radial-gradient(110px circle at var(--x,50%) var(--y,50%),#b79939,transparent) border-box; mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0); mask-composite:exclude; opacity:0; transition:opacity .2s; }
+.card.edge:hover::after { opacity:1; }
+details summary { display:flex; align-items:center; justify-content:space-between; gap:12px; list-style:none; }
+details summary::-webkit-details-marker { display:none; }
+details summary::after { content:'+'; font-size:1.25em; color:var(--green); transition:transform .2s; }
+details[open] summary::after { transform:rotate(45deg); }
+details[open] > p { animation:appear .22s ease-out; }
+.command-trigger,.command-close { font:inherit; cursor:pointer; border-radius:6px; padding:4px 10px; }
+.command-trigger { border:1px solid #7a9687; color:white; background:#ffffff12; }
+.command-trigger kbd { margin-left:8px; opacity:.85; }
+.command-dialog { width:min(520px,calc(100% - 32px)); max-height:80dvh; padding:18px; border:1px solid var(--line); border-radius:14px; color:var(--ink); }
+.command-dialog[open] { animation:appear .2s ease-out; }
+.command-dialog::backdrop { background:#10251ccc; }
+.command-head { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.command-close { background:white; border:1px solid var(--line); color:inherit; }
+.command-dialog input { width:100%; padding:10px; font:inherit; border:1px solid #96ac9c; border-radius:7px; margin:12px 0; }
+.command-results { display:grid; gap:4px; }
+.command-results a { padding:8px; border-radius:6px; text-decoration:none; }
+.command-results a:hover,.command-results a:focus-visible { background:#eef3eb; }
+@media(prefers-reduced-motion:reduce){.command-dialog[open],details[open] > p{animation:none}.card.edge::after,details summary::after{transition:none}}
+
+</style>
+
+</head>
+<body>
+<header><div class="wrap">
+<div class="brand"><img src="./logo-abencoada.png" alt="Abençoada Agrícolas"></div>
+<h1>Abençoada</h1>
+<p>Como as áreas da Abençoada se conectam</p>
+<nav aria-label="Navegação"><a href="#cadeias">Organograma</a><a href="#fluxos">Fluxos no GMAIS</a></nav>
+</div></header>
+<main><div class="wrap">
+<section aria-labelledby="cadeias">
+<h2 id="cadeias">Do campo ao resultado</h2>
+<div class="map">
+  <article class="lane card"><h3>Produção agrícola</h3><div class="node">Safra, talhão e plantio</div><div class="node">Tratos e colheita</div><div class="node">Apontamentos de pessoal e máquinas</div><div class="node">Controle de operação e custo</div></article>
+  <article class="lane card"><h3>Compras e estoque</h3><div class="node">Solicitação e cotação</div><div class="node">Pedido de compra</div><div class="node">Recebimento e documento de entrada</div><div class="node">Estoque e contas a pagar</div></article>
+  <article class="lane card"><h3>Frota e manutenção</h3><div class="node">Equipamento e ordem de serviço</div><div class="node">Peças, serviços e horas</div><div class="node">Apropriação ao equipamento</div><div class="node">Custos da frota</div></article>
+  <article class="lane card"><h3>Entregas de cana</h3><div class="node">Entregas à usina</div><div class="node">Certificados</div><div class="node">Toneladas, ATR e descontos</div><div class="node">Faturamento</div></article>
+  <article class="lane card"><h3>Vendas</h3><div class="node">Ordem ou pedido de venda</div><div class="node">Nota fiscal</div><div class="node">Contas a receber</div><div class="node">Liquidação financeira</div></article>
+  <article class="lane card"><h3>RH e folha</h3><div class="node">Cadastro e jornada</div><div class="node">Ponto e apontamentos</div><div class="node">Folha e obrigações</div><div class="node">Financeiro e contabilização</div></article>
+</div>
+</section>
+<section aria-labelledby="conexoes">
+<h2 id="conexoes">Onde os fluxos se encontram</h2>
+<details open><summary>Controle de operação e centro de custo</summary><p>Relacionam os apontamentos, materiais e gastos às atividades cadastradas, como plantio, trato, colheita e oficina.</p></details>
+<details><summary>Financeiro e bancos</summary><p>Reúnem títulos a pagar e receber. O GMAIS tem consultas de borderôs, remessas, liquidações e movimento bancário para conciliação.</p></details>
+<details><summary>Fiscal e patrimônio</summary><p>O fiscal acompanha documentos de entrada e saída e obrigações. Patrimônio mantém o cadastro dos bens, aquisições e depreciação.</p></details>
+<details><summary>Contabilidade e controladoria</summary><p>As consultas incluem lançamentos, balancete, DRE e relatórios por centro de custo, conta, mão de obra e frota.</p></details>
+</section>
+<p class="muted">Mapa funcional baseado nas telas do GMAIS consultadas em 04/11/2026. Hierarquia de cargos e integrações automáticas não foram verificadas.</p>
+<section id="fluxos">
+  <p class="muted">Etapas identificadas nos menus e nas origens dos lançamentos.</p><label for="flow-filter">Operação</label><select id="flow-filter"><option value="">Todas</option></select>
+  <div class="grid two">
+    <article class="card"><h3>Compras e recebimento</h3><div class="flow"><div>Solicitação e cotação</div><div>Pedido de compra</div><div>Documento de entrada</div><div>Estoque e contas a pagar</div></div></article>
+    <article class="card"><h3>Produção agrícola</h3><div class="flow"><div>Talhão e safra</div><div>Apontamento de pessoal e máquinas</div><div>Controle de operação e centro de custo</div><div>Gastos e relatórios</div></div></article>
+    <article class="card"><h3>Manutenção</h3><div class="flow"><div>Ordem de serviço</div><div>Peças, serviços e horas</div><div>Custo do equipamento</div></div></article>
+    <article class="card"><h3>Venda e faturamento</h3><div class="flow"><div>Ordem ou pedido de venda</div><div>Nota fiscal</div><div>Contas a receber</div></div></article>
+    <article class="card"><h3>Financeiro e bancos</h3><div class="flow"><div>Títulos a pagar e receber</div><div>Borderô e remessa</div><div>Movimento bancário e conciliação</div></div></article>
+    <article class="card"><h3>Entregas de cana</h3><div class="flow"><div>Entregas e certificados da usina</div><div>Toneladas, ATR e descontos</div><div>Faturamento</div></div></article>
+  </div>
+</section>
+</div></main>
+<script>
+const shapes = {
+  buildings:'M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6M9 10h.01M15 10h.01',
+  sprout:'M12 22v-9M12 16C5 16 3 12 3 7c5 0 9 3 9 9Zm0-3c0-6 4-9 9-9 0 5-3 9-9 9Z',
+  clipboard:'M9 5H5v16h14V5h-4M9 3h6v4H9zM8 12h8M8 16h6',
+  wrench:'M14 6a5 5 0 0 0-6 6l-5 5a2 2 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-3z',
+  box:'m3 7 9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10',
+  receipt:'M5 3v18l3-2 4 2 4-2 3 2V3l-3 2-4-2-4 2zM8 9h8M8 13h8',
+  bank:'m3 8 9-5 9 5v2H3zM5 10v8M10 10v8M14 10v8M19 10v8M3 18h18v3H3z',
+  map:'m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zM9 3v16M15 5v16'
+};
+const ns='http://www.w3.org/2000/svg';
+function svgElement(tag, attributes) {
+  const element=document.createElementNS(ns,tag);
+  for(const [name,value] of Object.entries(attributes)) element.setAttribute(name,value);
+  return element;
+}
+function addIcon(element, type) {
+  const svg=svgElement('svg',{viewBox:'0 0 24 24',class:'icon',fill:'none',stroke:'currentColor','stroke-width':1.7,'stroke-linecap':'round','stroke-linejoin':'round','aria-hidden':true});
+  svg.append(svgElement('path',{d:shapes[type]}));
+  element.prepend(svg);
+}
+
+const filter=document.querySelector('#flow-filter');
+const flows=[...document.querySelectorAll('#fluxos article')];
+flows.forEach((card,i)=>{
+  const heading=card.querySelector('h3');
+  filter.add(new Option(heading.textContent,String(i)));
+  addIcon(heading,['box','sprout','wrench','receipt','bank','sprout'][i]);
+});
+filter.addEventListener('change',()=>{
+  flows.forEach((card,i)=>{
+    card.hidden=filter.value!=='' && filter.value!==String(i);
+    card.classList.toggle('flow-visible',!card.hidden);
+  });
+});
+
+
+</script>
+</body>
+</html>
