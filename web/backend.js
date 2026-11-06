@@ -1,10 +1,13 @@
 import {createClient} from './vendor.js';
 import {config} from './config.js';
 import {normalizeGmaisSession} from './gmais-fleet.js';
-export const isConfigured=()=>/^https:\/\//.test(config.url)&&!!config.publishableKey;
-const client=isConfigured()?createClient(config.url,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'diesel-auth'}}):null;
-export async function getAuthUserId(){return (await client.auth.getSession()).data.session?.user.id||null}
+import {sqlSignIn,sqlSignOut,sqlUserId,sqlApi} from './sqlserver-client.js';
+const localSql=config.backend==='sqlserver';
+export const isConfigured=()=>localSql?!!config.url:/^https:\/\//.test(config.url)&&!!config.publishableKey;
+const client=!localSql&&isConfigured()?createClient(config.url,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'diesel-auth'}}):null;
+export async function getAuthUserId(){if(localSql)return sqlUserId();return (await client.auth.getSession()).data.session?.user.id||null}
 export async function signIn(username,password,request=fetch){
+ if(localSql)return sqlSignIn(username,password,request);
  if(!client)throw Error('O banco ainda não foi conectado.');
  const login=String(username).trim().toLowerCase();
  // Compatibilidade com contas antigas durante a transição; a tela pede usuário.
@@ -19,8 +22,9 @@ export async function signIn(username,password,request=fetch){
   if(error)throw Error('Não foi possível entrar. Tente novamente.');
  }catch(error){if(error.name==='TypeError'||error.name==='AbortError')throw Object.assign(Error('Não foi possível conectar. Conecte o celular à internet e confira a data e hora automáticas.'),{code:error.name==='AbortError'?'REQUEST_ABORTED':'NETWORK_ERROR'});throw error}finally{clearTimeout(timer)}
 }
-export async function signOut(){if(client)await client.auth.signOut({scope:'local'})}
+export async function signOut(){if(localSql)return sqlSignOut();if(client)await client.auth.signOut({scope:'local'})}
 export async function api(path,options={}){
+ if(localSql)return sqlApi(path,options);
  if(!client)throw Error('O banco ainda não foi conectado.');
  const {data:auth,error:authError}=await client.auth.getSession();if(authError)throw Error('Não foi possível confirmar a conexão. Os registros continuam neste aparelho.');if(!auth.session){const e=Error('Entre com seu usuário e senha.');e.status=401;e.code='LOCAL_AUTH_REQUIRED';throw e}
  const photoUpload=path==='operation-submit'&&options.body&&Boolean(JSON.parse(options.body).photo);
@@ -52,6 +56,7 @@ export async function api(path,options={}){
 
 // Read-only catalog probe used to distinguish connection and session failures.
 export async function fieldApi(route,payload){
+ if(localSql)throw Error('Entre com seu usuário e senha para conectar ao banco local.');
  if(route!=='session')throw Error('Registre abastecimentos pelo aplicativo Android.');
  if(!client)throw Error('O banco ainda não foi conectado.');
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),10000);

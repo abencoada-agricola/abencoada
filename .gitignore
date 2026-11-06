@@ -16,3 +16,9 @@ web/checklists.js
 
 # Local architecture map and caches (CI publishes downloadable snapshots).
 graphify-out/
+sqlserver/local-credentials.txt
+sqlserver/*.log
+sqlserver/*.pid
+sqlserver/exports/
+dependencies-copy-backup/
+sqlserver/local-preview.png

@@ -1,0 +1,558 @@
+{
+  "constraints": [
+    {
+      "name": "settings_pkey",
+      "type": "p",
+      "table": "settings",
+      "schema": "public",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "diesel_materials_material_code_check",
+      "type": "c",
+      "table": "diesel_materials",
+      "schema": "public",
+      "definition": "CHECK ((material_code ~ '^[0-9]{1,30}$'::text))"
+    },
+    {
+      "name": "diesel_materials_pkey",
+      "type": "p",
+      "table": "diesel_materials",
+      "schema": "public",
+      "definition": "PRIMARY KEY (material_code)"
+    },
+    {
+      "name": "login_attempts_pkey",
+      "type": "p",
+      "table": "login_attempts",
+      "schema": "private",
+      "definition": "PRIMARY KEY (bucket)"
+    },
+    {
+      "name": "diesel_locations_last_meter_check",
+      "type": "c",
+      "table": "diesel_locations",
+      "schema": "public",
+      "definition": "CHECK (((last_meter >= (0)::numeric) AND (last_meter <= '1000000000'::numeric)))"
+    },
+    {
+      "name": "diesel_locations_last_verified_meter_check",
+      "type": "c",
+      "table": "diesel_locations",
+      "schema": "public",
+      "definition": "CHECK (((last_verified_meter >= (0)::numeric) AND (last_verified_meter <= '1000000000'::numeric)))"
+    },
+    {
+      "name": "diesel_locations_local_code_check",
+      "type": "c",
+      "table": "diesel_locations",
+      "schema": "public",
+      "definition": "CHECK ((local_code ~ '^[0-9]{1,30}$'::text))"
+    },
+    {
+      "name": "diesel_locations_material_code_check",
+      "type": "c",
+      "table": "diesel_locations",
+      "schema": "public",
+      "definition": "CHECK ((material_code ~ '^[0-9]{1,30}$'::text))"
+    },
+    {
+      "name": "diesel_locations_pkey",
+      "type": "p",
+      "table": "diesel_locations",
+      "schema": "public",
+      "definition": "PRIMARY KEY (local_code, material_code)"
+    },
+    {
+      "name": "diesel_vehicle_no_elevator",
+      "type": "c",
+      "table": "fleets",
+      "schema": "public",
+      "definition": "CHECK (((type = ANY (ARRAY['Trator'::text, 'Colhedora'::text])) OR ((meter_fields -> 'elevator'::text) = 'false'::jsonb)))"
+    },
+    {
+      "name": "fleets_meter_fields",
+      "type": "c",
+      "table": "fleets",
+      "schema": "public",
+      "definition": "CHECK (private.valid_meter_fields(meter_fields))"
+    },
+    {
+      "name": "fleets_model_check",
+      "type": "c",
+      "table": "fleets",
+      "schema": "public",
+      "definition": "CHECK ((length(model) <= 120))"
+    },
+    {
+      "name": "fleets_pkey",
+      "type": "p",
+      "table": "fleets",
+      "schema": "public",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "fleets_tank_capacity_check",
+      "type": "c",
+      "table": "fleets",
+      "schema": "public",
+      "definition": "CHECK (((tank_capacity > (0)::numeric) AND (tank_capacity <= (100000)::numeric)))"
+    },
+    {
+      "name": "members_email_check",
+      "type": "c",
+      "table": "members",
+      "schema": "public",
+      "definition": "CHECK ((email = lower(email)))"
+    },
+    {
+      "name": "members_name_check",
+      "type": "c",
+      "table": "members",
+      "schema": "public",
+      "definition": "CHECK (((length(name) >= 2) AND (length(name) <= 120)))"
+    },
+    {
+      "name": "members_permissions_check",
+      "type": "c",
+      "table": "members",
+      "schema": "public",
+      "definition": "CHECK (private.valid_feature_access(permissions))"
+    },
+    {
+      "name": "members_pkey",
+      "type": "p",
+      "table": "members",
+      "schema": "public",
+      "definition": "PRIMARY KEY (email)"
+    },
+    {
+      "name": "members_role_check",
+      "type": "c",
+      "table": "members",
+      "schema": "public",
+      "definition": "CHECK ((role = ANY (ARRAY['admin'::text, 'operator'::text])))"
+    },
+    {
+      "name": "members_username_unique",
+      "type": "u",
+      "table": "members",
+      "schema": "public",
+      "definition": "UNIQUE (username)"
+    },
+    {
+      "name": "members_username_valid",
+      "type": "c",
+      "table": "members",
+      "schema": "public",
+      "definition": "CHECK ((username ~ '^[a-z0-9][a-z0-9_.-]{2,29}$'::text))"
+    },
+    {
+      "name": "records_capture_fields",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK ((((capture_mode = 'full'::text) AND (start IS NOT NULL) AND (\"end\" IS NOT NULL)) OR ((capture_mode = 'quick'::text) AND (start IS NULL) AND (\"end\" IS NULL) AND (signature_source = 'account'::text))))"
+    },
+    {
+      "name": "records_capture_mode_check",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK ((capture_mode = ANY (ARRAY['full'::text, 'quick'::text])))"
+    },
+    {
+      "name": "records_check",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK (((\"end\" > start) AND (\"end\" <= '1000000000'::numeric)))"
+    },
+    {
+      "name": "records_elevator_check",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK (((elevator >= (0)::numeric) AND (elevator <= '1000000000'::numeric)))"
+    },
+    {
+      "name": "records_engine_check",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK (((engine >= (0)::numeric) AND (engine <= '1000000000'::numeric)))"
+    },
+    {
+      "name": "records_fleet_fkey",
+      "type": "f",
+      "table": "records",
+      "schema": "public",
+      "definition": "FOREIGN KEY (fleet) REFERENCES fleets(id)"
+    },
+    {
+      "name": "records_identity",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK ((((signature_source = 'account'::text) AND (user_id IS NOT NULL) AND (submission_key IS NULL)) OR ((signature_source = 'declared'::text) AND (user_id IS NULL) AND (submission_key IS NOT NULL))))"
+    },
+    {
+      "name": "records_km_check",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK (((km >= (0)::numeric) AND (km <= '1000000000'::numeric)))"
+    },
+    {
+      "name": "records_liters_check",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK (((liters > (0)::numeric) AND (liters <= '1000000000'::numeric)))"
+    },
+    {
+      "name": "records_notes_check",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK ((length(notes) <= 1000))"
+    },
+    {
+      "name": "records_pkey",
+      "type": "p",
+      "table": "records",
+      "schema": "public",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "records_previous_record_id_fkey",
+      "type": "f",
+      "table": "records",
+      "schema": "public",
+      "definition": "FOREIGN KEY (previous_record_id) REFERENCES records(id)"
+    },
+    {
+      "name": "records_signature_source_check",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK ((signature_source = ANY (ARRAY['account'::text, 'declared'::text])))"
+    },
+    {
+      "name": "records_start_check",
+      "type": "c",
+      "table": "records",
+      "schema": "public",
+      "definition": "CHECK (((start >= (0)::numeric) AND (start <= '1000000000'::numeric)))"
+    },
+    {
+      "name": "records_user_id_fkey",
+      "type": "f",
+      "table": "records",
+      "schema": "public",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id)"
+    },
+    {
+      "name": "diesel_devices_pkey",
+      "type": "p",
+      "table": "diesel_devices",
+      "schema": "private",
+      "definition": "PRIMARY KEY (user_id, device_id)"
+    },
+    {
+      "name": "diesel_devices_token_hash_key",
+      "type": "u",
+      "table": "diesel_devices",
+      "schema": "private",
+      "definition": "UNIQUE (token_hash)"
+    },
+    {
+      "name": "record_control_audit_pkey",
+      "type": "p",
+      "table": "record_control_audit",
+      "schema": "private",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "diesel_occurrence_photos_data_url_check",
+      "type": "c",
+      "table": "diesel_occurrence_photos",
+      "schema": "private",
+      "definition": "CHECK ((length(data_url) <= 280000))"
+    },
+    {
+      "name": "diesel_occurrence_photos_operation_id_fkey",
+      "type": "f",
+      "table": "diesel_occurrence_photos",
+      "schema": "private",
+      "definition": "FOREIGN KEY (operation_id) REFERENCES diesel_operations(id)"
+    },
+    {
+      "name": "diesel_occurrence_photos_pkey",
+      "type": "p",
+      "table": "diesel_occurrence_photos",
+      "schema": "private",
+      "definition": "PRIMARY KEY (operation_id)"
+    },
+    {
+      "name": "removed_members_pkey",
+      "type": "p",
+      "table": "removed_members",
+      "schema": "private",
+      "definition": "PRIMARY KEY (email)"
+    },
+    {
+      "name": "user_access_audit_pkey",
+      "type": "p",
+      "table": "user_access_audit",
+      "schema": "private",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "diesel_checklist_templates_fleet_fkey",
+      "type": "f",
+      "table": "diesel_checklist_templates",
+      "schema": "public",
+      "definition": "FOREIGN KEY (fleet) REFERENCES fleets(id)"
+    },
+    {
+      "name": "diesel_checklist_templates_pkey",
+      "type": "p",
+      "table": "diesel_checklist_templates",
+      "schema": "public",
+      "definition": "PRIMARY KEY (fleet, version)"
+    },
+    {
+      "name": "diesel_checklist_templates_version_check",
+      "type": "c",
+      "table": "diesel_checklist_templates",
+      "schema": "public",
+      "definition": "CHECK ((version > 0))"
+    },
+    {
+      "name": "diesel_checklists_fleet_template_version_fkey",
+      "type": "f",
+      "table": "diesel_checklists",
+      "schema": "public",
+      "definition": "FOREIGN KEY (fleet, template_version) REFERENCES diesel_checklist_templates(fleet, version)"
+    },
+    {
+      "name": "diesel_checklists_grade_check",
+      "type": "c",
+      "table": "diesel_checklists",
+      "schema": "public",
+      "definition": "CHECK ((grade = ANY (ARRAY['PERFEITO'::text, 'ATENCAO'::text, 'CRITICO'::text])))"
+    },
+    {
+      "name": "diesel_checklists_pkey",
+      "type": "p",
+      "table": "diesel_checklists",
+      "schema": "public",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "diesel_operation_context_required",
+      "type": "c",
+      "table": "diesel_operations",
+      "schema": "public",
+      "definition": "CHECK (((kind = 'occurrence'::text) OR ((local_code IS NOT NULL) AND (local_code ~ '^[0-9]{1,30}$'::text) AND (material_code IS NOT NULL) AND (material_code ~ '^[0-9]{1,30}$'::text))))"
+    },
+    {
+      "name": "diesel_operations_fleet_fkey",
+      "type": "f",
+      "table": "diesel_operations",
+      "schema": "public",
+      "definition": "FOREIGN KEY (fleet) REFERENCES fleets(id)"
+    },
+    {
+      "name": "diesel_operations_kind_check",
+      "type": "c",
+      "table": "diesel_operations",
+      "schema": "public",
+      "definition": "CHECK ((kind = ANY (ARRAY['transfer'::text, 'occurrence'::text])))"
+    },
+    {
+      "name": "diesel_operations_pkey",
+      "type": "p",
+      "table": "diesel_operations",
+      "schema": "public",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "operation_recorder_readings",
+      "type": "c",
+      "table": "diesel_operations",
+      "schema": "public",
+      "definition": "CHECK ((((recorder_start IS NULL) AND (recorder_end IS NULL) AND (recorder_liters IS NULL)) OR ((kind = 'transfer'::text) AND (recorder_start >= (0)::numeric) AND (recorder_end >= recorder_start) AND (recorder_end <= '1000000000'::numeric) AND (recorder_liters = (recorder_end - recorder_start)))))"
+    }
+  ],
+  "indexes": [
+    {
+      "indexdef": "CREATE UNIQUE INDEX settings_pkey ON public.settings USING btree (id)",
+      "indexname": "settings_pkey",
+      "tablename": "settings",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX diesel_materials_pkey ON public.diesel_materials USING btree (material_code)",
+      "indexname": "diesel_materials_pkey",
+      "tablename": "diesel_materials",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX login_attempts_pkey ON private.login_attempts USING btree (bucket)",
+      "indexname": "login_attempts_pkey",
+      "tablename": "login_attempts",
+      "schemaname": "private",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX diesel_locations_pkey ON public.diesel_locations USING btree (local_code, material_code)",
+      "indexname": "diesel_locations_pkey",
+      "tablename": "diesel_locations",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX fleets_pkey ON public.fleets USING btree (id)",
+      "indexname": "fleets_pkey",
+      "tablename": "fleets",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX members_pkey ON public.members USING btree (email)",
+      "indexname": "members_pkey",
+      "tablename": "members",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX members_username_unique ON public.members USING btree (username)",
+      "indexname": "members_username_unique",
+      "tablename": "members",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX records_pkey ON public.records USING btree (id)",
+      "indexname": "records_pkey",
+      "tablename": "records",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX records_fleet ON public.records USING btree (fleet)",
+      "indexname": "records_fleet",
+      "tablename": "records",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX records_user ON public.records USING btree (user_id)",
+      "indexname": "records_user",
+      "tablename": "records",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX diesel_devices_pkey ON private.diesel_devices USING btree (user_id, device_id)",
+      "indexname": "diesel_devices_pkey",
+      "tablename": "diesel_devices",
+      "schemaname": "private",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX diesel_devices_token_hash_key ON private.diesel_devices USING btree (token_hash)",
+      "indexname": "diesel_devices_token_hash_key",
+      "tablename": "diesel_devices",
+      "schemaname": "private",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX record_control_audit_pkey ON private.record_control_audit USING btree (id)",
+      "indexname": "record_control_audit_pkey",
+      "tablename": "record_control_audit",
+      "schemaname": "private",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX diesel_occurrence_photos_pkey ON private.diesel_occurrence_photos USING btree (operation_id)",
+      "indexname": "diesel_occurrence_photos_pkey",
+      "tablename": "diesel_occurrence_photos",
+      "schemaname": "private",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX removed_members_pkey ON private.removed_members USING btree (email)",
+      "indexname": "removed_members_pkey",
+      "tablename": "removed_members",
+      "schemaname": "private",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX user_access_audit_pkey ON private.user_access_audit USING btree (id)",
+      "indexname": "user_access_audit_pkey",
+      "tablename": "user_access_audit",
+      "schemaname": "private",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX diesel_checklist_templates_pkey ON public.diesel_checklist_templates USING btree (fleet, version)",
+      "indexname": "diesel_checklist_templates_pkey",
+      "tablename": "diesel_checklist_templates",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX diesel_checklists_pkey ON public.diesel_checklists USING btree (id)",
+      "indexname": "diesel_checklists_pkey",
+      "tablename": "diesel_checklists",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE INDEX diesel_checklists_fleet_received ON public.diesel_checklists USING btree (fleet, received_at DESC)",
+      "indexname": "diesel_checklists_fleet_received",
+      "tablename": "diesel_checklists",
+      "schemaname": "public",
+      "tablespace": null
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX diesel_operations_pkey ON public.diesel_operations USING btree (id)",
+      "indexname": "diesel_operations_pkey",
+      "tablename": "diesel_operations",
+      "schemaname": "public",
+      "tablespace": null
+    }
+  ],
+  "triggers": [
+    {
+      "table": "diesel_locations",
+      "schema": "public",
+      "definition": "CREATE TRIGGER diesel_verified_meter BEFORE INSERT OR UPDATE OF last_meter ON public.diesel_locations FOR EACH ROW EXECUTE FUNCTION private.preserve_verified_meter()"
+    },
+    {
+      "table": "records",
+      "schema": "public",
+      "definition": "CREATE TRIGGER diesel_mark_test_record BEFORE INSERT OR UPDATE ON public.records FOR EACH ROW EXECUTE FUNCTION private.mark_test_record()"
+    },
+    {
+      "table": "diesel_operations",
+      "schema": "public",
+      "definition": "CREATE TRIGGER diesel_mark_test_operation BEFORE INSERT OR UPDATE ON public.diesel_operations FOR EACH ROW EXECUTE FUNCTION private.mark_test_operation()"
+    },
+    {
+      "table": "fleets",
+      "schema": "public",
+      "definition": "CREATE TRIGGER diesel_vehicle_meters BEFORE INSERT OR UPDATE OF type, meter_fields ON public.fleets FOR EACH ROW EXECUTE FUNCTION private.enforce_vehicle_meters()"
+    },
+    {
+      "table": "fleets",
+      "schema": "public",
+      "definition": "CREATE TRIGGER mark_tank_adjustment BEFORE UPDATE OF tank_capacity ON public.fleets FOR EACH ROW EXECUTE FUNCTION private.mark_tank_adjustment()"
+    }
+  ]
+}

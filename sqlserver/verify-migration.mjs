@@ -1,0 +1,7 @@
+import {Database,manifest,decodeRow,qname} from './database.mjs';
+import {readFile,writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const source=JSON.parse(await readFile('sqlserver/exports/supabase-2026-11-05.json','utf8')),db=new Database();
+const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
+function normalized(t,rows){return rows.map(row=>JSON.stringify(t.columns.map(c=>{let v=row[c.name];if(v==null)return null;if(c.type==='timestamp with time zone'){const fraction=(v.match(/\.(\d+)/)?.[1]||'').padEnd(7,'0');return String(BigInt(Date.parse(v))*10000n+BigInt(fraction.slice(3)))}if(c.type==='jsonb')return canonical(v);return v}))).sort()}
+let rows=0;try{await db.transaction(async()=>{for(const t of manifest){const actual=(await db.query(`SELECT * FROM ${qname(t.name)}`)).map(r=>decodeRow(t,r));assert.deepEqual(normalized(t,actual),normalized(t,source.tables[t.name]),'Column value mismatch: '+t.name);rows+=actual.length}const identities=await db.query('SELECT id,email,password_hash FROM app_auth.users');assert.equal(identities.length,source.users.length);for(const u of source.users)assert(identities.some(i=>i.id===u.id&&i.email===u.email&&i.password_hash===u.encrypted_password));console.log(`Verified persisted snapshot: ${manifest.length} tables, ${rows} rows, all 125 column definitions represented, ${identities.length} identities and password hashes preserved.`)})}finally{db.close()}

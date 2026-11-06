@@ -1,0 +1,15 @@
+{
+  "appId": "br.com.abencoada.diesel.sqlserver",
+  "appName": "Abençoada SQL",
+  "webDir": "mobile-dist",
+  "server": { "androidScheme": "http" },
+  "android": { "backgroundColor": "#193c2b" },
+  "plugins": {
+    "SystemBars": {
+      "style": "LIGHT",
+      "hidden": false,
+      "insetsHandling": "css",
+      "initialViewportFitValueHint": "cover"
+    }
+  }
+}

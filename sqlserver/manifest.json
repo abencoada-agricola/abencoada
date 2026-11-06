@@ -1,0 +1,1400 @@
+[
+  {
+    "name": "private.diesel_devices",
+    "columns": [
+      {
+        "schema": "private",
+        "table": "diesel_devices",
+        "name": "user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "diesel_devices",
+        "name": "device_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "diesel_devices",
+        "name": "email",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "diesel_devices",
+        "name": "token_hash",
+        "type": "bytea",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "diesel_devices",
+        "name": "expires_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "private",
+        "table": "diesel_devices",
+        "type": "p",
+        "name": "diesel_devices_pkey",
+        "definition": "PRIMARY KEY (user_id, device_id)"
+      },
+      {
+        "schema": "private",
+        "table": "diesel_devices",
+        "type": "u",
+        "name": "diesel_devices_token_hash_key",
+        "definition": "UNIQUE (token_hash)"
+      }
+    ]
+  },
+  {
+    "name": "private.diesel_occurrence_photos",
+    "columns": [
+      {
+        "schema": "private",
+        "table": "diesel_occurrence_photos",
+        "name": "operation_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "diesel_occurrence_photos",
+        "name": "data_url",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "private",
+        "table": "diesel_occurrence_photos",
+        "type": "f",
+        "name": "diesel_occurrence_photos_operation_id_fkey",
+        "definition": "FOREIGN KEY (operation_id) REFERENCES diesel_operations(id)"
+      },
+      {
+        "schema": "private",
+        "table": "diesel_occurrence_photos",
+        "type": "p",
+        "name": "diesel_occurrence_photos_pkey",
+        "definition": "PRIMARY KEY (operation_id)"
+      }
+    ]
+  },
+  {
+    "name": "private.login_attempts",
+    "columns": [
+      {
+        "schema": "private",
+        "table": "login_attempts",
+        "name": "bucket",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "login_attempts",
+        "name": "window_start",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "login_attempts",
+        "name": "attempts",
+        "type": "integer",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "private",
+        "table": "login_attempts",
+        "type": "p",
+        "name": "login_attempts_pkey",
+        "definition": "PRIMARY KEY (bucket)"
+      }
+    ]
+  },
+  {
+    "name": "private.record_control_audit",
+    "columns": [
+      {
+        "schema": "private",
+        "table": "record_control_audit",
+        "name": "id",
+        "type": "bigint",
+        "nullable": false,
+        "default": null,
+        "identity": true
+      },
+      {
+        "schema": "private",
+        "table": "record_control_audit",
+        "name": "record_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "record_control_audit",
+        "name": "kind",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "record_control_audit",
+        "name": "action",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "record_control_audit",
+        "name": "reason",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "record_control_audit",
+        "name": "actor_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "record_control_audit",
+        "name": "actor_name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "record_control_audit",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": "now()",
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "private",
+        "table": "record_control_audit",
+        "type": "p",
+        "name": "record_control_audit_pkey",
+        "definition": "PRIMARY KEY (id)"
+      }
+    ]
+  },
+  {
+    "name": "private.removed_members",
+    "columns": [
+      {
+        "schema": "private",
+        "table": "removed_members",
+        "name": "email",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "removed_members",
+        "name": "member_data",
+        "type": "jsonb",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "removed_members",
+        "name": "removed_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": "now()",
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "removed_members",
+        "name": "removed_by",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "removed_members",
+        "name": "removed_by_name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "private",
+        "table": "removed_members",
+        "type": "p",
+        "name": "removed_members_pkey",
+        "definition": "PRIMARY KEY (email)"
+      }
+    ]
+  },
+  {
+    "name": "private.user_access_audit",
+    "columns": [
+      {
+        "schema": "private",
+        "table": "user_access_audit",
+        "name": "id",
+        "type": "bigint",
+        "nullable": false,
+        "default": null,
+        "identity": true
+      },
+      {
+        "schema": "private",
+        "table": "user_access_audit",
+        "name": "email",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "user_access_audit",
+        "name": "previous_access",
+        "type": "jsonb",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "user_access_audit",
+        "name": "new_access",
+        "type": "jsonb",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "user_access_audit",
+        "name": "actor_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "user_access_audit",
+        "name": "actor_name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "private",
+        "table": "user_access_audit",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": "now()",
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "private",
+        "table": "user_access_audit",
+        "type": "p",
+        "name": "user_access_audit_pkey",
+        "definition": "PRIMARY KEY (id)"
+      }
+    ]
+  },
+  {
+    "name": "public.diesel_checklist_templates",
+    "columns": [
+      {
+        "schema": "public",
+        "table": "diesel_checklist_templates",
+        "name": "fleet",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklist_templates",
+        "name": "version",
+        "type": "integer",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklist_templates",
+        "name": "questions",
+        "type": "jsonb",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklist_templates",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": "now()",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklist_templates",
+        "name": "created_by",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "public",
+        "table": "diesel_checklist_templates",
+        "type": "f",
+        "name": "diesel_checklist_templates_fleet_fkey",
+        "definition": "FOREIGN KEY (fleet) REFERENCES fleets(id)"
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklist_templates",
+        "type": "p",
+        "name": "diesel_checklist_templates_pkey",
+        "definition": "PRIMARY KEY (fleet, version)"
+      }
+    ]
+  },
+  {
+    "name": "public.diesel_checklists",
+    "columns": [
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "fleet",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "template_version",
+        "type": "integer",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "operator",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "received_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": "now()",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "answers",
+        "type": "jsonb",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "grade",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "name": "resolutions",
+        "type": "jsonb",
+        "nullable": false,
+        "default": "'{}'::jsonb",
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "type": "f",
+        "name": "diesel_checklists_fleet_template_version_fkey",
+        "definition": "FOREIGN KEY (fleet, template_version) REFERENCES diesel_checklist_templates(fleet, version)"
+      },
+      {
+        "schema": "public",
+        "table": "diesel_checklists",
+        "type": "p",
+        "name": "diesel_checklists_pkey",
+        "definition": "PRIMARY KEY (id)"
+      }
+    ]
+  },
+  {
+    "name": "public.diesel_locations",
+    "columns": [
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "name": "local_code",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "name": "material_code",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "name": "name",
+        "type": "text",
+        "nullable": false,
+        "default": "''::text",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "name": "material_name",
+        "type": "text",
+        "nullable": false,
+        "default": "''::text",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "name": "last_meter",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": "now()",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "name": "last_verified_meter",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "name": "is_test",
+        "type": "boolean",
+        "nullable": false,
+        "default": "false",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "name": "simulated_meter",
+        "type": "boolean",
+        "nullable": false,
+        "default": "false",
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "public",
+        "table": "diesel_locations",
+        "type": "p",
+        "name": "diesel_locations_pkey",
+        "definition": "PRIMARY KEY (local_code, material_code)"
+      }
+    ]
+  },
+  {
+    "name": "public.diesel_materials",
+    "columns": [
+      {
+        "schema": "public",
+        "table": "diesel_materials",
+        "name": "material_code",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_materials",
+        "name": "material_name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "public",
+        "table": "diesel_materials",
+        "type": "p",
+        "name": "diesel_materials_pkey",
+        "definition": "PRIMARY KEY (material_code)"
+      }
+    ]
+  },
+  {
+    "name": "public.diesel_operations",
+    "columns": [
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "operator",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "kind",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "local_code",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "material_code",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "destination",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "notes",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "received_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": "now()",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "recorder_start",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "recorder_end",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "recorder_liters",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "has_photo",
+        "type": "boolean",
+        "nullable": false,
+        "default": "false",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "is_test",
+        "type": "boolean",
+        "nullable": false,
+        "default": "false",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "removed_at",
+        "type": "timestamp with time zone",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "removed_by",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "removed_by_name",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "removal_reason",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "name": "fleet",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "type": "f",
+        "name": "diesel_operations_fleet_fkey",
+        "definition": "FOREIGN KEY (fleet) REFERENCES fleets(id)"
+      },
+      {
+        "schema": "public",
+        "table": "diesel_operations",
+        "type": "p",
+        "name": "diesel_operations_pkey",
+        "definition": "PRIMARY KEY (id)"
+      }
+    ]
+  },
+  {
+    "name": "public.fleets",
+    "columns": [
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "id",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "type",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "active",
+        "type": "boolean",
+        "nullable": false,
+        "default": "true",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "meter_fields",
+        "type": "jsonb",
+        "nullable": false,
+        "default": "'{\"km\": true, \"engine\": false, \"elevator\": false}'::jsonb",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "gmais_readings",
+        "type": "jsonb",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "model",
+        "type": "text",
+        "nullable": false,
+        "default": "''::text",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "tank_capacity",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "is_test",
+        "type": "boolean",
+        "nullable": false,
+        "default": "false",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "fleets",
+        "name": "tank_reference",
+        "type": "jsonb",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "public",
+        "table": "fleets",
+        "type": "p",
+        "name": "fleets_pkey",
+        "definition": "PRIMARY KEY (id)"
+      }
+    ]
+  },
+  {
+    "name": "public.members",
+    "columns": [
+      {
+        "schema": "public",
+        "table": "members",
+        "name": "email",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "members",
+        "name": "name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "members",
+        "name": "role",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "members",
+        "name": "username",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "members",
+        "name": "permissions",
+        "type": "jsonb",
+        "nullable": false,
+        "default": "'{\"refuel\": true, \"transfer\": true, \"checklist\": true}'::jsonb",
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "public",
+        "table": "members",
+        "type": "p",
+        "name": "members_pkey",
+        "definition": "PRIMARY KEY (email)"
+      },
+      {
+        "schema": "public",
+        "table": "members",
+        "type": "u",
+        "name": "members_username_unique",
+        "definition": "UNIQUE (username)"
+      }
+    ]
+  },
+  {
+    "name": "public.records",
+    "columns": [
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "fleet",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "date",
+        "type": "date",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "operator",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "user_id",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "engine",
+        "type": "numeric",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "elevator",
+        "type": "numeric",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "km",
+        "type": "numeric",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "start",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "end",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "liters",
+        "type": "numeric",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "signature",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "notes",
+        "type": "text",
+        "nullable": false,
+        "default": "''::text",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "received_at",
+        "type": "timestamp with time zone",
+        "nullable": false,
+        "default": "now()",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "signature_source",
+        "type": "text",
+        "nullable": false,
+        "default": "'account'::text",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "submission_key",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "capture_mode",
+        "type": "text",
+        "nullable": false,
+        "default": "'full'::text",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "measured_fields",
+        "type": "jsonb",
+        "nullable": false,
+        "default": "'{\"km\": true, \"engine\": true, \"elevator\": true}'::jsonb",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "previous_readings",
+        "type": "jsonb",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "previous_record_id",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "local_code",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "material_code",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "recorder_start",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "recorder_end",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "tank_capacity_at_record",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "capacity_warning_confirmed",
+        "type": "boolean",
+        "nullable": false,
+        "default": "false",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "is_test",
+        "type": "boolean",
+        "nullable": false,
+        "default": "false",
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "removed_at",
+        "type": "timestamp with time zone",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "removed_by",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "removed_by_name",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "name": "removal_reason",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "public",
+        "table": "records",
+        "type": "f",
+        "name": "records_fleet_fkey",
+        "definition": "FOREIGN KEY (fleet) REFERENCES fleets(id)"
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "type": "p",
+        "name": "records_pkey",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "type": "f",
+        "name": "records_previous_record_id_fkey",
+        "definition": "FOREIGN KEY (previous_record_id) REFERENCES records(id)"
+      },
+      {
+        "schema": "public",
+        "table": "records",
+        "type": "f",
+        "name": "records_user_id_fkey",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id)"
+      }
+    ]
+  },
+  {
+    "name": "public.settings",
+    "columns": [
+      {
+        "schema": "public",
+        "table": "settings",
+        "name": "id",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      },
+      {
+        "schema": "public",
+        "table": "settings",
+        "name": "value",
+        "type": "jsonb",
+        "nullable": false,
+        "default": null,
+        "identity": false
+      }
+    ],
+    "keys": [
+      {
+        "schema": "public",
+        "table": "settings",
+        "type": "p",
+        "name": "settings_pkey",
+        "definition": "PRIMARY KEY (id)"
+      }
+    ]
+  }
+]

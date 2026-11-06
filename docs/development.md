@@ -1,5 +1,13 @@
 # Development workflow
 
+## Trabalho em dois computadores
+
+O repositório central é https://github.com/abencoada-agricola/abencoada. Em outra máquina, clone e selecione a branch de trabalho. Antes de trocar de computador, faça `git add`, `git commit` e `git push`; no destino, use `git pull --ff-only` antes de editar. Use uma branch por tarefa e pull request para integrar à main. O Git não sincroniza bancos, dependências ou credenciais. Configure ferramentas e `.env` em cada máquina. Não versione exportações de dados.
+
+## Decisão de implantação — 06/11/2026
+
+O responsável pelo GMAIS criará um banco próprio do aplicativo ao lado do banco existente do GMAIS. Esse destino SQL Server substitui o Supabase sem misturar tabelas com o GMAIS. Os registros atuais são testes e não devem ser migrados: instalar somente a estrutura, com equivalência de tabelas, colunas, relações, índices e regras. Tipos, autenticação e funções exigem adaptação entre PostgreSQL e SQL Server. Não apagar a base local atual nem executar importação nesta preparação. A consulta ao GMAIS depende de interface autorizada pelo responsável. O APK publicado continua no Supabase até configurar e validar a nova API.
+
 Graphify maps the maintained JavaScript, Java and SQL source. Git records each code change; `docs/changes.md` records the reason and validation of material behavior changes.
 
 ## Setup
@@ -66,3 +74,9 @@ The baseline parser reports partial/no-symbol extraction for some Android Gradle
 The health report also identifies self-loops and same-endpoint relationships that can be collapsed during traversal/clustering. Check the source and relevant tests when an exact relationship matters. These limitations do not indicate an application test failure.
 
 Do not index credentials, operational exports or GMAIS captures. Keep all future GMAIS investigation read-only unless the user explicitly changes that requirement.
+
+## Backend local SQL Server
+
+Consulte sqlserver/README.md. Compile com SQL_API_URL para selecionar a API local; sem essa variável, o Supabase continua sendo o padrão. O banco local é app_abencoada. Execute node sqlserver/test.mjs para integração real, powershell -File sqlserver/build-local.ps1 para builds e node sqlserver/server.mjs para iniciar em 127.0.0.1:4780. Não publique sqlserver/local-credentials.txt nem backups. Migração dos dados atuais depende de backup, simulação e revisão das contagens e precisão.
+
+A cópia atual do Supabase foi importada em 05/11/2026: 15 tabelas, 76 linhas e três identidades. Consulte sqlserver/exports/migration-result.json para o resultado da fotografia importada. Execute node sqlserver/verify-migration.mjs para conferir cada valor contra a exportação e node sqlserver/parity-test.mjs para comparar os cenários com as funções PL/pgSQL exportadas. Esses arquivos de exportação são reservados e não devem ser commitados. Reexecute testes após mudanças; a cópia não se sincroniza automaticamente com o Supabase.

@@ -1,5 +1,29 @@
 # Change log
 
+## 2026-11-06 — Banco novo sem dados de teste e Android SQL local
+
+Resultado final da validação: suíte completa de testes do app aprovada; build `assembleSqlEmulator` aprovado com JDK 21; instalação e abertura do pacote separado confirmadas. A WebView Android recebeu HTTP 200 de `http://10.0.2.2:4782/health`, identificando `sqlserver` e `app_abencoada`, com origem `http://localhost`. Não foi efetuado login nem criado registro operacional no teste manual.
+
+O destino planejado é um banco próprio do app no SQL Server, ao lado do GMAIS, com somente estrutura e regras equivalentes ao Supabase. Não migrar registros de teste. A cópia local histórica é preservada. Documentado fluxo Git entre computadores.
+
+Adicionada variante Android sqlEmulator, pacote separado .sqlserver e API loopback na porta 4782, acessível pelo emulador em 10.0.2.2. A variante permite HTTP somente para o host do emulador/localhost e usa origem http://localhost. A versão oficial mantém sua configuração. Limite atual: worker nativo de segundo plano permanece restrito ao Supabase; SQL deve sincronizar em primeiro plano nesta etapa. Validação: saúde SQL local e 28 verificações de integração aprovadas, além dos testes HTTP de autenticação, sessão, registros e origens. Build Android e suíte do app conferidos nesta preparação; resultado final registrado abaixo.
+
+## 2026-11-05 — Importação da cópia atual do Supabase
+
+Após escolha explícita por manter SQL Server com dados e comportamento equivalentes, exportada uma fotografia somente leitura do projeto e preservado/verificado backup do banco local anterior. Importação transacional de 15 tabelas e 76 linhas, incluindo fotos, IDs de auditoria, dispositivos e tentativas de login. Substituída a conta provisória pelos três usuários da origem, preservando UUIDs, e-mails e hashes bcrypt. Adicionado suporte a bcrypt e alinhados limite de login (10 por usuário/60 por IP em cinco minutos), regras de usuário, permissões de teste e capacidades com a origem. Nenhuma alteração foi enviada ao Supabase nem ao GitHub.
+
+As 125 colunas foram conferidas contra metadados atuais; todos os valores das 76 linhas foram comparados após gravar, incluindo precisão temporal, JSON e binários. Adicionadas 31 traduções de CHECK e cinco regras de gatilhos (quatro gatilhos SQL, com as duas regras de frota reunidas). Funções PL/pgSQL/RPC e controle por usuário continuam adaptados à API local, sem equivalência binária entre os bancos. O APK em uso permanece apontando ao Supabase. As cópias são independentes após a exportação.
+
+Validação: simulação com rollback, igualdade persistida, 28 verificações de integração SQL Server, 33 verificações diferenciais contra as definições das funções exportadas do banco vivo, autenticação/origem/catálogo por HTTP, painel em Chrome isolado e suíte completa existente do projeto. Os testes não deixam dados operacionais na base. Material reservado da exportação e relatórios detalhados ficam em sqlserver/exports, ignorado pelo Git.
+
+
+## 2026-11-05 — Cópia local com SQL Server
+
+Adicionado backend local opcional, selecionado por SQL_API_URL no build, preservando o fluxo Supabase padrão. Banco app_abencoada, com 15 tabelas de domínio (125 colunas) e autenticação local em app_auth. O esquema PostgreSQL public corresponde a app. API local parametrizada, com scrypt, tokens armazenados como hash, limite de login e transações serializadas para regras de permissões, leituras, registradoras, checklists, fotos e recuperação de exclusões. Não houve publicação, importação de dados atuais nem distribuição de APK.
+
+Validação: 28 verificações de integração real no SQL Server, com rollback de todos os dados de teste; login e painel em Chrome isolado; builds web e móvel; suíte existente do projeto. Adicionado LF explícito para testes no Windows. Exportador de migração somente leitura e importador JSON com simulação/reversão, recusa de destino com dados operacionais e reconciliação de contagens. Importação real ainda depende do backup e revisão de precisão decimal. A API usa leitura de tabelas em transação serializada e requer avaliação de volume antes de produção. Detalhes em sqlserver/README.md.
+
+
 ## 2026-10-29 — Orientação vertical fixa no Android
 
 A atividade principal passa a declarar orientação portrait, mantendo login, menu e formulários em pé ao girar o aparelho. O leitor de QR já usa scanOrientation=1 (portrait). Adicionada a propriedade de compatibilidade do alvo Android 16/API 36 para respeitar a restrição também em telas grandes. Configuração conforme a [documentação oficial](https://developer.android.com/about/versions/16/behavior-changes-16#adaptive-layouts); o comportamento deve ser revisto antes de migrar para targetSdk 37, quando essa propriedade deixa de valer em telas grandes.

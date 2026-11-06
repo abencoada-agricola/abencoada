@@ -31,3 +31,4 @@ package-lock.json
 *.zip
 *.yaml
 *.yml
+dependencies-copy-backup/
