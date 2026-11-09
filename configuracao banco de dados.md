@@ -152,7 +152,7 @@ Variáveis públicas do GitHub Actions:
 | Android | Workflow `Build Android APK` |
 | Secret Android | `ANDROID_KEYSTORE_BASE64`: keystore PKCS12 em base64, alias `abencoada` |
 | Secret Android | `ANDROID_KEYSTORE_PASSWORD`: senha do keystore |
-| Application ID | `br.com.abencoada.diesel` |
+| Application ID | `br.com.abencoada` |
 | Assinatura | Mesmo keystore nas atualizações |
 | Build local | Node.js 22+, `npm ci`, `npm test`, `npm run build` |
 | Build Android | Java 21, Android SDK e `npm run android:sync` |

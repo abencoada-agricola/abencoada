@@ -11,7 +11,7 @@ android {
     namespace = "br.com.abencoada.diesel"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "br.com.abencoada.diesel"
+        applicationId "br.com.abencoada"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode = releaseCode.toInteger()

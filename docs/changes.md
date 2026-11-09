@@ -2,6 +2,7 @@
 
 ## Google Play build
 
+- Android now installs under `br.com.abencoada`. Devices with the older `br.com.abencoada.diesel` APK keep it as a separate app. Sync pending records in that installation before retiring it.
 - Android CI builds and verifies a signed App Bundle alongside the APK. The bundle and checksum are available as a workflow artifact for manual upload to Play Console.
 
 

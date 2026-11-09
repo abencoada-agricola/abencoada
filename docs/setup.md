@@ -34,7 +34,7 @@ The **Build Android APK** workflow builds and signs the app, verifies its signat
 - `ANDROID_KEYSTORE_BASE64`: base64-encoded PKCS12 signing keystore, with alias `abencoada`.
 - `ANDROID_KEYSTORE_PASSWORD`: the keystore password.
 
-Keep a private backup of the original keystore and its password outside the repository. Future APK updates must use the same signing key. Do not commit keystores or passwords. The Android application ID is `br.com.abencoada.diesel`.
+Keep a private backup of the original keystore and its password outside the repository. Future APK updates must use the same signing key. Do not commit keystores or passwords. The Android application ID is `br.com.abencoada`.
 
 For local builds, install Node.js 22, Java 21, and the Android SDK, then run:
 
