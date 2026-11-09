@@ -1,5 +1,10 @@
 # Change log
 
+## Demonstração para revisão do Google Play
+
+- O login oferece uma demonstração com frota, locais e checklist fictícios. Os registros da demonstração ficam em memória e desaparecem ao sair. O modo não autentica no servidor, não envia operações nem grava nos rascunhos da conta de trabalho.
+
+
 ## Política de privacidade
 
 - A tela de login inclui um link para a página de privacidade acima da versão do app. O Android abre a página no navegador para manter a sessão e os registros locais no app.
