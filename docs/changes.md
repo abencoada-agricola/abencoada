@@ -1,5 +1,10 @@
 # Change log
 
+## Política de privacidade
+
+- A tela de login inclui um link para a página de privacidade acima da versão do app. O Android abre a página no navegador para manter a sessão e os registros locais no app.
+
+
 ## Google Play build
 
 - Android now installs under `br.com.abencoada`. Devices with the older `br.com.abencoada.diesel` APK keep it as a separate app. Sync pending records in that installation before retiring it.
