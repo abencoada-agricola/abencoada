@@ -1,5 +1,10 @@
 # Change log
 
+## Google Play build
+
+- Android CI builds and verifies a signed App Bundle alongside the APK. The bundle and checksum are available as a workflow artifact for manual upload to Play Console.
+
+
 ## 2026-10-29 — Orientação vertical fixa no Android
 
 A atividade principal passa a declarar orientação portrait, mantendo login, menu e formulários em pé ao girar o aparelho. O leitor de QR já usa scanOrientation=1 (portrait). Adicionada a propriedade de compatibilidade do alvo Android 16/API 36 para respeitar a restrição também em telas grandes. Configuração conforme a [documentação oficial](https://developer.android.com/about/versions/16/behavior-changes-16#adaptive-layouts); o comportamento deve ser revisto antes de migrar para targetSdk 37, quando essa propriedade deixa de valer em telas grandes.

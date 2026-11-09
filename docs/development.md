@@ -66,3 +66,7 @@ The baseline parser reports partial/no-symbol extraction for some Android Gradle
 The health report also identifies self-loops and same-endpoint relationships that can be collapsed during traversal/clustering. Check the source and relevant tests when an exact relationship matters. These limitations do not indicate an application test failure.
 
 Do not index credentials, operational exports or GMAIS captures. Keep all future GMAIS investigation read-only unless the user explicitly changes that requirement.
+
+## Android App Bundle
+
+Download the signed `abencoada.aab` and its checksum from the `abencoada-play-bundle` artifact in the **Build Android APK** workflow. The APK and bundle use the same version and release keystore. The workflow publishes the APK to GitHub Releases on main. Upload the bundle to the intended track in Play Console.

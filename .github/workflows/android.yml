@@ -55,15 +55,30 @@ jobs:
           test -n "$KEYSTORE_BASE64"
           printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/abencoada.p12"
           chmod 600 "$RUNNER_TEMP/abencoada.p12"
-      - name: Build signed APK
+      - name: Build signed APK and App Bundle
         working-directory: android
         env:
           ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/abencoada.p12
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-        run: ./gradlew assembleRelease -PappVersionCode="$APP_VERSION_CODE" -PappVersionName="$APP_VERSION"
+        run: ./gradlew assembleRelease bundleRelease -PappVersionCode="$APP_VERSION_CODE" -PappVersionName="$APP_VERSION"
       - name: Verify signature
         run: |
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose android/app/build/outputs/apk/release/app-release.apk
+      - name: Verify and package Play bundle
+        run: |
+          bundle=android/app/build/outputs/bundle/release/app-release.aab
+          LC_ALL=C jarsigner -verify "$bundle" > "$RUNNER_TEMP/aab-verification.txt"
+          cat "$RUNNER_TEMP/aab-verification.txt"
+          grep -Fxq 'jar verified.' "$RUNNER_TEMP/aab-verification.txt"
+          cp "$bundle" abencoada.aab
+          sha256sum abencoada.aab > abencoada.aab.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: abencoada-play-bundle
+          path: |
+            abencoada.aab
+            abencoada.aab.sha256
+          if-no-files-found: error
       - name: Prepare download
         run: |
           cp android/app/build/outputs/apk/release/app-release.apk abencoada.apk
