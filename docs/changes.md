@@ -264,3 +264,8 @@ Record material changes here with the request, resulting behavior, affected area
 - Added seven monochrome currentColor SVGs: car, pickup, tractor, sugarcane harvester, truck, sugarcane and the brand silhouette based on Logo Abençoada2.png. Added a looping GIF preview in docs/assets/loading-abencoada.gif and usage documentation in docs/loading.md.
 - App opening and login validation use the same sequence as scalable SVGs, changing every 450 ms inside a 36 px rotating ring. Reduced-motion preferences show a fixed brand symbol. The build includes the opening indicator before JavaScript starts. Android CI also watches the shared icon module.
 - Validation: full application suite and mobile production build passed on the publication branch; browser checks cover the seven frames, reduced motion and login recovery. The GIF contains 63 frames at 20 fps, loops in 3.15 seconds and was visually reviewed. Updated the local architecture map.
+
+## Avisos de envio e conexão no Android
+
+- A confirmação de abastecimento informa o envio e o horário. O aviso de fila usa texto mais curto e a caixa centraliza o conteúdo com espaçamento adaptável.
+- O cabeçalho mostra sem conexão ao receber o evento offline. Validação local com os testes de login offline, sincronização, interface móvel e avisos de entrega.
