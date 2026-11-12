@@ -93,9 +93,9 @@ body.login-screen main{padding-bottom:var(--space)}
 .delivery-feedback strong,.delivery-feedback span:not(.delivery-feedback-icon){display:block}
 .delivery-feedback strong{font-size:17px;line-height:1.4}.delivery-feedback div>span{font-size:14px;line-height:1.5;color:var(--muted);margin-top:4px}
 .queue-note{font-size:14px;line-height:1.5;text-transform:none;color:var(--muted)}
-.status-message{padding:14px 16px;margin:14px 0;border:1px solid var(--line);border-radius:14px;background:var(--success-bg);color:var(--success-ink);text-transform:none}
+.status-message{display:grid;justify-items:center;gap:6px;text-align:center;padding:16px clamp(12px,4vw,24px);margin:14px 0;border:1px solid var(--line);border-radius:14px;background:var(--success-bg);color:var(--success-ink);text-transform:none}
 .status-message.saved{background:var(--warning-bg);color:var(--warning-ink)}
-.status-message strong,.status-message span{display:block}.status-message strong{font-size:17px}.status-message span{font-size:14px;line-height:1.5;margin-top:4px}
+.status-message strong,.status-message span{display:block}.status-message strong{font-size:17px}.status-message span{font-size:14px;line-height:1.4}
 
 
 /* Shared website palette, with an offline-persistent explicit appearance choice. */

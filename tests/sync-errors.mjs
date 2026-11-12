@@ -49,7 +49,7 @@ failRefresh=false;state.queue=[];await state.sync();assert.equal(state.syncIssue
 state.message='RASCUNHO SALVO';await state.sync();assert.equal(state.message,'RASCUNHO SALVO');
 state.queue=[pending];failUpload=true;await state.sync();assert.equal(state.queue[0],pending);assert.match(pending.lastSendError,/REGISTROS CONTINUAM SALVOS/);assert.doesNotMatch(pending.lastSendError,/AbortError/);
 failUpload=false;mismatch=true;await state.sync();assert.equal(state.queue.length,1);assert.ok(!stored.some(entry=>entry.deleted));
-assert.equal(deliveries.length,0);mismatch=false;await state.sync();assert.equal(state.queue.length,0);assert.ok(stored.some(entry=>entry.deleted===pending.id));assert.equal(state.syncIssue,null);assert.match(state.message,/REGISTRO ENVIADO/);
+assert.equal(deliveries.length,0);mismatch=false;await state.sync();assert.equal(state.queue.length,0);assert.ok(stored.some(entry=>entry.deleted===pending.id));assert.equal(state.syncIssue,null);assert.equal(state.message,'REGISTRO ENVIADO');
 console.log('Empty refreshes stay quiet, wrapped aborts are sanitized, recovery clears stale errors and pending uploads require a matching receipt.');
 
 assert.deepEqual(deliveries,[{user:'worker',ids:['pending-one']}]);
