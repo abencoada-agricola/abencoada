@@ -245,3 +245,4 @@ Record material changes here with the request, resulting behavior, affected area
 
 - A confirmação de abastecimento informa o envio e o horário. O aviso de fila usa texto mais curto e a caixa centraliza o conteúdo com espaçamento adaptável.
 - O cabeçalho mostra sem conexão ao receber o evento offline. Validação local com os testes de login offline, sincronização, interface móvel e avisos de entrega.
+- A confirmação usa **Registro enviado** para abastecimentos, transferências, checklists e ocorrências, inclusive após envio em segundo plano.
